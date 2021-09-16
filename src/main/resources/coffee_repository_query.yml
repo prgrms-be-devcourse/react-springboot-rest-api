@@ -1,0 +1,27 @@
+coffee:
+  create: >
+    INSERT INTO
+      coffee_order(
+        email,
+        name,
+        category,
+        quantity,
+        price
+      )
+    VALUES (
+      ?, ?, ?, ?, ?)
+
+  select:
+    byId:
+      SELECT FROM
+        coffee_order c
+      WHERE
+        c.id=?
+
+    createdBetween:
+      SELECT FROM
+        coffee_order c
+      WHERE
+        c.created_at
+      BETWEEN
+        ? AND ?

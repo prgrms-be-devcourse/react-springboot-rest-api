@@ -6,7 +6,7 @@ import lombok.Setter;
 
 @Getter
 public abstract class Order {
-    protected final long id;
+    protected Long id;
 
     protected Order(long id) {
         this.id = id;
