@@ -48,7 +48,7 @@ public class CoffeeOrder extends Order {
     }
 
     public DTO toDTO() {
-        return new DTO(id, email, name, category, quantity, price);
+        return new DTO(id, email, name, category, quantity, price, createdAt);
     }
 
     @Getter
@@ -60,14 +60,16 @@ public class CoffeeOrder extends Order {
         private CoffeeType coffeeCategory;
         private int quantity;
         private int price;
+        private LocalDateTime createdAt;
 
-        public DTO(long id, String email, String coffeeName, CoffeeType coffeeCategory, int quantity, int price) {
+        public DTO(long id, String email, String coffeeName, CoffeeType coffeeCategory, int quantity, int price, LocalDateTime createdAt) {
             super(id);
             this.email = email;
             this.coffeeName = coffeeName;
             this.coffeeCategory = coffeeCategory;
             this.quantity = quantity;
             this.price = price;
+            this.createdAt = createdAt;
         }
     }
 }
