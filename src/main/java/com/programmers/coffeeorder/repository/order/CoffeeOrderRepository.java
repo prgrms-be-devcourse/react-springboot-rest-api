@@ -1,4 +1,4 @@
-package com.programmers.coffeeorder.repository;
+package com.programmers.coffeeorder.repository.order;
 
 import com.programmers.coffeeorder.entity.CoffeeOrder;
 

@@ -3,7 +3,7 @@ package com.programmers.coffeeorder.entity;
 import lombok.Getter;
 
 @Getter
-public class DeliveryOrder extends Order {
+public abstract class DeliveryOrder extends Order {
 
     protected String address;
     protected int postcode;

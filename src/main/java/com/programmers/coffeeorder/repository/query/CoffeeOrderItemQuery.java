@@ -8,18 +8,10 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 
 @Configuration
-@ConfigurationProperties(prefix = "coffeeOrder")
+@ConfigurationProperties(prefix = "orderItem")
 @PropertySource(value = "classpath:/coffee_repository_query.yml", factory = YamlPropertySourceFactory.class)
 @Getter
 @Setter
-public class CoffeeQuery {
+public class CoffeeOrderItemQuery {
     private String create;
-    private Select select;
-
-    @Getter
-    @Setter
-    public static class Select {
-        private String byId;
-        private String createdBetween;
-    }
 }

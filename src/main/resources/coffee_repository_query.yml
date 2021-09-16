@@ -1,27 +1,64 @@
-coffee:
+coffeeOrder:
   create: >
     INSERT INTO
       coffee_order(
+        address,
+        postcode,
         email,
-        name,
-        category,
-        quantity,
-        price
-      )
+        order_status)
     VALUES (
-      ?, ?, ?, ?, ?)
+      ?, ?, ?, ?)
 
   select:
     byId:
-      SELECT FROM
+      SELECT
+        c.*,
+        p.id as product_id,
+        p.name,
+        p.description,
+        p.price,
+        p.category
+      FROM
         coffee_order c
+      JOIN
+        coffee_order_item i
+      ON
+        c.id=i.order_id
+      JOIN
+        coffee_product p
+      ON
+        i.product_id=p.id
       WHERE
         c.id=?
 
     createdBetween:
-      SELECT FROM
+      SELECT
+        c.*,
+        p.id as product_id,
+        p.name,
+        p.description,
+        p.price,
+        p.category
+      FROM
         coffee_order c
+      JOIN
+        coffee_order_item i
+      ON
+        c.id=i.order_id
+      JOIN
+        coffee_product p
+      ON
+        i.product_id=p.id
       WHERE
         c.created_at
       BETWEEN
         ? AND ?
+
+orderItem:
+  create: >
+    INSERT INTO
+      coffee_order_item(
+        order_id,
+        product_id)
+    VALUES
+      (?, ?)

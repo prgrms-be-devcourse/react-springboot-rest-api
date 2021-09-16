@@ -4,7 +4,9 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Getter
@@ -26,6 +28,7 @@ public class CoffeeOrder extends DeliveryOrder {
                 email,
                 address,
                 postcode,
+                OrderStatus.NOT_DELIVERED,
                 LocalDateTime.now(),
                 LocalDateTime.now(),
                 orderItems);
@@ -36,6 +39,18 @@ public class CoffeeOrder extends DeliveryOrder {
             String email,
             String address,
             int postcode,
+            OrderStatus status,
+            LocalDateTime createdAt,
+            LocalDateTime updatedAt) {
+        this(id, email, address, postcode, status, createdAt, updatedAt, new LinkedList<>());
+    }
+
+    public CoffeeOrder(
+            Long id,
+            String email,
+            String address,
+            int postcode,
+            OrderStatus status,
             LocalDateTime createdAt,
             LocalDateTime updatedAt,
             List<CoffeeProduct> orderItems) {
@@ -43,7 +58,7 @@ public class CoffeeOrder extends DeliveryOrder {
         this.email = email;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
-        status = OrderStatus.NOT_DELIVERED;
+        this.status = status;
         this.orderItems = orderItems;
     }
 
@@ -95,5 +110,17 @@ public class CoffeeOrder extends DeliveryOrder {
             this.updatedAt = updatedAt;
             this.status = status.toString();
         }
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, address, postcode, email);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof CoffeeOrder)) return false;
+        CoffeeOrder other = (CoffeeOrder) obj;
+        return id.equals(other.id);
     }
 }
