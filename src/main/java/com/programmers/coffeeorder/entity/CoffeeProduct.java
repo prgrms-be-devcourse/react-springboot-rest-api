@@ -14,7 +14,7 @@ public class CoffeeProduct {
     private String description;
 
     public DTO toDTO() {
-        return new DTO(id, coffeeName, coffeeName, price);
+        return new DTO(id, coffeeName, coffeeType.toString(), price);
     }
 
     public CoffeeProduct(Long id) {

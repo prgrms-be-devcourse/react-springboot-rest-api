@@ -18,9 +18,9 @@ public class BasicCoffeeOrderService implements CoffeeOrderService {
     private final CoffeeOrderRepository coffeeOrderRepository;
 
     @Override
-    public Optional<CoffeeOrder.DTO> submitOrder(CoffeeOrder submit) {
+    public CoffeeOrder.DTO submitOrder(CoffeeOrder submit) {
         CoffeeOrder order = coffeeOrderRepository.createOrder(submit);
-        return Optional.ofNullable(order.toDTO());
+        return order.toDTO();
     }
 
     @Override

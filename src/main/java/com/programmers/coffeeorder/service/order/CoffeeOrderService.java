@@ -9,7 +9,7 @@ import java.util.Optional;
 
 public interface CoffeeOrderService {
 
-    Optional<CoffeeOrder.DTO> submitOrder(CoffeeOrder submit);
+    CoffeeOrder.DTO submitOrder(CoffeeOrder submit);
 
     List<CoffeeOrder.DTO> listOrdersBetweenTime(LocalDateTime from, LocalDateTime to);
 
