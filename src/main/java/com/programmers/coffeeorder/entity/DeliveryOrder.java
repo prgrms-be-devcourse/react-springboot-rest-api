@@ -8,7 +8,7 @@ public abstract class DeliveryOrder extends Order {
     protected String address;
     protected int postcode;
 
-    protected DeliveryOrder(long id, String address, int postcode) {
+    protected DeliveryOrder(Long id, String address, int postcode) {
         super(id);
         this.address = address;
         this.postcode = postcode;
@@ -22,11 +22,12 @@ public abstract class DeliveryOrder extends Order {
         this.postcode = postcode;
     }
 
+    @Getter
     public static class DTO extends Order.DTO {
         protected String address;
         protected int postcode;
 
-        public DTO(long id, String address, int postcode) {
+        public DTO(Long id, String address, int postcode) {
             super(id);
             this.address = address;
             this.postcode = postcode;

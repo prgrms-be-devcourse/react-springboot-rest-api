@@ -1,4 +1,4 @@
-coffeeOrder:
+coffee-order:
   create: >
     INSERT INTO
       coffee_order(
@@ -54,7 +54,7 @@ coffeeOrder:
       BETWEEN
         ? AND ?
 
-orderItem:
+order-item:
   create: >
     INSERT INTO
       coffee_order_item(
@@ -62,3 +62,19 @@ orderItem:
         product_id)
     VALUES
       (?, ?)
+
+coffee-product:
+  select:
+    all: >
+      SELECT
+        *
+      FROM
+        coffee_product
+
+    byId: >
+      SELECT
+        *
+      FROM
+        coffee_product p
+      WHERE
+        p.id=?

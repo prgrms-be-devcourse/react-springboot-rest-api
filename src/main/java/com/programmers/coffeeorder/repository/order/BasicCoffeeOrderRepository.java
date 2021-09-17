@@ -4,9 +4,11 @@ import com.programmers.coffeeorder.entity.CoffeeOrder;
 import com.programmers.coffeeorder.entity.CoffeeProduct;
 import com.programmers.coffeeorder.entity.CoffeeType;
 import com.programmers.coffeeorder.entity.OrderStatus;
+import com.programmers.coffeeorder.repository.product.CoffeeProductRepository;
 import com.programmers.coffeeorder.repository.query.CoffeeOrderItemQuery;
 import com.programmers.coffeeorder.repository.query.CoffeeQuery;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -23,11 +25,14 @@ import java.util.*;
 
 @Repository
 @RequiredArgsConstructor
+@Slf4j
 public class BasicCoffeeOrderRepository implements CoffeeOrderRepository {
 
     private final JdbcTemplate jdbcTemplate;
     private final CoffeeQuery coffeeQuery;
     private final CoffeeOrderItemQuery coffeeOrderItemQuery;
+
+    private final CoffeeProductRepository coffeeProductRepository;
 
     @Override
     public CoffeeOrder createOrder(CoffeeOrder coffeeOrder) {
@@ -44,10 +49,15 @@ public class BasicCoffeeOrderRepository implements CoffeeOrderRepository {
         coffeeOrder.registerId(Objects.requireNonNull(keyHolder.getKey()).intValue());
 
         coffeeOrder.getOrderItems().forEach(coffeeProduct ->
-                jdbcTemplate.update(
-                        coffeeOrderItemQuery.getCreate(),
-                        coffeeOrder.getId(),
-                        coffeeProduct.getId()));
+                coffeeProductRepository.findById(coffeeProduct.getId()).ifPresentOrElse(
+                        menu -> {
+                            coffeeProduct.update(menu);
+                            jdbcTemplate.update(
+                                    coffeeOrderItemQuery.getCreate(),
+                                    coffeeOrder.getId(),
+                                    coffeeProduct.getId());
+                        },
+                        () -> log.warn("Requested not existing coffee product from order {}", coffeeOrder.getId())));
 
         return coffeeOrder;
     }
@@ -63,7 +73,7 @@ public class BasicCoffeeOrderRepository implements CoffeeOrderRepository {
             return Optional.empty();
         }
 
-        if(!coffeeOrderResultMap.containsKey(id)) {
+        if (!coffeeOrderResultMap.containsKey(id)) {
             return Optional.empty();
         }
 
@@ -103,7 +113,7 @@ public class BasicCoffeeOrderRepository implements CoffeeOrderRepository {
     private static final RowMapper<CoffeeOrder> coffeeOrderRowMapper = (rs, rowNum) -> {
         CoffeeOrder coffeeOrder;
         long id = rs.getLong("id");
-        if(coffeeOrderResultMap.containsKey(id)) {
+        if (coffeeOrderResultMap.containsKey(id)) {
             coffeeOrder = coffeeOrderResultMap.get(id);
         } else {
             String address = rs.getString("address");

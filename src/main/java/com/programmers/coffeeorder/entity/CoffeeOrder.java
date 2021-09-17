@@ -95,14 +95,13 @@ public class CoffeeOrder extends DeliveryOrder {
     @Getter
     @Setter
     public static class DTO extends DeliveryOrder.DTO {
-        private long orderId;
         private String email;
         private List<CoffeeProduct.DTO> orderItems;
         private LocalDateTime createdAt;
         private LocalDateTime updatedAt;
         private String status;
 
-        public DTO(long id, String address, int postcode, String email, List<CoffeeProduct> orderItems, LocalDateTime createdAt, LocalDateTime updatedAt, OrderStatus status) {
+        public DTO(Long id, String address, int postcode, String email, List<CoffeeProduct> orderItems, LocalDateTime createdAt, LocalDateTime updatedAt, OrderStatus status) {
             super(id, address, postcode);
             this.email = email;
             this.orderItems = orderItems.stream().map(CoffeeProduct::toDTO).collect(Collectors.toList());

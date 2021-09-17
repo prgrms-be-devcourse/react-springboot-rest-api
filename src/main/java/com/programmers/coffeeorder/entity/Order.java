@@ -16,6 +16,6 @@ public abstract class Order {
     @Setter
     @AllArgsConstructor
     public static class DTO {
-        private long id;
+        private Long id;
     }
 }
