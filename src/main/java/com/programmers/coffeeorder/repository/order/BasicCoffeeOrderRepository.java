@@ -1,9 +1,6 @@
 package com.programmers.coffeeorder.repository.order;
 
-import com.programmers.coffeeorder.entity.CoffeeOrder;
-import com.programmers.coffeeorder.entity.CoffeeProduct;
-import com.programmers.coffeeorder.entity.CoffeeType;
-import com.programmers.coffeeorder.entity.OrderStatus;
+import com.programmers.coffeeorder.entity.*;
 import com.programmers.coffeeorder.repository.product.CoffeeProductRepository;
 import com.programmers.coffeeorder.repository.query.CoffeeOrderItemQuery;
 import com.programmers.coffeeorder.repository.query.CoffeeQuery;
@@ -48,16 +45,21 @@ public class BasicCoffeeOrderRepository implements CoffeeOrderRepository {
 
         coffeeOrder.registerId(Objects.requireNonNull(keyHolder.getKey()).intValue());
 
-        coffeeOrder.getOrderItems().forEach(coffeeProduct ->
-                coffeeProductRepository.findById(coffeeProduct.getId()).ifPresentOrElse(
-                        menu -> {
-                            coffeeProduct.update(menu);
+        coffeeOrder.getOrderItems().forEach(coffeeProductOrderItem ->
+        {
+            CoffeeProduct product = coffeeProductOrderItem.getProduct();
+            coffeeProductRepository.findById(product.getId()).ifPresentOrElse(
+                    menu -> {
+                        product.update(menu);
+                        for(int i=0;i<coffeeProductOrderItem.getQuantity();i++) {
                             jdbcTemplate.update(
                                     coffeeOrderItemQuery.getCreate(),
                                     coffeeOrder.getId(),
-                                    coffeeProduct.getId());
-                        },
-                        () -> log.warn("Requested not existing coffee product from order {}", coffeeOrder.getId())));
+                                    product.getId());
+                        }
+                    },
+                    () -> log.warn("Requested not existing coffee product from order {}", coffeeOrder.getId()));
+        });
 
         return coffeeOrder;
     }
@@ -78,8 +80,7 @@ public class BasicCoffeeOrderRepository implements CoffeeOrderRepository {
         }
 
         CoffeeOrder coffeeOrder = coffeeOrderResultMap.get(id);
-        List<CoffeeProduct> items = coffeeOrderProductResultMap.getOrDefault(id, new ArrayList<>(0));
-        coffeeOrder.getOrderItems().addAll(items);
+        combineCoffeeOrderProduct(coffeeOrder);
         return Optional.of(coffeeOrder);
     }
 
@@ -90,7 +91,7 @@ public class BasicCoffeeOrderRepository implements CoffeeOrderRepository {
 
         jdbcTemplate.query(coffeeQuery.getSelect().getCreatedBetween(), coffeeOrderRowMapper, from, to);
 
-        return combineCoffeeOrderProduct();
+        return combineCoffeeOrderProducts();
     }
 
     @Override
@@ -102,7 +103,7 @@ public class BasicCoffeeOrderRepository implements CoffeeOrderRepository {
                 LocalDateTime.of(date.minusDays(1), LocalTime.of(14, 0)),
                 LocalDateTime.of(date, LocalTime.of(14, 0)));
 
-        return combineCoffeeOrderProduct();
+        return combineCoffeeOrderProducts();
     }
 
     // long id로 나중에 조회할 때 Map<CoffeeOrder, List<CoffeeProduct>> 같은 경우는
@@ -126,6 +127,7 @@ public class BasicCoffeeOrderRepository implements CoffeeOrderRepository {
             coffeeOrderResultMap.put(id, coffeeOrder);
         }
 
+        // 이미 찾았던 product는 캐시로 처리?
         long productId = rs.getLong("product_id");
         String productName = rs.getString("name");
         CoffeeType productCategory = CoffeeType.of(rs.getString("category"));
@@ -140,14 +142,22 @@ public class BasicCoffeeOrderRepository implements CoffeeOrderRepository {
         return coffeeOrder;
     };
 
-    private List<CoffeeOrder> combineCoffeeOrderProduct() {
+    private List<CoffeeOrder> combineCoffeeOrderProducts() {
         List<CoffeeOrder> result = new LinkedList<>();
         coffeeOrderResultMap.values().forEach(coffeeOrder -> {
-            List<CoffeeProduct> items = coffeeOrderProductResultMap.getOrDefault(coffeeOrder.getId(), new ArrayList<>());
-            coffeeOrder.getOrderItems().addAll(items);
+            combineCoffeeOrderProduct(coffeeOrder);
             result.add(coffeeOrder);
         });
 
         return result;
     }
+
+    private void combineCoffeeOrderProduct(CoffeeOrder coffeeOrder) {
+        Map<CoffeeProduct, Integer> productCounter = new HashMap<>();
+        coffeeOrderProductResultMap.getOrDefault(coffeeOrder.getId(), new ArrayList<>(0))
+                .forEach(product -> productCounter.put(product, productCounter.getOrDefault(product, 0) + 1));
+        productCounter.forEach((product, quantity) ->
+                coffeeOrder.getOrderItems().add(new CoffeeProductOrderItem(quantity, product)));
+    }
+
 }

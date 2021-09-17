@@ -1,11 +1,13 @@
 package com.programmers.coffeeorder.entity;
 
 import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @AllArgsConstructor
+@EqualsAndHashCode(of = {"id", "coffeeName", "coffeeType"})
 public class CoffeeProduct {
     private Long id;
     private String coffeeName;

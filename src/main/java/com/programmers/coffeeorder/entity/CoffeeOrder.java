@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 @Getter
 public class CoffeeOrder extends DeliveryOrder {
     private String email;
-    private final List<CoffeeProduct> orderItems;
+    private final List<CoffeeProductOrderItem> orderItems;
     private final LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private OrderStatus status;
@@ -22,7 +22,7 @@ public class CoffeeOrder extends DeliveryOrder {
             String email,
             String address,
             int postcode,
-            List<CoffeeProduct> orderItems) {
+            List<CoffeeProductOrderItem> orderItems) {
         this(
                 id,
                 email,
@@ -53,7 +53,7 @@ public class CoffeeOrder extends DeliveryOrder {
             OrderStatus status,
             LocalDateTime createdAt,
             LocalDateTime updatedAt,
-            List<CoffeeProduct> orderItems) {
+            List<CoffeeProductOrderItem> orderItems) {
         super(id, address, postcode);
         this.email = email;
         this.createdAt = createdAt;
@@ -96,15 +96,15 @@ public class CoffeeOrder extends DeliveryOrder {
     @Setter
     public static class DTO extends DeliveryOrder.DTO {
         private String email;
-        private List<CoffeeProduct.DTO> orderItems;
+        private List<CoffeeProductOrderItem.DTO> orderItems;
         private LocalDateTime createdAt;
         private LocalDateTime updatedAt;
         private String status;
 
-        public DTO(Long id, String address, int postcode, String email, List<CoffeeProduct> orderItems, LocalDateTime createdAt, LocalDateTime updatedAt, OrderStatus status) {
+        public DTO(Long id, String address, int postcode, String email, List<CoffeeProductOrderItem> orderItems, LocalDateTime createdAt, LocalDateTime updatedAt, OrderStatus status) {
             super(id, address, postcode);
             this.email = email;
-            this.orderItems = orderItems.stream().map(CoffeeProduct::toDTO).collect(Collectors.toList());
+            this.orderItems = orderItems.stream().map(CoffeeProductOrderItem::toDTO).collect(Collectors.toList());
             this.createdAt = createdAt;
             this.updatedAt = updatedAt;
             this.status = status.toString();
