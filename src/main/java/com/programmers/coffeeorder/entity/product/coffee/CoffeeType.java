@@ -1,4 +1,4 @@
-package com.programmers.coffeeorder.entity;
+package com.programmers.coffeeorder.entity.product.coffee;
 
 public enum CoffeeType {
     LATTE, CAPPUCCINO, MACCHIATO, BLACK, UNKNOWN;

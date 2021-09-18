@@ -1,4 +1,4 @@
-package com.programmers.coffeeorder.entity;
+package com.programmers.coffeeorder.entity.product.coffee;
 
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;

@@ -1,6 +1,6 @@
 package com.programmers.coffeeorder.controller;
 
-import com.programmers.coffeeorder.entity.CoffeeProduct;
+import com.programmers.coffeeorder.entity.product.coffee.CoffeeProduct;
 import com.programmers.coffeeorder.service.product.CoffeeProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

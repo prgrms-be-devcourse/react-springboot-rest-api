@@ -1,6 +1,6 @@
 package com.programmers.coffeeorder.repository.order;
 
-import com.programmers.coffeeorder.entity.CoffeeOrder;
+import com.programmers.coffeeorder.entity.order.CoffeeOrder;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;

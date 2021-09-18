@@ -1,6 +1,6 @@
 package com.programmers.coffeeorder.repository.product;
 
-import com.programmers.coffeeorder.entity.CoffeeProduct;
+import com.programmers.coffeeorder.entity.product.coffee.CoffeeProduct;
 
 import java.util.List;
 import java.util.Optional;

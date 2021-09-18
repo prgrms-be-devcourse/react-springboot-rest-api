@@ -1,7 +1,7 @@
 package com.programmers.coffeeorder.repository.product;
 
-import com.programmers.coffeeorder.entity.CoffeeProduct;
-import com.programmers.coffeeorder.entity.CoffeeType;
+import com.programmers.coffeeorder.entity.product.coffee.CoffeeProduct;
+import com.programmers.coffeeorder.entity.product.coffee.CoffeeType;
 import com.programmers.coffeeorder.repository.query.CoffeeProductQuery;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataAccessException;

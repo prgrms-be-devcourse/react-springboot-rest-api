@@ -1,6 +1,6 @@
 package com.programmers.coffeeorder.service.order;
 
-import com.programmers.coffeeorder.entity.CoffeeOrder;
+import com.programmers.coffeeorder.entity.order.CoffeeOrder;
 import com.programmers.coffeeorder.repository.order.CoffeeOrderRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service

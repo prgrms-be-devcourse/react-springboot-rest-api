@@ -1,6 +1,10 @@
 package com.programmers.coffeeorder.repository.order;
 
-import com.programmers.coffeeorder.entity.*;
+import com.programmers.coffeeorder.entity.order.CoffeeOrder;
+import com.programmers.coffeeorder.entity.order.OrderStatus;
+import com.programmers.coffeeorder.entity.product.coffee.CoffeeProduct;
+import com.programmers.coffeeorder.entity.product.coffee.CoffeeProductOrderItem;
+import com.programmers.coffeeorder.entity.product.coffee.CoffeeType;
 import com.programmers.coffeeorder.repository.product.CoffeeProductRepository;
 import com.programmers.coffeeorder.repository.query.CoffeeOrderItemQuery;
 import com.programmers.coffeeorder.repository.query.CoffeeQuery;

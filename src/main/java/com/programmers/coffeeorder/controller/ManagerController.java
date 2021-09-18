@@ -1,6 +1,6 @@
 package com.programmers.coffeeorder.controller;
 
-import com.programmers.coffeeorder.entity.CoffeeOrder;
+import com.programmers.coffeeorder.entity.order.CoffeeOrder;
 import com.programmers.coffeeorder.service.order.CoffeeOrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -33,6 +33,14 @@ public class ManagerController {
         List<CoffeeOrder.DTO> orders = coffeeOrderService.listOrdersBetweenTime(from, to);
         model.addAttribute("orders", orders);
         return "manage/orders";
+    }
+
+    @GetMapping("/delivery")
+    public String getDeliveryReservations(@RequestParam(value = "date", required = false)
+                                          @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
+                                          Model model) {
+        if(date == null) date = LocalDate.now();
+
     }
 
 }

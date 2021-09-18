@@ -1,4 +1,4 @@
-package com.programmers.coffeeorder.entity;
+package com.programmers.coffeeorder.entity.order;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

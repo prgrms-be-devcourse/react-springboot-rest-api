@@ -1,5 +1,6 @@
-package com.programmers.coffeeorder.entity;
+package com.programmers.coffeeorder.entity.order;
 
+import com.programmers.coffeeorder.entity.product.coffee.CoffeeProductOrderItem;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -28,7 +29,7 @@ public class CoffeeOrder extends DeliveryOrder {
                 email,
                 address,
                 postcode,
-                OrderStatus.NOT_DELIVERED,
+                OrderStatus.CREATED,
                 LocalDateTime.now(),
                 LocalDateTime.now(),
                 orderItems);
