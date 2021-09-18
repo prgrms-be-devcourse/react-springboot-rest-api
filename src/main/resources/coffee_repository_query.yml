@@ -30,6 +30,8 @@ coffee-order:
         i.product_id=p.id
       WHERE
         c.id=?
+      ORDER BY
+        c.id, p.id
 
     createdBetween:
       SELECT
@@ -53,6 +55,8 @@ coffee-order:
         c.created_at
       BETWEEN
         ? AND ?
+      ORDER BY
+        c.id, p.id
 
 order-item:
   create: >

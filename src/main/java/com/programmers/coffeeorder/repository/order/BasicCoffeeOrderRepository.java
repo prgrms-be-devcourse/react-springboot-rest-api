@@ -108,7 +108,8 @@ public class BasicCoffeeOrderRepository implements CoffeeOrderRepository {
 
     // long id로 나중에 조회할 때 Map<CoffeeOrder, List<CoffeeProduct>> 같은 경우는
     // key 를 long 으로 변환해서 비교해야 하기 때문에 그냥 두 개의 map을 뒀음. 성능, 메모리 상 장단점??
-    // 동기화 문제???
+    // TODO: 동기화 문제???
+    // TODO: 두 번 쿼리를 보내서 count를 하느냐 아니면 자바 코드 상에서 직접 count 하느냐
     private static final Map<Long, CoffeeOrder> coffeeOrderResultMap = new HashMap<>();
     private static final Map<Long, List<CoffeeProduct>> coffeeOrderProductResultMap = new HashMap<>();
     private static final RowMapper<CoffeeOrder> coffeeOrderRowMapper = (rs, rowNum) -> {
@@ -127,7 +128,7 @@ public class BasicCoffeeOrderRepository implements CoffeeOrderRepository {
             coffeeOrderResultMap.put(id, coffeeOrder);
         }
 
-        // 이미 찾았던 product는 캐시로 처리?
+        // TODO: 이미 찾았던 product는 캐시로 처리?
         long productId = rs.getLong("product_id");
         String productName = rs.getString("name");
         CoffeeType productCategory = CoffeeType.of(rs.getString("category"));
@@ -153,7 +154,7 @@ public class BasicCoffeeOrderRepository implements CoffeeOrderRepository {
     }
 
     private void combineCoffeeOrderProduct(CoffeeOrder coffeeOrder) {
-        Map<CoffeeProduct, Integer> productCounter = new HashMap<>();
+        Map<CoffeeProduct, Integer> productCounter = new TreeMap<>((o1, o2) -> (int) (o1.getId() - o2.getId()));
         coffeeOrderProductResultMap.getOrDefault(coffeeOrder.getId(), new ArrayList<>(0))
                 .forEach(product -> productCounter.put(product, productCounter.getOrDefault(product, 0) + 1));
         productCounter.forEach((product, quantity) ->
