@@ -1,6 +1,7 @@
 package com.programmers.coffeeorder.controller;
 
 import com.programmers.coffeeorder.entity.order.CoffeeOrder;
+import com.programmers.coffeeorder.service.delivery.CoffeeDeliveryService;
 import com.programmers.coffeeorder.service.order.CoffeeOrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/manage")
@@ -20,9 +22,10 @@ import java.util.List;
 public class ManagerController {
 
     private final CoffeeOrderService coffeeOrderService;
+    private final CoffeeDeliveryService coffeeDeliveryService;
 
     @GetMapping("/orders")
-    // TODO: https://javacan.tistory.com/468 use custom resolver?
+    // https://javacan.tistory.com/468 use custom resolver?
     public String getCoffeeOrders(@RequestParam(value = "from", required = false)
                                   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime from, // https://www.baeldung.com/spring-date-parameters
                                   @RequestParam(value = "to", required = false)
@@ -35,12 +38,15 @@ public class ManagerController {
         return "manage/orders";
     }
 
-    @GetMapping("/delivery")
-    public String getDeliveryReservations(@RequestParam(value = "date", required = false)
+    @GetMapping("/deliveries")
+    public String getCoffeeDeliveryReservations(@RequestParam(value = "date", required = false)
                                           @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
                                           Model model) {
         if(date == null) date = LocalDate.now();
-
+        Map<String, List<CoffeeOrder>> deliveries = coffeeDeliveryService.listAppointedDeliveries(date);
+        model.addAttribute("deliveries", deliveries);
+        model.addAttribute("date", date);
+        return "manage/deliveries-scheduled";
     }
 
 }

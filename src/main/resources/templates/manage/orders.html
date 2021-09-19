@@ -14,10 +14,10 @@
     <form method="get" th:action="@{/manage/orders}">
         <span>ORDERS</span>
         <label for="from">FROM: </label>
-        <input id="from" type="datetime-local" pattern="[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}" placeholder="1970-01-01T00:00:00">
+        <input id="from" name="from" type="datetime-local" pattern="[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}" placeholder="1970-01-01T00:00:00">
 
         <label for="to">TO: </label>
-        <input id="to" type="datetime-local" pattern="[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}" placeholder="2199-12-31T23:59:59">
+        <input id="to" name="to" type="datetime-local" pattern="[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}" placeholder="2199-12-31T23:59:59">
 
         <input type="submit">
     </form>

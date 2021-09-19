@@ -12,5 +12,4 @@ public interface CoffeeOrderService {
 
     List<CoffeeOrder.DTO> listOrdersBetweenTime(LocalDateTime from, LocalDateTime to);
 
-    List<CoffeeOrder.DTO> getDeliveryReservedOrders(LocalDate date);
 }

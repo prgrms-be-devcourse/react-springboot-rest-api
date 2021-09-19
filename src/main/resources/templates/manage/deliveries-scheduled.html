@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Coffee Order Manager</title>
+</head>
+<body>
+<div>
+    <h1>Coffee Order Manager - List Reserved Deliveries</h1>
+</div>
+
+<div>
+    <form method="get" th:action="@{/manage/deliveries}">
+        <span>DELIVERIES </span>
+        <label for="date">OF: </label>
+        <input id="date" name="date" type="date" th:value="${date}" pattern="[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}"
+               placeholder="1970-01-01T00:00:00">
+        <input type="submit">
+    </form>
+</div>
+
+<div th:each="email: ${deliveries.keySet()}" style="border: 1px solid black; margin: 10px; padding: 10px;">
+    <p th:text="|Customer: ${email}|">Customer: email@domain.com</p>
+
+    <div th:each="order: ${deliveries.get(email)}" th:object="${order}">
+        <p th:text="|ORDER #*{id}|">ORDER #0</p>
+        <p th:text="|Destination: *{address}(*{postcode})|">Destination: cheongju(12345)</p>
+        <p th:text="|Status: *{status}|">Status: NOT_DELIVERED</p>
+
+        <table style="border: 1px solid black">
+            <tr>
+                <th>COFFEE NAME</th>
+                <th>COFFEE TYPE</th>
+                <th>PRICE</th>
+                <th>QUANTITY</th>
+            </tr>
+            <tr th:each="coffee: ${order.readCoffeeOrderItems()}">
+                <td th:text="${coffee.getCoffeeProduct().getCoffeeName()}">COFFEE NAME HERE</td>
+                <td th:text="${coffee.getCoffeeProduct().getCoffeeType()}">COFFEE TYPE HERE</td>
+                <td th:text="${coffee.getCoffeeProduct().getPrice()}">COFFEE PRICE HERE</td>
+                <td th:text="${coffee.getQuantity()}">COFFEE QUANTITY HERE</td>
+            </tr>
+        </table>
+    </div>
+</div>
+</body>
+</html>

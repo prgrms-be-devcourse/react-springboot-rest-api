@@ -50,10 +50,6 @@ public class CoffeeOrder extends DeliverableOrder {
         this.email = email;
     }
 
-    public List<CoffeeProductOrderItem> getCoffeeOrderItems() {
-        return orderItems.stream().map(CoffeeProductOrderItem.class::cast).collect(Collectors.toList());
-    }
-
     public void registerId(long id) {
         super.id = id;
         updateTimestamp();

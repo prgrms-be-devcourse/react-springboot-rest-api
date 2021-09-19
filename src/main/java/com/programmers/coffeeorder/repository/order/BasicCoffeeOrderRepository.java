@@ -49,8 +49,9 @@ public class BasicCoffeeOrderRepository implements CoffeeOrderRepository {
 
         coffeeOrder.registerId(Objects.requireNonNull(keyHolder.getKey()).intValue());
 
-        coffeeOrder.getCoffeeOrderItems().forEach(coffeeProductOrderItem ->
+        coffeeOrder.getOrderItems().forEach(productOrderItem ->
         {
+            CoffeeProductOrderItem coffeeProductOrderItem = (CoffeeProductOrderItem) productOrderItem;
             CoffeeProduct product = coffeeProductOrderItem.getCoffeeProduct();
             coffeeProductRepository.findById(product.getId()).ifPresentOrElse(
                     menu -> {

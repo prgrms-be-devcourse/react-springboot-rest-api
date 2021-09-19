@@ -5,7 +5,6 @@ import com.programmers.coffeeorder.repository.order.CoffeeOrderRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -25,12 +24,6 @@ public class BasicCoffeeOrderService implements CoffeeOrderService {
     @Override
     public List<CoffeeOrder.DTO> listOrdersBetweenTime(LocalDateTime from, LocalDateTime to) {
         List<CoffeeOrder> coffeeOrders = coffeeOrderRepository.listOrdersBetween(from, to);
-        return coffeeOrders.stream().map(CoffeeOrder::toDTO).collect(Collectors.toList());
-    }
-
-    @Override
-    public List<CoffeeOrder.DTO> getDeliveryReservedOrders(LocalDate date) {
-        List<CoffeeOrder> coffeeOrders = coffeeOrderRepository.listDeliveryReservedOrders(date);
         return coffeeOrders.stream().map(CoffeeOrder::toDTO).collect(Collectors.toList());
     }
 
