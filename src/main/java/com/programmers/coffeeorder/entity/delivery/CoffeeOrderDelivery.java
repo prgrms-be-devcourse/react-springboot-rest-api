@@ -1,7 +1,6 @@
 package com.programmers.coffeeorder.entity.delivery;
 
 import com.programmers.coffeeorder.entity.order.CoffeeOrder;
-import com.programmers.coffeeorder.entity.order.DeliveryOrder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -11,26 +10,27 @@ import java.time.LocalDateTime;
 @Getter
 @EqualsAndHashCode(callSuper = true)
 public class CoffeeOrderDelivery extends OrderDelivery {
+
     public CoffeeOrderDelivery(
             Long id,
-            CoffeeOrder order) {
-        super(id, order);
+            CoffeeOrder coffeeOrder) {
+        super(id, coffeeOrder);
     }
 
     public CoffeeOrderDelivery(
             Long id,
-            CoffeeOrder order,
+            CoffeeOrder coffeeOrder,
             DeliveryStatus deliveryStatus) {
-        super(id, order, deliveryStatus);
+        super(id, coffeeOrder, deliveryStatus);
     }
 
     public CoffeeOrderDelivery(
             Long id,
-            CoffeeOrder order,
+            CoffeeOrder coffeeOrder,
             DeliveryStatus deliveryStatus,
             LocalDateTime createdAt,
             LocalDateTime updatedAt) {
-        super(id, order, deliveryStatus, createdAt, updatedAt);
+        super(id, coffeeOrder, deliveryStatus, createdAt, updatedAt);
     }
 
     public CoffeeOrder getCoffeeOrder() {
@@ -38,7 +38,7 @@ public class CoffeeOrderDelivery extends OrderDelivery {
     }
 
     public DTO toDTO() {
-        return new DTO(id, ((CoffeeOrder) order).toDTO(), deliveryStatus, createdAt, updatedAt);
+        return new DTO(id, getCoffeeOrder().toDTO(), deliveryStatus, createdAt, updatedAt);
     }
 
     @Getter
@@ -46,11 +46,15 @@ public class CoffeeOrderDelivery extends OrderDelivery {
     public static class DTO extends OrderDelivery.DTO {
         public DTO(
                 Long id,
-                DeliveryOrder.DTO order,
+                CoffeeOrder.DTO order,
                 DeliveryStatus status,
                 LocalDateTime createdAt,
                 LocalDateTime updatedAt) {
             super(id, order, status, createdAt, updatedAt);
+        }
+
+        public CoffeeOrder.DTO getCoffeeOrder() {
+            return (CoffeeOrder.DTO) order;
         }
     }
 }

@@ -26,7 +26,7 @@ public abstract class Order {
     @Setter
     @AllArgsConstructor(access = AccessLevel.PROTECTED)
     protected abstract static class DTO {
-        protected Long id;
+        protected final long id;
         protected final LocalDateTime createdAt;
         protected final LocalDateTime updatedAt;
     }

@@ -3,7 +3,7 @@ package com.programmers.coffeeorder.controller;
 import com.programmers.coffeeorder.controller.bind.CoffeeOrderSubmit;
 import com.programmers.coffeeorder.entity.order.CoffeeOrder;
 import com.programmers.coffeeorder.entity.product.coffee.CoffeeProduct;
-import com.programmers.coffeeorder.entity.product.coffee.CoffeeProductOrderItem;
+import com.programmers.coffeeorder.entity.order.item.CoffeeProductOrderItem;
 import com.programmers.coffeeorder.service.order.CoffeeOrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -34,7 +34,7 @@ public class OrderController {
                                 new CoffeeProduct(coffeeOrderDetails.getProductId())))
                 .collect(Collectors.toList());
         CoffeeOrder.DTO dto = coffeeOrderService.submitOrder(new CoffeeOrder(null, email, address, postcode, products));
-        if (dto.getId() == null) return ResponseEntity.internalServerError().body(dto);
+        if (dto.getId() < 1) return ResponseEntity.internalServerError().body(dto);
         return ResponseEntity.ok(dto);
     }
 }

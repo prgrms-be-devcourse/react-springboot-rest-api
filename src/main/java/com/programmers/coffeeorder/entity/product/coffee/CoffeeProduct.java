@@ -1,15 +1,14 @@
 package com.programmers.coffeeorder.entity.product.coffee;
 
+import com.programmers.coffeeorder.entity.product.Product;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
-@AllArgsConstructor
-@EqualsAndHashCode(of = {"id", "coffeeName", "coffeeType"})
-public class CoffeeProduct {
-    private Long id;
+@EqualsAndHashCode(of = {"coffeeName", "coffeeType"}, callSuper = true)
+public class CoffeeProduct extends Product {
     private String coffeeName;
     private CoffeeType coffeeType;
     private int price;
@@ -20,7 +19,15 @@ public class CoffeeProduct {
     }
 
     public CoffeeProduct(Long id) {
-        this.id = id;
+        super(id);
+    }
+
+    public CoffeeProduct(Long id, String coffeeName, CoffeeType coffeeType, int price, String description) {
+        super(id);
+        this.coffeeName = coffeeName;
+        this.coffeeType = coffeeType;
+        this.price = price;
+        this.description = description;
     }
 
     public void update(CoffeeProduct product) {
@@ -30,13 +37,19 @@ public class CoffeeProduct {
         this.description = product.description;
     }
 
-    @AllArgsConstructor
+
     @Getter
     @Setter
-    public static class DTO {
-        Long productId;
+    public static class DTO extends Product.DTO {
         String productName;
         String category;
         int price;
+
+        public DTO(long productId, String productName, String category, int price) {
+            super(productId);
+            this.productName = productName;
+            this.category = category;
+            this.price = price;
+        }
     }
 }

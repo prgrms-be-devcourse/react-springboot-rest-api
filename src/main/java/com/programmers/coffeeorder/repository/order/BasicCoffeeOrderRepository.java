@@ -3,7 +3,7 @@ package com.programmers.coffeeorder.repository.order;
 import com.programmers.coffeeorder.entity.order.CoffeeOrder;
 import com.programmers.coffeeorder.entity.order.OrderStatus;
 import com.programmers.coffeeorder.entity.product.coffee.CoffeeProduct;
-import com.programmers.coffeeorder.entity.product.coffee.CoffeeProductOrderItem;
+import com.programmers.coffeeorder.entity.order.item.CoffeeProductOrderItem;
 import com.programmers.coffeeorder.entity.product.coffee.CoffeeType;
 import com.programmers.coffeeorder.repository.product.CoffeeProductRepository;
 import com.programmers.coffeeorder.repository.query.CoffeeOrderItemQuery;
@@ -49,9 +49,9 @@ public class BasicCoffeeOrderRepository implements CoffeeOrderRepository {
 
         coffeeOrder.registerId(Objects.requireNonNull(keyHolder.getKey()).intValue());
 
-        coffeeOrder.getOrderItems().forEach(coffeeProductOrderItem ->
+        coffeeOrder.getCoffeeOrderItems().forEach(coffeeProductOrderItem ->
         {
-            CoffeeProduct product = coffeeProductOrderItem.getProduct();
+            CoffeeProduct product = coffeeProductOrderItem.getCoffeeProduct();
             coffeeProductRepository.findById(product.getId()).ifPresentOrElse(
                     menu -> {
                         product.update(menu);
@@ -113,7 +113,6 @@ public class BasicCoffeeOrderRepository implements CoffeeOrderRepository {
     // long id로 나중에 조회할 때 Map<CoffeeOrder, List<CoffeeProduct>> 같은 경우는
     // key 를 long 으로 변환해서 비교해야 하기 때문에 그냥 두 개의 map을 뒀음. 성능, 메모리 상 장단점??
     // TODO: 동기화 문제???
-    // TODO: 두 번 쿼리를 보내서 count를 하느냐 아니면 자바 코드 상에서 직접 count 하느냐
     private static final Map<Long, CoffeeOrder> coffeeOrderResultMap = new HashMap<>();
     private static final Map<Long, List<CoffeeProduct>> coffeeOrderProductResultMap = new HashMap<>();
     private static final RowMapper<CoffeeOrder> coffeeOrderRowMapper = (rs, rowNum) -> {
