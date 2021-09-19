@@ -1,6 +1,7 @@
 package com.programmers.coffeeorder.entity.order;
 
 import com.programmers.coffeeorder.entity.product.coffee.CoffeeProductOrderItem;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -11,12 +12,10 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Getter
+@EqualsAndHashCode(of = "email", callSuper = true)
 public class CoffeeOrder extends DeliveryOrder {
     private String email;
     private final List<CoffeeProductOrderItem> orderItems;
-    private final LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
-    private OrderStatus status;
 
     public CoffeeOrder(
             Long id,
@@ -24,15 +23,7 @@ public class CoffeeOrder extends DeliveryOrder {
             String address,
             int postcode,
             List<CoffeeProductOrderItem> orderItems) {
-        this(
-                id,
-                email,
-                address,
-                postcode,
-                OrderStatus.CREATED,
-                LocalDateTime.now(),
-                LocalDateTime.now(),
-                orderItems);
+        this(id, email, address, postcode, OrderStatus.CREATED, LocalDateTime.now(), LocalDateTime.now(), orderItems);
     }
 
     public CoffeeOrder(
@@ -55,16 +46,9 @@ public class CoffeeOrder extends DeliveryOrder {
             LocalDateTime createdAt,
             LocalDateTime updatedAt,
             List<CoffeeProductOrderItem> orderItems) {
-        super(id, address, postcode);
+        super(id, address, postcode, status, createdAt, updatedAt);
         this.email = email;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
-        this.status = status;
         this.orderItems = orderItems;
-    }
-
-    private void updateTimestamp() {
-        this.updatedAt = LocalDateTime.now();
     }
 
     public void registerId(long id) {
@@ -98,29 +82,11 @@ public class CoffeeOrder extends DeliveryOrder {
     public static class DTO extends DeliveryOrder.DTO {
         private String email;
         private List<CoffeeProductOrderItem.DTO> orderItems;
-        private LocalDateTime createdAt;
-        private LocalDateTime updatedAt;
-        private String status;
 
         public DTO(Long id, String address, int postcode, String email, List<CoffeeProductOrderItem> orderItems, LocalDateTime createdAt, LocalDateTime updatedAt, OrderStatus status) {
-            super(id, address, postcode);
+            super(id, address, postcode, status, createdAt, updatedAt);
             this.email = email;
             this.orderItems = orderItems.stream().map(CoffeeProductOrderItem::toDTO).collect(Collectors.toList());
-            this.createdAt = createdAt;
-            this.updatedAt = updatedAt;
-            this.status = status.toString();
         }
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, address, postcode, email);
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (!(obj instanceof CoffeeOrder)) return false;
-        CoffeeOrder other = (CoffeeOrder) obj;
-        return id.equals(other.id);
     }
 }

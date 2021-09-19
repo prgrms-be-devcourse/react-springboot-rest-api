@@ -1,4 +1,4 @@
-package com.programmers.coffeeorder.entity.order;
+package com.programmers.coffeeorder.entity.delivery;
 
 import lombok.*;
 
@@ -7,12 +7,12 @@ import java.time.LocalDateTime;
 @Getter
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 @EqualsAndHashCode(of = "id")
-public abstract class Order {
+public abstract class Delivery {
     protected Long id;
     protected final LocalDateTime createdAt;
     protected LocalDateTime updatedAt;
 
-    protected Order(Long id) {
+    protected Delivery(Long id) {
         this.id = id;
         createdAt = LocalDateTime.now();
         updatedAt = LocalDateTime.now();
@@ -26,7 +26,7 @@ public abstract class Order {
     @Setter
     @AllArgsConstructor(access = AccessLevel.PROTECTED)
     protected abstract static class DTO {
-        protected Long id;
+        protected final long id;
         protected final LocalDateTime createdAt;
         protected final LocalDateTime updatedAt;
     }
