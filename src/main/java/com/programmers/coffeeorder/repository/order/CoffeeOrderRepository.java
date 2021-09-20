@@ -12,6 +12,8 @@ public interface CoffeeOrderRepository {
 
     Optional<CoffeeOrder> readOrder(long id);
 
+    CoffeeOrder updateOrder(CoffeeOrder coffeeOrder);
+
     Collection<CoffeeOrder> listOrdersBetween(LocalDateTime from, LocalDateTime to);
 
 }

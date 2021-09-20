@@ -1,6 +1,7 @@
 package com.programmers.coffeeorder.service.order;
 
 import com.programmers.coffeeorder.entity.order.CoffeeOrder;
+import com.programmers.coffeeorder.entity.order.OrderStatus;
 import com.programmers.coffeeorder.repository.order.CoffeeOrderRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,6 +21,15 @@ public class BasicCoffeeOrderService implements CoffeeOrderService {
     public CoffeeOrder.DTO submitOrder(CoffeeOrder submit) {
         CoffeeOrder order = coffeeOrderRepository.createOrder(submit);
         return order.toDTO();
+    }
+
+    @Override
+    public CoffeeOrder cancelOrder(long id) {
+        CoffeeOrder coffeeOrder = coffeeOrderRepository.readOrder(id).orElseThrow(() -> {
+            throw new IllegalArgumentException("Coffee order with given id not exist.");
+        });
+        coffeeOrder.updateOrderStatus(OrderStatus.CANCELLED);
+        return coffeeOrderRepository.updateOrder(coffeeOrder);
     }
 
     @Override

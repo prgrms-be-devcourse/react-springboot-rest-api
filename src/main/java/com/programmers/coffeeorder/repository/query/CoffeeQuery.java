@@ -15,11 +15,18 @@ import org.springframework.context.annotation.PropertySource;
 public class CoffeeQuery {
     private String create;
     private Select select;
+    private Update update;
 
     @Getter
     @Setter
     public static class Select {
         private String byId;
         private String createdBetween;
+    }
+
+    @Getter
+    @Setter
+    public static class Update {
+        private String byId;
     }
 }

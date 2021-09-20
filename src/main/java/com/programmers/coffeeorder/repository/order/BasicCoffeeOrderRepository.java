@@ -71,6 +71,7 @@ public class BasicCoffeeOrderRepository implements CoffeeOrderRepository {
         try {
             products = jdbcTemplate.query(coffeeQuery.getSelect().getById(), CoffeeOrderRowMappers.coffeeOrderRowMapper, id);
         } catch (DataAccessException ex) {
+            log.warn(ex.getLocalizedMessage());
             return Optional.empty();
         }
 
@@ -93,6 +94,25 @@ public class BasicCoffeeOrderRepository implements CoffeeOrderRepository {
                 resultItems);
 
         return Optional.of(coffeeOrder);
+    }
+
+    @Override
+    public CoffeeOrder updateOrder(CoffeeOrder coffeeOrder) {
+        jdbcTemplate.update(coffeeQuery.getUpdate().getById(),
+                coffeeOrder.getAddress(),
+                coffeeOrder.getPostcode(),
+                coffeeOrder.getEmail(),
+                LocalDateTime.now(),
+                coffeeOrder.getStatus().toString(),
+                coffeeOrder.getId());
+
+        List<CoffeeOrder> notJoinedOrder = jdbcTemplate.query(coffeeQuery.getSelect().getById(), CoffeeOrderRowMappers.coffeeOrderRowMapper, coffeeOrder.getId());
+        return notJoinedOrder.stream().reduce((order1, order2) -> {
+            order1.getOrderItems().addAll(order2.getOrderItems());
+            return order1;
+        }).orElseThrow(() -> {
+            throw new IllegalArgumentException("Empty coffee order record received.");
+        });
     }
 
     @Override

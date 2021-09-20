@@ -17,7 +17,8 @@ coffee-order:
         p.name,
         p.description,
         p.price,
-        p.category
+        p.category,
+        i.quantity
       FROM
         coffee_order c
       JOIN
@@ -58,6 +59,19 @@ coffee-order:
         ? AND ?
       ORDER BY
         c.id, p.id
+
+  update:
+    byId: >
+      UPDATE
+        coffee_order
+      SET
+        address=?,
+        postcode=?,
+        email=?,
+        updated_at=?,
+        order_status=?
+      WHERE
+        id=?
 
 order-item:
   create: >

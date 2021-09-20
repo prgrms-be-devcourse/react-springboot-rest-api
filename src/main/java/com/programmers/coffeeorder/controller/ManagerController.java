@@ -34,8 +34,17 @@ public class ManagerController {
         if (from == null) from = LocalDateTime.of(1970, 1, 1, 0, 0);
         if (to == null) to = LocalDateTime.now();
         List<CoffeeOrder.DTO> orders = coffeeOrderService.listOrdersBetweenTime(from, to);
+        model.addAttribute("from", from);
+        model.addAttribute("to", to);
         model.addAttribute("orders", orders);
         return "manage/orders";
+    }
+
+    @GetMapping("/orders/cancel")
+    public String cancelCoffeeOrder(@RequestParam(name = "id") Long id) {
+        if(id == null) return "redirect:/manage/orders";
+        coffeeOrderService.cancelOrder(id);
+        return "redirect:/manage/orders";
     }
 
     @GetMapping("/deliveries")
