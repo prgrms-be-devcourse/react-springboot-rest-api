@@ -1,5 +1,6 @@
 package com.programmers.coffeeorder.entity.delivery;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.programmers.coffeeorder.entity.order.CoffeeOrder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -53,6 +54,7 @@ public class CoffeeOrderDelivery extends OrderDelivery {
             super(id, order, status, createdAt, updatedAt);
         }
 
+        @JsonIgnore
         public CoffeeOrder.DTO getCoffeeOrder() {
             return (CoffeeOrder.DTO) order;
         }

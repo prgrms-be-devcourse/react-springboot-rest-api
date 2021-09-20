@@ -1,5 +1,6 @@
 package com.programmers.coffeeorder.entity.order.item;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.programmers.coffeeorder.entity.product.coffee.CoffeeProduct;
 import lombok.Getter;
 import lombok.Setter;
@@ -27,6 +28,7 @@ public class CoffeeProductOrderItem extends ProductOrderItem {
             super(quantity, product.toDTO());
         }
 
+        @JsonIgnore
         public CoffeeProduct.DTO getCoffeeProduct() {
             return (CoffeeProduct.DTO) product;
         }
