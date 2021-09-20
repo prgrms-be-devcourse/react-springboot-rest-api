@@ -2,6 +2,7 @@ package com.programmers.coffeeorder.repository.order;
 
 import com.programmers.coffeeorder.entity.order.CoffeeOrder;
 import com.programmers.coffeeorder.entity.order.OrderStatus;
+import com.programmers.coffeeorder.entity.product.Product;
 import com.programmers.coffeeorder.entity.product.coffee.CoffeeProduct;
 import com.programmers.coffeeorder.entity.order.item.CoffeeProductOrderItem;
 import com.programmers.coffeeorder.entity.product.coffee.CoffeeType;
@@ -19,10 +20,9 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.PreparedStatement;
 import java.sql.Statement;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Repository
 @RequiredArgsConstructor
@@ -71,68 +71,72 @@ public class BasicCoffeeOrderRepository implements CoffeeOrderRepository {
 
     @Override
     public Optional<CoffeeOrder> readOrder(long id) {
-        coffeeOrderResultMap.clear();
-        coffeeOrderProductResultMap.clear();
-
+        List<CoffeeOrder> products;
         try {
-            jdbcTemplate.query(coffeeQuery.getSelect().getById(), coffeeOrderRowMapper, id);
+            products = jdbcTemplate.query(coffeeQuery.getSelect().getById(), coffeeOrderRowMapper, id);
         } catch (DataAccessException ex) {
             return Optional.empty();
         }
 
-        if (!coffeeOrderResultMap.containsKey(id)) {
-            return Optional.empty();
-        }
+        if(products.isEmpty()) return Optional.empty();
 
-        CoffeeOrder coffeeOrder = coffeeOrderResultMap.get(id);
-        combineCoffeeOrderProduct(coffeeOrder);
+        Map<Product, List<CoffeeProductOrderItem>> groupByCoffeeType = products.stream()
+                .map(coffeeOrder -> (CoffeeProductOrderItem) (coffeeOrder.getOrderItems().get(0)))
+                .collect(Collectors.groupingBy(CoffeeProductOrderItem::getProduct, Collectors.toList()));
+        CoffeeOrder orderInfo = products.get(0);
+        List<CoffeeProductOrderItem> resultItems = new LinkedList<>();
+        groupByCoffeeType.forEach((key, value) -> resultItems.add(new CoffeeProductOrderItem(value.size(), value.get(0).getCoffeeProduct())));
+        CoffeeOrder coffeeOrder = new CoffeeOrder(
+                id,
+                orderInfo.getEmail(),
+                orderInfo.getAddress(),
+                orderInfo.getPostcode(),
+                orderInfo.getStatus(),
+                orderInfo.getCreatedAt(),
+                orderInfo.getUpdatedAt(),
+                resultItems);
+
         return Optional.of(coffeeOrder);
     }
 
     @Override
-    public List<CoffeeOrder> listOrdersBetween(LocalDateTime from, LocalDateTime to) {
-        coffeeOrderResultMap.clear();
-        coffeeOrderProductResultMap.clear();
+    public Collection<CoffeeOrder> listOrdersBetween(LocalDateTime from, LocalDateTime to) {
+        List<CoffeeOrder> coffeeOrders = jdbcTemplate.query(coffeeQuery.getSelect().getCreatedBetween(), coffeeOrderRowMapper, from, to);
+        Map<Long, CoffeeOrder> arrangedOrders = new TreeMap<>((o1, o2) -> (int)(o1 - o2));
+        coffeeOrders.stream().collect(Collectors.groupingBy(CoffeeOrder::getId, Collectors.toList()))
+                .forEach((key1, currentOrderCoffees) -> {
+                    long orderId = key1;
+                    CoffeeOrder orderInfo = currentOrderCoffees.get(0);
 
-        jdbcTemplate.query(coffeeQuery.getSelect().getCreatedBetween(), coffeeOrderRowMapper, from, to);
+                    Map<Product, List<CoffeeOrder>> groupByCoffeeType = currentOrderCoffees.stream()
+                            .collect(Collectors.groupingBy(coffeeOrder ->
+                                    coffeeOrder.getOrderItems().get(0).getProduct(), Collectors.toList()));
 
-        return combineCoffeeOrderProducts();
+                    List<CoffeeProductOrderItem> resultItems = new LinkedList<>();
+                    groupByCoffeeType.forEach((key, value) -> resultItems.add(new CoffeeProductOrderItem(value.size(), (CoffeeProduct) key)));
+                    arrangedOrders.put(orderId, new CoffeeOrder(
+                            orderId,
+                            orderInfo.getEmail(),
+                            orderInfo.getAddress(),
+                            orderInfo.getPostcode(),
+                            orderInfo.getStatus(),
+                            orderInfo.getCreatedAt(),
+                            orderInfo.getUpdatedAt(),
+                            resultItems));
+                });
+        return arrangedOrders.values();
     }
 
-    @Override
-    public List<CoffeeOrder> listDeliveryReservedOrders(LocalDate date) {
-        coffeeOrderResultMap.clear();
-        coffeeOrderProductResultMap.clear();
-
-        jdbcTemplate.query(coffeeQuery.getSelect().getCreatedBetween(), coffeeOrderRowMapper,
-                LocalDateTime.of(date.minusDays(1), LocalTime.of(14, 0)),
-                LocalDateTime.of(date, LocalTime.of(14, 0)));
-
-        return combineCoffeeOrderProducts();
-    }
-
-    // long id로 나중에 조회할 때 Map<CoffeeOrder, List<CoffeeProduct>> 같은 경우는
-    // key 를 long 으로 변환해서 비교해야 하기 때문에 그냥 두 개의 map을 뒀음. 성능, 메모리 상 장단점??
-    // TODO: 동기화 문제???
-    private static final Map<Long, CoffeeOrder> coffeeOrderResultMap = new HashMap<>();
-    private static final Map<Long, List<CoffeeProduct>> coffeeOrderProductResultMap = new HashMap<>();
     private static final RowMapper<CoffeeOrder> coffeeOrderRowMapper = (rs, rowNum) -> {
-        CoffeeOrder coffeeOrder;
         long id = rs.getLong("id");
-        if (coffeeOrderResultMap.containsKey(id)) {
-            coffeeOrder = coffeeOrderResultMap.get(id);
-        } else {
-            String address = rs.getString("address");
-            int postcode = rs.getInt("postcode");
-            String email = rs.getString("email");
-            LocalDateTime createdAt = rs.getTimestamp("created_at").toLocalDateTime();
-            LocalDateTime updatedAt = rs.getTimestamp("updated_at").toLocalDateTime();
-            OrderStatus orderStatus = OrderStatus.of(rs.getString("order_status"));
-            coffeeOrder = new CoffeeOrder(id, email, address, postcode, orderStatus, createdAt, updatedAt);
-            coffeeOrderResultMap.put(id, coffeeOrder);
-        }
+        String address = rs.getString("address");
+        int postcode = rs.getInt("postcode");
+        String email = rs.getString("email");
+        LocalDateTime createdAt = rs.getTimestamp("created_at").toLocalDateTime();
+        LocalDateTime updatedAt = rs.getTimestamp("updated_at").toLocalDateTime();
+        OrderStatus orderStatus = OrderStatus.of(rs.getString("order_status"));
+        CoffeeOrder coffeeOrder = new CoffeeOrder(id, email, address, postcode, orderStatus, createdAt, updatedAt);
 
-        // TODO: 이미 찾았던 product는 캐시로 처리?
         long productId = rs.getLong("product_id");
         String productName = rs.getString("name");
         CoffeeType productCategory = CoffeeType.of(rs.getString("category"));
@@ -140,29 +144,8 @@ public class BasicCoffeeOrderRepository implements CoffeeOrderRepository {
         String productDescription = rs.getString("description");
         CoffeeProduct coffeeProduct = new CoffeeProduct(productId, productName, productCategory, price, productDescription);
 
-        List<CoffeeProduct> currentOrderProducts = coffeeOrderProductResultMap.getOrDefault(id, new LinkedList<>());
-        currentOrderProducts.add(coffeeProduct);
-        coffeeOrderProductResultMap.put(id, currentOrderProducts);
-
+        coffeeOrder.getOrderItems().add(new CoffeeProductOrderItem(1, coffeeProduct));
         return coffeeOrder;
     };
-
-    private List<CoffeeOrder> combineCoffeeOrderProducts() {
-        List<CoffeeOrder> result = new LinkedList<>();
-        coffeeOrderResultMap.values().forEach(coffeeOrder -> {
-            combineCoffeeOrderProduct(coffeeOrder);
-            result.add(coffeeOrder);
-        });
-
-        return result;
-    }
-
-    private void combineCoffeeOrderProduct(CoffeeOrder coffeeOrder) {
-        Map<CoffeeProduct, Integer> productCounter = new TreeMap<>((o1, o2) -> (int) (o1.getId() - o2.getId()));
-        coffeeOrderProductResultMap.getOrDefault(coffeeOrder.getId(), new ArrayList<>(0))
-                .forEach(product -> productCounter.put(product, productCounter.getOrDefault(product, 0) + 1));
-        productCounter.forEach((product, quantity) ->
-                coffeeOrder.getOrderItems().add(new CoffeeProductOrderItem(quantity, product)));
-    }
 
 }

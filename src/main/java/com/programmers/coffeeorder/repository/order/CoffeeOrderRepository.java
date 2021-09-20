@@ -2,9 +2,8 @@ package com.programmers.coffeeorder.repository.order;
 
 import com.programmers.coffeeorder.entity.order.CoffeeOrder;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
+import java.util.Collection;
 import java.util.Optional;
 
 public interface CoffeeOrderRepository {
@@ -13,8 +12,6 @@ public interface CoffeeOrderRepository {
 
     Optional<CoffeeOrder> readOrder(long id);
 
-    List<CoffeeOrder> listOrdersBetween(LocalDateTime from, LocalDateTime to);
-
-    List<CoffeeOrder> listDeliveryReservedOrders(LocalDate date);
+    Collection<CoffeeOrder> listOrdersBetween(LocalDateTime from, LocalDateTime to);
 
 }
