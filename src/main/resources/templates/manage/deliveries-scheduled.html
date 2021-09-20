@@ -35,10 +35,10 @@
                 <th>PRICE</th>
                 <th>QUANTITY</th>
             </tr>
-            <tr th:each="coffee: ${order.readCoffeeOrderItems()}">
-                <td th:text="${coffee.getCoffeeProduct().getCoffeeName()}">COFFEE NAME HERE</td>
-                <td th:text="${coffee.getCoffeeProduct().getCoffeeType()}">COFFEE TYPE HERE</td>
-                <td th:text="${coffee.getCoffeeProduct().getPrice()}">COFFEE PRICE HERE</td>
+            <tr th:each="coffee: ${order.getCoffeeOrderItems()}">
+                <td th:text="${coffee.getCoffeeProduct().productName}">COFFEE NAME HERE</td>
+                <td th:text="${coffee.getCoffeeProduct().category}">COFFEE TYPE HERE</td>
+                <td th:text="${coffee.getCoffeeProduct().price}">COFFEE PRICE HERE</td>
                 <td th:text="${coffee.getQuantity()}">COFFEE QUANTITY HERE</td>
             </tr>
         </table>

@@ -7,5 +7,5 @@ import java.util.List;
 import java.util.Map;
 
 public interface CoffeeDeliveryService {
-    Map<String, List<CoffeeOrder>> listAppointedDeliveries(LocalDate date);
+    Map<String, List<CoffeeOrder.DTO>> listAppointedDeliveries(LocalDate date);
 }

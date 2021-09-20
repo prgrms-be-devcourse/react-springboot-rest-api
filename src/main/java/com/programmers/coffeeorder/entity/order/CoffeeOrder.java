@@ -1,5 +1,6 @@
 package com.programmers.coffeeorder.entity.order;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.programmers.coffeeorder.entity.order.item.CoffeeProductOrderItem;
 import com.programmers.coffeeorder.entity.order.item.ProductOrderItem;
 import lombok.EqualsAndHashCode;
@@ -50,6 +51,10 @@ public class CoffeeOrder extends DeliverableOrder {
         this.email = email;
     }
 
+    public List<CoffeeProductOrderItem> getCoffeeOrderItems() {
+        return orderItems.stream().map(CoffeeProductOrderItem.class::cast).collect(Collectors.toList());
+    }
+
     public void registerId(long id) {
         super.id = id;
         updateTimestamp();
@@ -69,7 +74,7 @@ public class CoffeeOrder extends DeliverableOrder {
     }
 
     public DTO toDTO() {
-        return new DTO(id, address, postcode, email, orderItems, createdAt, updatedAt, status);
+        return new DTO(this);
     }
 
     public void updateOrderStatus(OrderStatus status) {
@@ -81,15 +86,19 @@ public class CoffeeOrder extends DeliverableOrder {
     public static class DTO extends DeliverableOrder.DTO {
         private String email;
 
-        public DTO(Long id, String address, int postcode, String email, List<ProductOrderItem> orderItems, LocalDateTime createdAt, LocalDateTime updatedAt, OrderStatus status) {
-            super(id, address, postcode, status, createdAt, updatedAt,
-                    orderItems.stream().map(CoffeeProductOrderItem.class::cast)
-                    .map(CoffeeProductOrderItem::toDTO).collect(Collectors.toList()));
-            this.email = email;
+        public DTO(CoffeeOrder coffeeOrder) {
+            super(coffeeOrder.id, coffeeOrder.address, coffeeOrder.postcode, coffeeOrder.status,
+                    coffeeOrder.createdAt, coffeeOrder.updatedAt,
+                    coffeeOrder.orderItems.stream()
+                            .map(CoffeeProductOrderItem.class::cast)
+                            .map(CoffeeProductOrderItem::toDTO).collect(Collectors.toList()));
+            this.email = coffeeOrder.getEmail();
         }
 
-        public List<CoffeeProductOrderItem.DTO> getCoffeeOrderItems() {
+        @JsonIgnore
+        public List<CoffeeProductOrderItem.DTO> getCoffeeOrderItems() { // thymeleaf file(deliveries-scheduled.html) use this.
             return orderItems.stream().map(CoffeeProductOrderItem.DTO.class::cast).collect(Collectors.toList());
         }
+
     }
 }

@@ -40,7 +40,8 @@ coffee-order:
         p.name,
         p.description,
         p.price,
-        p.category
+        p.category,
+        i.quantity
       FROM
         coffee_order c
       JOIN
@@ -63,9 +64,10 @@ order-item:
     INSERT INTO
       coffee_order_item(
         order_id,
-        product_id)
+        product_id,
+        quantity)
     VALUES
-      (?, ?)
+      (?, ?, ?)
 
 coffee-product:
   select:

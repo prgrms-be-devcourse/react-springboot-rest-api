@@ -43,7 +43,7 @@ public class ManagerController {
                                           @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
                                           Model model) {
         if(date == null) date = LocalDate.now();
-        Map<String, List<CoffeeOrder>> deliveries = coffeeDeliveryService.listAppointedDeliveries(date);
+        Map<String, List<CoffeeOrder.DTO>> deliveries = coffeeDeliveryService.listAppointedDeliveries(date);
         model.addAttribute("deliveries", deliveries);
         model.addAttribute("date", date);
         return "manage/deliveries-scheduled";
