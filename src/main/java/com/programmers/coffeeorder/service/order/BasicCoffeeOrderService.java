@@ -24,6 +24,16 @@ public class BasicCoffeeOrderService implements CoffeeOrderService {
     }
 
     @Override
+    public CoffeeOrder acceptOrder(long id) {
+        CoffeeOrder coffeeOrder = coffeeOrderRepository.readOrder(id).orElseThrow(() -> {
+            throw new IllegalArgumentException("Coffee order with given id not exist.");
+        });
+
+        coffeeOrder.updateOrderStatus(OrderStatus.ACCEPTED);
+        return coffeeOrderRepository.updateOrder(coffeeOrder);
+    }
+
+    @Override
     public CoffeeOrder cancelOrder(long id) {
         CoffeeOrder coffeeOrder = coffeeOrderRepository.readOrder(id).orElseThrow(() -> {
             throw new IllegalArgumentException("Coffee order with given id not exist.");

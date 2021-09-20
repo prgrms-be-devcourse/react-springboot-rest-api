@@ -24,6 +24,8 @@ public class ManagerController {
     private final CoffeeOrderService coffeeOrderService;
     private final CoffeeDeliveryService coffeeDeliveryService;
 
+    private static final String REDIRECT_TO_ORDER_LIST = "redirect:/manage/orders";
+
     @GetMapping("/orders")
     // https://javacan.tistory.com/468 use custom resolver?
     public String getCoffeeOrders(@RequestParam(value = "from", required = false)
@@ -40,11 +42,16 @@ public class ManagerController {
         return "manage/orders";
     }
 
+    @GetMapping("/orders/accept")
+    public String acceptCoffeeOrder(@RequestParam("id") Long id) {
+        if(id != null) coffeeOrderService.acceptOrder(id);
+        return REDIRECT_TO_ORDER_LIST;
+    }
+
     @GetMapping("/orders/cancel")
     public String cancelCoffeeOrder(@RequestParam(name = "id") Long id) {
-        if(id == null) return "redirect:/manage/orders";
-        coffeeOrderService.cancelOrder(id);
-        return "redirect:/manage/orders";
+        if(id != null) coffeeOrderService.cancelOrder(id);
+        return REDIRECT_TO_ORDER_LIST;
     }
 
     @GetMapping("/deliveries")
