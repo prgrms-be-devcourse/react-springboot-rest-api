@@ -118,3 +118,18 @@ coffee-product:
         coffee_product p
       WHERE
         p.id=?
+
+coffee-delivery:
+  create: >
+    INSERT INTO
+      coffee_order_delivery(
+        delivery_status,
+        sender,
+        receiver,
+        destination,
+        message,
+        created_at,
+        updated_at,
+        order_id)
+    VALUES (
+        ?, ?, ?, ?, ?, ?, ?, ?)
