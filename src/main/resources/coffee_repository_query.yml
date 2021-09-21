@@ -83,6 +83,26 @@ order-item:
     VALUES
       (?, ?, ?)
 
+  exists: >
+    SELECT
+      count(*) as exist
+    FROM
+      coffee_order_item
+    WHERE
+      order_id=?
+    AND
+      product_id=?
+
+  update: >
+    UPDATE
+      coffee_order_item
+    SET
+      quantity=?
+    WHERE
+      order_id=?
+    AND
+      product_id=?
+
 coffee-product:
   select:
     all: >

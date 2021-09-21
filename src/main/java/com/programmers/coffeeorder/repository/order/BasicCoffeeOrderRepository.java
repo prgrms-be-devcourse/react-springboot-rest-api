@@ -1,7 +1,6 @@
 package com.programmers.coffeeorder.repository.order;
 
 import com.programmers.coffeeorder.entity.order.CoffeeOrder;
-import com.programmers.coffeeorder.entity.product.Product;
 import com.programmers.coffeeorder.entity.product.coffee.CoffeeProduct;
 import com.programmers.coffeeorder.entity.order.item.CoffeeProductOrderItem;
 import com.programmers.coffeeorder.repository.mapper.CoffeeOrderRowMappers;
@@ -10,7 +9,6 @@ import com.programmers.coffeeorder.repository.query.CoffeeOrderItemQuery;
 import com.programmers.coffeeorder.repository.query.CoffeeQuery;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
@@ -67,33 +65,11 @@ public class BasicCoffeeOrderRepository implements CoffeeOrderRepository {
 
     @Override
     public Optional<CoffeeOrder> readOrder(long id) {
-        List<CoffeeOrder> products;
-        try {
-            products = jdbcTemplate.query(coffeeQuery.getSelect().getById(), CoffeeOrderRowMappers.coffeeOrderRowMapper, id);
-        } catch (DataAccessException ex) {
-            log.warn(ex.getLocalizedMessage());
-            return Optional.empty();
-        }
-
-        if (products.isEmpty()) return Optional.empty();
-
-        Map<Product, List<CoffeeProductOrderItem>> groupByCoffeeType = products.stream()
-                .map(coffeeOrder -> (CoffeeProductOrderItem) (coffeeOrder.getOrderItems().get(0)))
-                .collect(Collectors.groupingBy(CoffeeProductOrderItem::getProduct, Collectors.toList()));
-        CoffeeOrder orderInfo = products.get(0);
-        List<CoffeeProductOrderItem> resultItems = new LinkedList<>();
-        groupByCoffeeType.forEach((key, value) -> resultItems.add(new CoffeeProductOrderItem(value.size(), value.get(0).getCoffeeProduct())));
-        CoffeeOrder coffeeOrder = new CoffeeOrder(
-                id,
-                orderInfo.getEmail(),
-                orderInfo.getAddress(),
-                orderInfo.getPostcode(),
-                orderInfo.getStatus(),
-                orderInfo.getCreatedAt(),
-                orderInfo.getUpdatedAt(),
-                resultItems);
-
-        return Optional.of(coffeeOrder);
+        List<CoffeeOrder> products = jdbcTemplate.query(coffeeQuery.getSelect().getById(), CoffeeOrderRowMappers.coffeeOrderRowMapper, id);
+        return products.stream().reduce((order1, order2) -> {
+            order1.getOrderItems().addAll(order2.getOrderItems());
+            return order1;
+        });
     }
 
     @Override
@@ -112,6 +88,18 @@ public class BasicCoffeeOrderRepository implements CoffeeOrderRepository {
             return order1;
         }).orElseThrow(() -> {
             throw new IllegalArgumentException("Empty coffee order record received.");
+        });
+    }
+
+    @Override
+    public void updateOrderItemsQuantity(long orderId, Map<Long, Integer> quantityMap) {
+        quantityMap.forEach((productId, quantity) -> {
+            Integer exist = jdbcTemplate.queryForObject(coffeeOrderItemQuery.getExists(), (rs, rowNum) -> rs.getInt("exist"), orderId, productId);
+            if(exist == null || exist < 1) {
+                jdbcTemplate.update(coffeeOrderItemQuery.getCreate(), orderId, productId, quantity);
+            } else {
+                jdbcTemplate.update(coffeeOrderItemQuery.getUpdate(), quantity, orderId, productId);
+            }
         });
     }
 

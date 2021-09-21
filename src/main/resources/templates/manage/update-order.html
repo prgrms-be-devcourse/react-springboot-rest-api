@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Coffee Order Manager</title>
+</head>
+<body>
+<div>
+    <h1>Coffee Order Manager - Update Order</h1>
+</div>
+
+<div>
+    <form method="get" th:action="@{/manage/orders/update}">
+        <label for="id">FROM: </label>
+        <input id="id" name="id" th:value="${id}" type="number" min="1" required>
+        <input type="submit" value="SEARCH">
+    </form>
+</div>
+
+<div>
+    <p th:text="${error}">ERROR MESSAGE HERE</p>
+</div>
+
+<div th:if="${order != null}" th:object="${order}" style="border: 1px solid black; margin: 10px; padding: 10px;">
+    <form th:action="@{/manage/orders/update}" method="post">
+        <input type="hidden" name="id" th:value="*{id}">
+        <h3 th:text="|ORDER #*{id}|">ORDER #0</h3>
+        <table>
+            <tr>
+                <td><label for="email-form">Order requested by: </label></td>
+                <td><input id="email-form" type="text" name="email" th:value="*{email}" th:placeholder="*{email}"
+                           required></td>
+            </tr>
+            <tr>
+                <td><label for="address-form">Delivery address: </label></td>
+                <td><input id="address-form" type="text" name="address" th:value="*{address}"
+                           th:placeholder="*{address}" required></td>
+                <td><label for="postcode-form">postcode: </label></td>
+                <td><input id="postcode-form" type="number" name="postcode" th:value="*{postcode}"
+                           th:placeholder="*{postcode}" required></td>
+            </tr>
+            <tr>
+                <td><label for="order-status-form">Status</label></td>
+                <td>
+                    <select id="order-status-form" name="orderStatus">
+                        <option th:each="orderStatus: ${orderStatuses}" th:text="${orderStatus.toString()}"
+                                th:value="${orderStatus.toString()}" th:selected="${order.orderStatus eq orderStatus}">
+                            ORDER STATUS HERE
+                        </option>
+                    </select>
+                </td>
+            </tr>
+        </table>
+        <p th:text="|Created: *{createdAt} / Updated: *{updatedAt}|">
+            Created: 2021-09-17T18:11:03 / Updated: 2021-09-017T18:11:03
+        </p>
+
+        <table style="border: 1px solid black">
+            <tr>
+                <th>PRODUCT ID</th>
+                <th>COFFEE NAME</th>
+                <th>COFFEE TYPE</th>
+                <th>PRICE</th>
+                <th>QUANTITY</th>
+            </tr>
+            <tr th:each="coffeeProduct: ${coffeeProducts}" th:object="${coffeeProduct}">
+                <td th:text="*{productId}">0</td>
+                <td th:text="*{productName}">COFFEE NAME HERE</td>
+                <td th:text="*{category}">COFFEE TYPE HERE</td>
+                <td th:text="*{price}">COFFEE PRICE HERE</td>
+                <td><input type="number" min="0" th:name="|orderItems[*{productId}]|" required
+                           th:value="${coffeeCount.getOrDefault(coffeeProduct.productId, 0)}"
+                           th:placeholder="${coffeeCount.getOrDefault(coffeeProduct.productId, 0)}">
+                </td>
+            </tr>
+        </table>
+        <input type="submit" value="UPDATE">
+    </form>
+</div>
+</body>
+</html>

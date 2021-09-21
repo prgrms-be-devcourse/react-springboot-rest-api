@@ -14,4 +14,6 @@ import org.springframework.context.annotation.PropertySource;
 @Setter
 public class CoffeeOrderItemQuery {
     private String create;
+    private String update;
+    private String exists;
 }

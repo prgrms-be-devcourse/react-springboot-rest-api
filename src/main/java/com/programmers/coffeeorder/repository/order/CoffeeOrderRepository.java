@@ -4,6 +4,7 @@ import com.programmers.coffeeorder.entity.order.CoffeeOrder;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.Map;
 import java.util.Optional;
 
 public interface CoffeeOrderRepository {
@@ -13,6 +14,8 @@ public interface CoffeeOrderRepository {
     Optional<CoffeeOrder> readOrder(long id);
 
     CoffeeOrder updateOrder(CoffeeOrder coffeeOrder);
+
+    void updateOrderItemsQuantity(long orderId, Map<Long, Integer> quantityMap);
 
     Collection<CoffeeOrder> listOrdersBetween(LocalDateTime from, LocalDateTime to);
 

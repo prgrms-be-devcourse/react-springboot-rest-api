@@ -64,14 +64,14 @@ public abstract class DeliverableOrder extends Order {
     public abstract static class DTO extends Order.DTO {
         protected final String address;
         protected final int postcode;
-        protected final OrderStatus status;
+        protected final OrderStatus orderStatus;
         protected final List<ProductOrderItem.DTO> orderItems;
 
-        protected DTO(Long id, String address, int postcode, OrderStatus status, LocalDateTime createdAt, LocalDateTime updatedAt, List<ProductOrderItem.DTO> orderItems) {
+        protected DTO(Long id, String address, int postcode, OrderStatus orderStatus, LocalDateTime createdAt, LocalDateTime updatedAt, List<ProductOrderItem.DTO> orderItems) {
             super(id, createdAt, updatedAt);
             this.address = address;
             this.postcode = postcode;
-            this.status = status;
+            this.orderStatus = orderStatus;
             this.orderItems = orderItems;
         }
     }

@@ -1,6 +1,7 @@
 package com.programmers.coffeeorder.entity.order;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.programmers.coffeeorder.controller.bind.CoffeeOrderUpdate;
 import com.programmers.coffeeorder.entity.order.item.CoffeeProductOrderItem;
 import com.programmers.coffeeorder.entity.order.item.ProductOrderItem;
 import lombok.EqualsAndHashCode;
@@ -8,6 +9,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -16,6 +18,11 @@ import java.util.stream.Collectors;
 @EqualsAndHashCode(of = "email", callSuper = true)
 public class CoffeeOrder extends DeliverableOrder {
     private String email;
+
+    public CoffeeOrder(CoffeeOrderUpdate update) {
+        super(update.getId(), update.getAddress(), update.getPostcode(), OrderStatus.of(update.getOrderStatus()), new ArrayList<>(0));
+        this.email = update.getEmail();
+    }
 
     public CoffeeOrder(
             Long id,
@@ -60,7 +67,7 @@ public class CoffeeOrder extends DeliverableOrder {
         updateTimestamp();
     }
 
-    public void updateEmail(String email) {
+    public void changeEmail(String email) {
         this.email = email;
         updateTimestamp();
     }

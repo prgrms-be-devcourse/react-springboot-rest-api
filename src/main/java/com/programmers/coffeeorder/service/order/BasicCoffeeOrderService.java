@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -24,22 +26,45 @@ public class BasicCoffeeOrderService implements CoffeeOrderService {
     }
 
     @Override
-    public CoffeeOrder acceptOrder(long id) {
+    public Optional<CoffeeOrder.DTO> readOrder(long id) {
+        return coffeeOrderRepository.readOrder(id).map(CoffeeOrder::toDTO);
+    }
+
+    @Override
+    public void acceptOrder(long id) {
         CoffeeOrder coffeeOrder = coffeeOrderRepository.readOrder(id).orElseThrow(() -> {
             throw new IllegalArgumentException("Coffee order with given id not exist.");
         });
 
         coffeeOrder.updateOrderStatus(OrderStatus.ACCEPTED);
-        return coffeeOrderRepository.updateOrder(coffeeOrder);
+        coffeeOrderRepository.updateOrder(coffeeOrder);
     }
 
     @Override
-    public CoffeeOrder cancelOrder(long id) {
+    public void cancelOrder(long id) {
         CoffeeOrder coffeeOrder = coffeeOrderRepository.readOrder(id).orElseThrow(() -> {
             throw new IllegalArgumentException("Coffee order with given id not exist.");
         });
         coffeeOrder.updateOrderStatus(OrderStatus.CANCELLED);
-        return coffeeOrderRepository.updateOrder(coffeeOrder);
+        coffeeOrderRepository.updateOrder(coffeeOrder);
+    }
+
+    @Override
+    public void updateOrderInfo(long id, CoffeeOrder updatedCoffeeOrder) {
+        CoffeeOrder coffeeOrder = coffeeOrderRepository.readOrder(id).orElseThrow(() -> {
+            throw new IllegalArgumentException("Order with given id not found.");
+        });
+
+        coffeeOrder.changeEmail(updatedCoffeeOrder.getEmail());
+        coffeeOrder.changeDestination(updatedCoffeeOrder.getAddress());
+        coffeeOrder.changePostcode(updatedCoffeeOrder.getPostcode());
+        coffeeOrder.updateOrderStatus(updatedCoffeeOrder.getStatus());
+        coffeeOrderRepository.updateOrder(coffeeOrder);
+    }
+
+    @Override
+    public void updateOrderItemsQuantity(long id, Map<Long, Integer> quantityMap) {
+        coffeeOrderRepository.updateOrderItemsQuantity(id, quantityMap);
     }
 
     @Override

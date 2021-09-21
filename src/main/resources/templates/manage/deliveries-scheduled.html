@@ -26,7 +26,7 @@
     <div th:each="order: ${deliveries.get(email)}" th:object="${order}">
         <p th:text="|ORDER #*{id}|">ORDER #0</p>
         <p th:text="|Destination: *{address}(*{postcode})|">Destination: cheongju(12345)</p>
-        <p th:text="|Status: *{status}|">Status: NOT_DELIVERED</p>
+        <p th:text="|Status: *{orderStatus}|">Status: NOT_DELIVERED</p>
 
         <table style="border: 1px solid black">
             <tr>
