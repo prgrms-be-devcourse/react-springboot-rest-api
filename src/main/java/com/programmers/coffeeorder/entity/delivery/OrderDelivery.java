@@ -7,25 +7,35 @@ import lombok.Getter;
 import java.time.LocalDateTime;
 
 @Getter
-@EqualsAndHashCode(of = {"order", "deliveryStatus"}, callSuper = true)
+@EqualsAndHashCode(of = {"order"}, callSuper = true)
 public abstract class OrderDelivery extends Delivery {
     protected final DeliverableOrder order;
-    protected DeliveryStatus deliveryStatus;
 
-    protected OrderDelivery(Long id, DeliverableOrder order) {
-        this(id, order, DeliveryStatus.NOT_DELIVERED);
+    protected OrderDelivery(Long id,
+                            String receiver,
+                            String destination,
+                            DeliverableOrder order) {
+        super(id, receiver, destination);
+        this.order = order;
     }
 
-    protected OrderDelivery(Long id, DeliverableOrder order, DeliveryStatus deliveryStatus) {
-        super(id);
-        this.order = order;
-        this.deliveryStatus = deliveryStatus;
+    protected OrderDelivery(Long id,
+                            String receiver,
+                            String destination,
+                            DeliverableOrder order,
+                            DeliveryStatus deliveryStatus) {
+        this(id, receiver, destination, order, deliveryStatus, LocalDateTime.now(), LocalDateTime.now());
     }
 
-    protected OrderDelivery(Long id, DeliverableOrder order, DeliveryStatus deliveryStatus, LocalDateTime createdAt, LocalDateTime updatedAt) {
-        super(id, createdAt, updatedAt);
+    protected OrderDelivery(Long id,
+                            String receiver,
+                            String destination,
+                            DeliverableOrder order,
+                            DeliveryStatus deliveryStatus,
+                            LocalDateTime createdAt,
+                            LocalDateTime updatedAt) {
+        super(id, deliveryStatus, "Anonymous", receiver, destination, "", createdAt, updatedAt);
         this.order = order;
-        this.deliveryStatus = deliveryStatus;
     }
 
     public void setStatus(DeliveryStatus status) {
@@ -36,12 +46,10 @@ public abstract class OrderDelivery extends Delivery {
     @Getter
     protected abstract static class DTO extends Delivery.DTO {
         protected final DeliverableOrder.DTO order;
-        protected final DeliveryStatus status;
 
-        protected DTO(Long id, DeliverableOrder.DTO order, DeliveryStatus status, LocalDateTime createdAt, LocalDateTime updatedAt) {
-            super(id, createdAt, updatedAt);
+        protected DTO(OrderDelivery delivery, DeliverableOrder.DTO order) {
+            super(delivery);
             this.order = order;
-            this.status = status;
         }
     }
 }

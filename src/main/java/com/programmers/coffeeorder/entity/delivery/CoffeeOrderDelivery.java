@@ -14,24 +14,34 @@ public class CoffeeOrderDelivery extends OrderDelivery {
 
     public CoffeeOrderDelivery(
             Long id,
+            String receiver,
             CoffeeOrder coffeeOrder) {
-        super(id, coffeeOrder);
+        this(
+                id,
+                receiver,
+                String.format("%s(%s)", coffeeOrder.getAddress(), coffeeOrder.getPostcode()),
+                coffeeOrder,
+                DeliveryStatus.NOT_DELIVERED);
     }
 
     public CoffeeOrderDelivery(
             Long id,
+            String receiver,
+            String destination,
             CoffeeOrder coffeeOrder,
             DeliveryStatus deliveryStatus) {
-        super(id, coffeeOrder, deliveryStatus);
+        this(id, receiver, destination, coffeeOrder, deliveryStatus, LocalDateTime.now(), LocalDateTime.now());
     }
 
     public CoffeeOrderDelivery(
             Long id,
+            String receiver,
+            String destination,
             CoffeeOrder coffeeOrder,
             DeliveryStatus deliveryStatus,
             LocalDateTime createdAt,
             LocalDateTime updatedAt) {
-        super(id, coffeeOrder, deliveryStatus, createdAt, updatedAt);
+        super(id, receiver, destination, coffeeOrder, deliveryStatus, createdAt, updatedAt);
     }
 
     public CoffeeOrder getCoffeeOrder() {
@@ -39,19 +49,14 @@ public class CoffeeOrderDelivery extends OrderDelivery {
     }
 
     public DTO toDTO() {
-        return new DTO(id, getCoffeeOrder().toDTO(), deliveryStatus, createdAt, updatedAt);
+        return new DTO(this);
     }
 
     @Getter
     @Setter
     public static class DTO extends OrderDelivery.DTO {
-        public DTO(
-                Long id,
-                CoffeeOrder.DTO order,
-                DeliveryStatus status,
-                LocalDateTime createdAt,
-                LocalDateTime updatedAt) {
-            super(id, order, status, createdAt, updatedAt);
+        public DTO(CoffeeOrderDelivery coffeeOrderDelivery) {
+            super(coffeeOrderDelivery, coffeeOrderDelivery.getCoffeeOrder().toDTO());
         }
 
         @JsonIgnore
