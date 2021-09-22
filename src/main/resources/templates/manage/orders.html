@@ -11,7 +11,7 @@
 </div>
 
 <div>
-    <form method="get" th:action="@{/manage/orders}">
+    <form method="get" th:action="@{/order}">
         <span>ORDERS</span>
         <label for="from">FROM: </label>
         <input id="from" name="from" th:value="${from}" type="datetime-local" pattern="[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}" placeholder="1970-01-01T00:00:00">
@@ -24,13 +24,13 @@
 </div>
 
 <div th:each="order: ${orders}" th:object="${order}" style="border: 1px solid black; margin: 10px; padding: 10px;">
-    <h3 th:text="|ORDER #*{id}|">ORDER #0</h3>
-    <a th:href="@{/manage/orders/update(id=*{id})}">[ UPDATE ]</a>
+    <a th:id="|order-*{id}|"><h3 th:text="|ORDER #*{id}|">ORDER #0</h3></a>
+    <a th:href="@{/order/update(id=*{id})}">[ UPDATE ]</a>
     <p th:text="|Order requested by: *{email}|">Order requested by: email@domain.com</p>
     <p th:text="|Delivery destination: *{address}(*{postcode})|">Delivery destination: south korea(12345)</p>
     <p th:text="|Status: *{getOrderStatus}|">Status: NOT_DELIVERED</p>
-    <a th:href="@{/manage/orders/accept(id=*{id})}">[ ACCEPT ]</a>
-    <a th:href="@{/manage/orders/cancel(id=*{id})}">[ CANCEL ]</a>
+    <a th:href="@{/order/accept(id=*{id})}">[ ACCEPT ]</a>
+    <a th:href="@{/order/cancel(id=*{id})}">[ CANCEL ]</a>
     <p th:text="|Created: *{createdAt} / Updated: *{updatedAt}|">Created: 2021-09-17T18:11:03 / Updated:
         2021-09-017T18:11:03</p>
 

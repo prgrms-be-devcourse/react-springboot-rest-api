@@ -11,7 +11,7 @@
 </div>
 
 <div>
-    <form method="get" th:action="@{/manage/deliveries}">
+    <form method="get" th:action="@{/delivery/appointed}">
         <span>DELIVERIES </span>
         <label for="date">OF: </label>
         <input id="date" name="date" type="date" th:value="${date}" pattern="[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}"

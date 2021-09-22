@@ -11,7 +11,7 @@
 </div>
 
 <div>
-    <form method="get" th:action="@{/manage/orders/update}">
+    <form method="get" th:action="@{/order/update}">
         <label for="id">FROM: </label>
         <input id="id" name="id" th:value="${id}" type="number" min="1" required>
         <input type="submit" value="SEARCH">
@@ -23,7 +23,7 @@
 </div>
 
 <div th:if="${order != null}" th:object="${order}" style="border: 1px solid black; margin: 10px; padding: 10px;">
-    <form th:action="@{/manage/orders/update}" method="post">
+    <form th:action="@{/order/update}" method="post">
         <input type="hidden" name="id" th:value="*{id}">
         <h3 th:text="|ORDER #*{id}|">ORDER #0</h3>
         <table>

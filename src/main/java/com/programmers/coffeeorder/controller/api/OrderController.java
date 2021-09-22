@@ -1,4 +1,4 @@
-package com.programmers.coffeeorder.controller;
+package com.programmers.coffeeorder.controller.api;
 
 import com.programmers.coffeeorder.controller.bind.CoffeeOrderSubmit;
 import com.programmers.coffeeorder.entity.order.CoffeeOrder;

@@ -1,4 +1,4 @@
-package com.programmers.coffeeorder.controller;
+package com.programmers.coffeeorder.controller.api;
 
 import com.programmers.coffeeorder.entity.product.coffee.CoffeeProduct;
 import com.programmers.coffeeorder.service.product.CoffeeProductService;
