@@ -6,13 +6,13 @@ import com.programmers.coffeeorder.entity.order.OrderStatus;
 import com.programmers.coffeeorder.repository.delivery.CoffeeOrderDeliveryRepository;
 import com.programmers.coffeeorder.repository.order.CoffeeOrderRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -31,6 +31,11 @@ public class BasicCoffeeDeliveryService implements CoffeeDeliveryService {
             result.put(key, converted);
         });
         return result;
+    }
+
+    @Override
+    public Optional<CoffeeOrderDelivery.DTO> readCoffeeOrderDelivery(long deliveryId) {
+        return coffeeOrderDeliveryRepository.readCoffeeOrderDelivery(deliveryId).map(CoffeeOrderDelivery::toDTO);
     }
 
     @Override

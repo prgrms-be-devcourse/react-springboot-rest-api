@@ -24,8 +24,19 @@ public class DeliveryController {
     private final CoffeeDeliveryService coffeeDeliveryService;
 
     private static final String DELIVERY_REQUEST_TEMPLATE = "deliveries/delivery-request";
+    private static final String DELIVERY_READ_TEMPLATE = "deliveries/delivery-status";
     private static final String ERROR_MESSAGE_COMPONENT = "error";
 
+
+    @GetMapping
+    public String readDeliveryInfo(@RequestParam("id") long id,
+                                   Model model) {
+        model.addAttribute("id", id);
+        coffeeDeliveryService.readCoffeeOrderDelivery(id).ifPresentOrElse(
+                delivery -> model.addAttribute("delivery", delivery),
+                () -> model.addAttribute(ERROR_MESSAGE_COMPONENT, "Delivery with given id not found."));
+        return DELIVERY_READ_TEMPLATE;
+    }
 
     @GetMapping("/create")
     public String requestDeliveryCreate(@RequestParam("id") long id,
@@ -41,6 +52,7 @@ public class DeliveryController {
     public String submitDeliveryCreate(CoffeeOrderDeliveryRequest request,
                                        Model model) {
         model.addAttribute("request", request);
+        model.addAttribute("id", request.getOrderId());
         if (request.getOrderId() == null) {
             model.addAttribute(ERROR_MESSAGE_COMPONENT, "orderId cannot be null.");
             return DELIVERY_REQUEST_TEMPLATE;
@@ -58,7 +70,7 @@ public class DeliveryController {
                             .createdAt(LocalDateTime.now())
                             .updatedAt(LocalDateTime.now())
                             .build());
-            return "redirect:/delivery?id" + coffeeOrder.getId();
+            return "redirect:/delivery?id=" + coffeeOrder.getId();
         } catch (RuntimeException ex) {
             coffeeOrderService.readOrder(request.getOrderId()).ifPresent(order -> model.addAttribute("order", order));
             model.addAttribute(ERROR_MESSAGE_COMPONENT, ex.getMessage());

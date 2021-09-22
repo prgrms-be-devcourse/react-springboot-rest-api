@@ -1,0 +1,21 @@
+coffee-delivery:
+  create: >
+    INSERT INTO
+      coffee_order_delivery(
+        delivery_status,
+        sender,
+        receiver,
+        destination,
+        message,
+        order_id)
+    VALUES (
+        ?, ?, ?, ?, ?, ?)
+
+  select:
+    byId:
+      SELECT
+        *
+      FROM
+        coffee_order_delivery
+      WHERE
+        id=?

@@ -9,6 +9,7 @@ import lombok.experimental.SuperBuilder;
 @EqualsAndHashCode(of = {"order"}, callSuper = true)
 @SuperBuilder
 public abstract class OrderDelivery extends Delivery {
+    protected long orderId;
     protected DeliverableOrder order;
 
     public void setStatus(DeliveryStatus status) {

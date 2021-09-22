@@ -1,5 +1,7 @@
 package com.programmers.coffeeorder.repository.mapper;
 
+import com.programmers.coffeeorder.entity.delivery.CoffeeOrderDelivery;
+import com.programmers.coffeeorder.entity.delivery.DeliveryStatus;
 import com.programmers.coffeeorder.entity.order.CoffeeOrder;
 import com.programmers.coffeeorder.entity.order.OrderStatus;
 import com.programmers.coffeeorder.entity.order.item.CoffeeProductOrderItem;
@@ -34,4 +36,15 @@ public class CoffeeOrderRowMappers {
         coffeeOrder.getOrderItems().add(new CoffeeProductOrderItem(quantity, coffeeProduct));
         return coffeeOrder;
     };
+
+    public static final RowMapper<CoffeeOrderDelivery> coffeeOrderDeliveryRowMapper = (rs, rowNum) -> CoffeeOrderDelivery.builder()
+            .id(rs.getLong("id"))
+            .deliveryStatus(DeliveryStatus.of(rs.getString("delivery_status")))
+            .sender(rs.getString("sender"))
+            .receiver(rs.getString("receiver"))
+            .destination(rs.getString("destination"))
+            .message(rs.getString("message"))
+            .createdAt(rs.getTimestamp("created_at").toLocalDateTime())
+            .updatedAt(rs.getTimestamp("updated_at").toLocalDateTime())
+            .orderId(rs.getLong("order_Id")).build();
 }

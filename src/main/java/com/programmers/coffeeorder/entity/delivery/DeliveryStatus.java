@@ -40,4 +40,12 @@ public enum DeliveryStatus {
     public void cancel(OrderDelivery orderDelivery) {
         cancel.accept(orderDelivery);
     }
+
+    public static DeliveryStatus of(String input) {
+        try {
+            return DeliveryStatus.valueOf(input.toUpperCase());
+        } catch (IllegalArgumentException ex) {
+            return DeliveryStatus.NOT_DELIVERED;
+        }
+    }
 }

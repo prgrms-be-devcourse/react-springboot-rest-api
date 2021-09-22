@@ -2,15 +2,11 @@ package com.programmers.coffeeorder.repository.delivery;
 
 import com.programmers.coffeeorder.entity.delivery.CoffeeOrderDelivery;
 import com.programmers.coffeeorder.entity.order.CoffeeOrder;
-import com.programmers.coffeeorder.entity.order.OrderStatus;
-import com.programmers.coffeeorder.entity.order.item.CoffeeProductOrderItem;
-import com.programmers.coffeeorder.entity.product.coffee.CoffeeProduct;
-import com.programmers.coffeeorder.entity.product.coffee.CoffeeType;
+import com.programmers.coffeeorder.repository.order.CoffeeOrderRepository;
 import com.programmers.coffeeorder.repository.query.CoffeeDeliveryQuery;
 import com.programmers.coffeeorder.repository.query.CoffeeQuery;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
@@ -20,11 +16,15 @@ import java.sql.Statement;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
 
-import static java.util.stream.Collectors.*;
-import static com.programmers.coffeeorder.repository.mapper.CoffeeOrderRowMappers.*;
+import static com.programmers.coffeeorder.repository.mapper.CoffeeOrderRowMappers.coffeeOrderDeliveryRowMapper;
+import static com.programmers.coffeeorder.repository.mapper.CoffeeOrderRowMappers.coffeeOrderRowMapper;
+import static java.util.stream.Collectors.groupingBy;
+import static java.util.stream.Collectors.toList;
 
 @Repository
 @RequiredArgsConstructor
@@ -32,6 +32,7 @@ public class BasicCoffeeOrderDeliveryRepository implements CoffeeOrderDeliveryRe
     private final JdbcTemplate jdbcTemplate;
     private final CoffeeQuery coffeeQuery;
     private final CoffeeDeliveryQuery coffeeDeliveryQuery;
+    private final CoffeeOrderRepository coffeeOrderRepository;
 
     @Override
     public Map<String, List<CoffeeOrder>> listReservedDeliveries(LocalDate date) {
@@ -53,6 +54,15 @@ public class BasicCoffeeOrderDeliveryRepository implements CoffeeOrderDeliveryRe
         });
 
         return groupByEmail;
+    }
+
+    @Override
+    public Optional<CoffeeOrderDelivery> readCoffeeOrderDelivery(long id) {
+        List<CoffeeOrderDelivery> delivery = jdbcTemplate.query(coffeeDeliveryQuery.getSelect().getById(), coffeeOrderDeliveryRowMapper, id);
+        if(delivery.isEmpty()) return Optional.empty();
+        CoffeeOrderDelivery coffeeOrderDelivery = delivery.get(0);
+        coffeeOrderRepository.readOrder(coffeeOrderDelivery.getOrderId()).ifPresent(coffeeOrderDelivery::setCoffeeOrder);
+        return coffeeOrderDelivery.getCoffeeOrder() == null ? Optional.empty() : Optional.of(coffeeOrderDelivery);
     }
 
     @Override

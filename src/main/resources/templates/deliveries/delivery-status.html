@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Coffee Order Manager</title>
+</head>
+<body>
+<div>
+    <h1>Coffee Order Manager - Read Delivery</h1>
+</div>
+
+<div>
+    <form method="get" th:action="@{/delivery}">
+        <label for="delivery-id-search">READ DELIVERY INFO OF: </label>
+        <input id="delivery-id-search" name="id" type="number" min="0" th:value="${id}" th:placeholder="${id}" required>
+        <input type="submit" value="SEARCH">
+    </form>
+</div>
+
+<div>
+    <p th:text="${error}">ERROR MESSAGE HERE</p>
+</div>
+
+<div th:unless="${delivery == null}" style="border: 1px solid black; margin: 10px; padding: 10px;">
+    <div th:object="${delivery}">
+        <h2 th:text="|DELIVERY #*{id}|">DELIVERY #0</h2>
+        <p th:text="|STATUS: *{deliveryStatus.toString()}|">STATUS: NOT_DELIVERED</p>
+        <table style="border: 1px solid black; margin: 10px; padding: 10px;">
+            <tr>
+                <td>Sender:</td>
+                <td th:text="*{sender}">DELIVERY SENDER NAME HERE</td>
+            </tr>
+
+            <tr>
+                <td>Receiver:</td>
+                <td th:text="*{receiver}">DELIVERY RECEIVER NAME HERE</td>
+            </tr>
+
+            <tr>
+                <td>Destination:</td>
+                <td th:text="*{destination}">ORDER DESTINATION HERE</td>
+            </tr>
+
+            <tr>
+                <td>Message:</td>
+                <td th:text="*{message}">DELIVERY MESSAGE HERE</td>
+            </tr>
+
+            <tr>
+                <td>Created at:</td>
+                <td th:text="*{createdAt}">1970-01-01T00:00:00</td>
+            </tr>
+
+            <tr>
+                <td>Updated at:</td>
+                <td th:text="*{updatedAt}">2021-09-23T02:30:00</td>
+            </tr>
+        </table>
+    </div>
+
+    <div th:object="${delivery.getCoffeeOrder()}">
+        <h3>ORDER INFO</h3>
+        <p th:text="|Requested by: *{email}|">Order requested by: email@domain.com</p>
+        <p th:text="|Status: *{orderStatus.toString()}|">Status: CREATED</p>
+        <p th:text="|Created at: *{createdAt} / Updated at: *{updatedAt}|">
+            Created at: 1970-01-01T00:00:00 / Updated at: 2021-09-22T20:28</p>
+        <table style="border: 1px solid black; margin: 10px; padding: 10px;">
+            <tr>
+                <th>COFFEE NAME</th>
+                <th>COFFEE TYPE</th>
+                <th>QUANTITY</th>
+            </tr>
+            <tr th:each="orderItem: *{getCoffeeOrderItems()}">
+                <td th:text="${orderItem.getCoffeeProduct().productName}">COFFEE PRODUCT NAME</td>
+                <td th:text="${orderItem.getCoffeeProduct().category}">COFFEE PRODUCT CATEGORY</td>
+                <td th:text="${orderItem.quantity}">COFFEE PRODUCT QUANTITY</td>
+            </tr>
+        </table>
+    </div>
+</div>
+</body>
+</html>

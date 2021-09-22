@@ -9,9 +9,16 @@ import org.springframework.context.annotation.PropertySource;
 
 @Configuration
 @ConfigurationProperties(prefix = "coffee-delivery")
-@PropertySource(value = "classpath:/coffee_repository_query.yml", factory = YamlPropertySourceFactory.class)
+@PropertySource(value = "classpath:/delivery_repository_query.yml", factory = YamlPropertySourceFactory.class)
 @Getter
 @Setter
 public class CoffeeDeliveryQuery {
     private String create;
+    private Select select;
+
+    @Getter
+    @Setter
+    public static class Select {
+        private String byId;
+    }
 }
