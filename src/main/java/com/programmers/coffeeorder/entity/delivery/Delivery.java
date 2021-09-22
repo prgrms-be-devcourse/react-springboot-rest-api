@@ -1,12 +1,14 @@
 package com.programmers.coffeeorder.entity.delivery;
 
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDateTime;
 
 @Getter
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 @EqualsAndHashCode(of = "id")
+@SuperBuilder
 public abstract class Delivery {
     protected Long id;
     protected DeliveryStatus deliveryStatus;
@@ -18,8 +20,12 @@ public abstract class Delivery {
     protected LocalDateTime updatedAt;
 
 
-    protected Delivery(Long id, String receiver, String destination) {
-        this(id, DeliveryStatus.NOT_DELIVERED, "Anonymous", receiver, destination, "", LocalDateTime.now(), LocalDateTime.now());
+    public void registerId(long id) {
+        this.id = id;
+    }
+
+    protected Delivery(Long id, String sender, String receiver, String destination) {
+        this(id, DeliveryStatus.NOT_DELIVERED, sender, receiver, destination, "", LocalDateTime.now(), LocalDateTime.now());
     }
 
     @Getter

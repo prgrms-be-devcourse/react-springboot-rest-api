@@ -2,46 +2,21 @@ package com.programmers.coffeeorder.entity.delivery;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.programmers.coffeeorder.entity.order.CoffeeOrder;
+import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDateTime;
 
 @Getter
 @EqualsAndHashCode(callSuper = true)
+@SuperBuilder
 public class CoffeeOrderDelivery extends OrderDelivery {
 
-    public CoffeeOrderDelivery(
-            Long id,
-            String receiver,
-            CoffeeOrder coffeeOrder) {
-        this(
-                id,
-                receiver,
-                String.format("%s(%s)", coffeeOrder.getAddress(), coffeeOrder.getPostcode()),
-                coffeeOrder,
-                DeliveryStatus.NOT_DELIVERED);
-    }
-
-    public CoffeeOrderDelivery(
-            Long id,
-            String receiver,
-            String destination,
-            CoffeeOrder coffeeOrder,
-            DeliveryStatus deliveryStatus) {
-        this(id, receiver, destination, coffeeOrder, deliveryStatus, LocalDateTime.now(), LocalDateTime.now());
-    }
-
-    public CoffeeOrderDelivery(
-            Long id,
-            String receiver,
-            String destination,
-            CoffeeOrder coffeeOrder,
-            DeliveryStatus deliveryStatus,
-            LocalDateTime createdAt,
-            LocalDateTime updatedAt) {
-        super(id, receiver, destination, coffeeOrder, deliveryStatus, createdAt, updatedAt);
+    public void setCoffeeOrder(CoffeeOrder order) {
+        this.order = order;
     }
 
     public CoffeeOrder getCoffeeOrder() {
@@ -50,6 +25,14 @@ public class CoffeeOrderDelivery extends OrderDelivery {
 
     public DTO toDTO() {
         return new DTO(this);
+    }
+
+    public void registerSenderWithEmail() {
+        this.sender = getCoffeeOrder().getEmail();
+    }
+
+    public void registerDestinationWithOrderInfo() {
+        this.destination = String.format("%s(%d)", order.getAddress(), order.getPostcode());
     }
 
     @Getter
@@ -64,4 +47,5 @@ public class CoffeeOrderDelivery extends OrderDelivery {
             return (CoffeeOrder.DTO) order;
         }
     }
+
 }
