@@ -22,6 +22,7 @@ public class CoffeeQuery {
     public static class Select {
         private String byId;
         private String createdBetween;
+        private String createdBetweenAndNotDelivered;
     }
 
     @Getter

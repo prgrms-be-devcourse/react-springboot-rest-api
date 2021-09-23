@@ -19,7 +19,7 @@
 </div>
 
 <div>
-    <form method="get" th:action="@{/delivery/appointed}">
+    <form method="get" th:action="@{/delivery/scheduled}">
         <span>DELIVERIES </span>
         <label for="date">OF: </label>
         <input id="date" name="date" type="date" th:value="${date}" pattern="[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}"
@@ -37,6 +37,7 @@
         <p th:text="|Status: *{orderStatus}|">Status: NOT_DELIVERED</p>
 
         <table style="border: 1px solid black">
+            <caption>List of coffee products included in this order.</caption>
             <tr>
                 <th>COFFEE NAME</th>
                 <th>COFFEE TYPE</th>

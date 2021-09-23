@@ -60,6 +60,39 @@ coffee-order:
       ORDER BY
         c.id, p.id
 
+    createdBetweenAndNotDelivered: >
+      SELECT
+        c.*,
+        p.id as product_id,
+        p.name,
+        p.description,
+        p.price,
+        p.category,
+        i.quantity
+      FROM
+        coffee_order c
+      JOIN
+        coffee_order_item i
+      ON
+        c.id=i.order_id
+      JOIN
+        coffee_product p
+      ON
+        i.product_id=p.id
+      LEFT JOIN
+        coffee_order_delivery d
+      ON
+        c.id=d.order_id
+      WHERE
+        d.order_id IS NULL
+      AND
+        c.created_at
+      BETWEEN
+        ? AND ?
+      ORDER BY
+        c.id, p.id
+
+
   update:
     byId: >
       UPDATE

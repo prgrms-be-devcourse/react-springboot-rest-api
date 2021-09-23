@@ -20,7 +20,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import static com.programmers.coffeeorder.repository.mapper.CoffeeOrderRowMappers.coffeeOrderDeliveryRowMapper;
 import static com.programmers.coffeeorder.repository.mapper.CoffeeOrderRowMappers.coffeeOrderRowMapper;
@@ -48,7 +47,7 @@ public class BasicCoffeeOrderDeliveryRepository implements CoffeeOrderDeliveryRe
 
     @Override
     public Map<String, List<CoffeeOrder>> listReservedDeliveries(LocalDate date) {
-        List<CoffeeOrder> coffeeOrders = jdbcTemplate.query(coffeeQuery.getSelect().getCreatedBetween(), coffeeOrderRowMapper,
+        List<CoffeeOrder> coffeeOrders = jdbcTemplate.query(coffeeQuery.getSelect().getCreatedBetweenAndNotDelivered(), coffeeOrderRowMapper,
                 LocalDateTime.of(date.minusDays(1), LocalTime.of(14, 0)),
                 LocalDateTime.of(date, LocalTime.of(14, 0)));
 
