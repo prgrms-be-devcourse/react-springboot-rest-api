@@ -1,12 +1,14 @@
 package com.programmers.coffeeorder.entity.order;
 
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDateTime;
 
 @Getter
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 @EqualsAndHashCode(of = "id")
+@SuperBuilder
 public abstract class Order {
     protected Long id;
     protected final LocalDateTime createdAt;

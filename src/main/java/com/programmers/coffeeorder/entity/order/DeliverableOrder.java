@@ -3,25 +3,19 @@ package com.programmers.coffeeorder.entity.order;
 import com.programmers.coffeeorder.entity.order.item.ProductOrderItem;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDateTime;
-import java.util.LinkedList;
 import java.util.List;
 
 @Getter
 @EqualsAndHashCode(of = {"address", "postcode"}, callSuper = true)
+@SuperBuilder
 public abstract class DeliverableOrder extends Order {
     protected String address;
     protected int postcode;
     protected OrderStatus status;
-    protected final List<ProductOrderItem> orderItems; // List<ProductOrderItem> not compatible with List<CoffeeProductOrderItem>
-
-    protected DeliverableOrder(
-            Long id,
-            String address,
-            int postcode) {
-        this(id, address, postcode, OrderStatus.CREATED, new LinkedList<>());
-    }
+    protected List<ProductOrderItem> orderItems; // List<ProductOrderItem> not compatible with List<CoffeeProductOrderItem>
 
     protected DeliverableOrder(
             Long id,

@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.jdbc.core.RowMapper;
 
 import java.time.LocalDateTime;
+import java.util.LinkedList;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class CoffeeOrderRowMappers {
@@ -23,7 +24,15 @@ public class CoffeeOrderRowMappers {
         LocalDateTime createdAt = rs.getTimestamp("created_at").toLocalDateTime();
         LocalDateTime updatedAt = rs.getTimestamp("updated_at").toLocalDateTime();
         OrderStatus orderStatus = OrderStatus.of(rs.getString("order_status"));
-        CoffeeOrder coffeeOrder = new CoffeeOrder(id, email, address, postcode, orderStatus, createdAt, updatedAt);
+        CoffeeOrder coffeeOrder = CoffeeOrder.builder()
+                .id(id)
+                .email(email)
+                .address(address)
+                .postcode(postcode)
+                .status(orderStatus)
+                .orderItems(new LinkedList<>())
+                .createdAt(createdAt)
+                .updatedAt(updatedAt).build();
 
         long productId = rs.getLong("product_id");
         String productName = rs.getString("name");

@@ -1,7 +1,6 @@
 package com.programmers.coffeeorder.entity.product.coffee;
 
 import com.programmers.coffeeorder.entity.product.Product;
-import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
