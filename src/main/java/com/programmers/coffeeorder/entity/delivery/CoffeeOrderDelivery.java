@@ -2,13 +2,10 @@ package com.programmers.coffeeorder.entity.delivery;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.programmers.coffeeorder.entity.order.CoffeeOrder;
-import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
-
-import java.time.LocalDateTime;
 
 @Getter
 @EqualsAndHashCode(callSuper = true)

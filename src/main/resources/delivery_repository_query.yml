@@ -29,3 +29,17 @@ coffee-delivery:
         created_at
       BETWEEN
         ? AND ?
+
+  update:
+    UPDATE
+      coffee_order_delivery
+    SET
+      delivery_status=?,
+      sender=?,
+      receiver=?,
+      destination=?,
+      message=?,
+      updated_at=?,
+      order_id=?
+    WHERE
+      id=?

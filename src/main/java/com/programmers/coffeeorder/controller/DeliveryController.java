@@ -1,6 +1,7 @@
 package com.programmers.coffeeorder.controller;
 
 import com.programmers.coffeeorder.controller.bind.CoffeeOrderDeliveryRequest;
+import com.programmers.coffeeorder.controller.bind.CoffeeOrderDeliveryUpdate;
 import com.programmers.coffeeorder.entity.delivery.CoffeeOrderDelivery;
 import com.programmers.coffeeorder.entity.delivery.DeliveryStatus;
 import com.programmers.coffeeorder.entity.order.CoffeeOrder;
@@ -18,8 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Controller
 @RequestMapping("/delivery")
@@ -32,8 +32,19 @@ public class DeliveryController {
     private static final String DELIVERY_REQUEST_TEMPLATE = "deliveries/delivery-request";
     private static final String DELIVERY_LIST_TEMPLATE = "deliveries/delivery-list";
     private static final String DELIVERY_READ_TEMPLATE = "deliveries/delivery-status";
+    private static final String DELIVERY_UPDATE_TEMPLATE = "deliveries/delivery-update";
     private static final String DELIVERY_SCHEDULED_TEMPLATE = "deliveries/deliveries-scheduled";
     private static final String ERROR_MESSAGE_COMPONENT = "error";
+    private static final String DELIVERY_INFO_COMPONENT = "delivery";
+
+    private static final List<String[]> urlMap = new LinkedList<>(Arrays.asList(
+            new String[]{"Main Page", "/"},
+            new String[]{"Create Delivery", "/delivery/create"},
+            new String[]{"Delivery List", "/delivery/list"},
+            new String[]{"Inspect Delivery", "/delivery"},
+            new String[]{"Update Delivery", "/delivery/update"},
+            new String[]{"Scheduled Delivery", "/delivery/scheduled"}
+    ));
 
 
     private static String redirectToDeliveryRead(Long id) {
@@ -43,13 +54,53 @@ public class DeliveryController {
     @GetMapping
     public String readDeliveryInfo(@RequestParam(value = "id", required = false) Long id,
                                    Model model) {
+        model.addAttribute("urls", urlMap);
+        model.addAttribute("id", id);
         if (id != null) {
-            model.addAttribute("id", id);
             coffeeDeliveryService.readCoffeeOrderDelivery(id).ifPresentOrElse(
-                    delivery -> model.addAttribute("delivery", delivery),
+                    delivery -> model.addAttribute(DELIVERY_INFO_COMPONENT, delivery),
                     () -> model.addAttribute(ERROR_MESSAGE_COMPONENT, "Delivery with given id not found."));
         }
         return DELIVERY_READ_TEMPLATE;
+    }
+
+    @GetMapping("/update")
+    public String requestCoffeeOrderDeliveryUpdate(@RequestParam(value = "id", required = false) Long id,
+                                                   Model model) {
+        model.addAttribute("urls", urlMap);
+        model.addAttribute("id", id);
+        if (id != null) {
+            coffeeDeliveryService.readCoffeeOrderDelivery(id).ifPresentOrElse(
+                    delivery -> model.addAttribute(DELIVERY_INFO_COMPONENT, delivery),
+                    () -> model.addAttribute(ERROR_MESSAGE_COMPONENT, "NO DELIVERY FOUND."));
+            model.addAttribute("deliveryStatuses", DeliveryStatus.values());
+        }
+        return DELIVERY_UPDATE_TEMPLATE;
+    }
+
+    @PostMapping("/update")
+    public String submitCoffeeOrderDeliveryUpdate(CoffeeOrderDeliveryUpdate update,
+                                                  Model model) {
+        model.addAttribute("urls", urlMap);
+        model.addAttribute("id", update.getId());
+        try {
+            coffeeDeliveryService.updateDelivery(CoffeeOrderDelivery.builder()
+                    .id(update.getId())
+                    .deliveryStatus(DeliveryStatus.of(update.getDeliveryStatus()))
+                    .sender(update.getSender())
+                    .receiver(update.getReceiver())
+                    .destination(update.getDestination())
+                    .message(update.getMessage())
+                    .orderId(update.getOrderId()).build());
+            return redirectToDeliveryRead(update.getId());
+        } catch (RuntimeException exception) {
+            model.addAttribute(ERROR_MESSAGE_COMPONENT, exception.getMessage());
+            coffeeDeliveryService.readCoffeeOrderDelivery(update.getId()).ifPresentOrElse(
+                    delivery -> model.addAttribute(DELIVERY_INFO_COMPONENT, delivery),
+                    () -> model.addAttribute(ERROR_MESSAGE_COMPONENT, "NO DELIVERY FOUND."));
+            model.addAttribute("deliveryStatuses", DeliveryStatus.values());
+            return DELIVERY_UPDATE_TEMPLATE;
+        }
     }
 
     @GetMapping("/list")
@@ -58,8 +109,9 @@ public class DeliveryController {
                                  @RequestParam(value = "to", required = false)
                                  @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime to,
                                  Model model) {
-        if(from == null) from = LocalDateTime.of(1970, 1, 1, 0, 0);
-        if(to == null) to = LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES);
+        model.addAttribute("urls", urlMap);
+        if (from == null) from = LocalDateTime.of(1970, 1, 1, 0, 0);
+        if (to == null) to = LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES);
         model.addAttribute("from", from);
         model.addAttribute("to", to);
         model.addAttribute("deliveries", coffeeDeliveryService.listCoffeeOrderDeliveries(from, to));
@@ -69,6 +121,7 @@ public class DeliveryController {
     @GetMapping("/create")
     public String requestDeliveryCreate(@RequestParam(value = "id", required = false) Long id,
                                         Model model) {
+        model.addAttribute("urls", urlMap);
         if (id != null) {
             model.addAttribute("id", id);
             coffeeOrderService.readOrder(id).ifPresentOrElse(
@@ -81,6 +134,7 @@ public class DeliveryController {
     @PostMapping("/create")
     public String submitDeliveryCreate(CoffeeOrderDeliveryRequest request,
                                        Model model) {
+        model.addAttribute("urls", urlMap);
         model.addAttribute("request", request);
         model.addAttribute("id", request.getOrderId());
         if (request.getOrderId() == null) {
@@ -108,10 +162,11 @@ public class DeliveryController {
         }
     }
 
-    @GetMapping("/appointed")
+    @GetMapping("/scheduled")
     public String getCoffeeDeliveryReservations(@RequestParam(value = "date", required = false)
                                                 @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
                                                 Model model) {
+        model.addAttribute("urls", urlMap);
         if (date == null) date = LocalDate.now();
         Map<String, List<CoffeeOrder.DTO>> deliveries = coffeeDeliveryService.listAppointedDeliveries(date);
         model.addAttribute("deliveries", deliveries);

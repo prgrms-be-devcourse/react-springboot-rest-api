@@ -12,8 +12,9 @@ public abstract class OrderDelivery extends Delivery {
     protected long orderId;
     protected DeliverableOrder order;
 
-    public void setStatus(DeliveryStatus status) {
-        this.deliveryStatus = status;
+
+    public void changeOrderId(long id) {
+        orderId = id;
     }
 
     @Getter

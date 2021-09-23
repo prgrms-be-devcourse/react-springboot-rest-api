@@ -1,6 +1,5 @@
 package com.programmers.coffeeorder.controller.bind;
 
-import com.programmers.coffeeorder.entity.order.OrderStatus;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;

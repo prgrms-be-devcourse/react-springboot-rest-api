@@ -20,8 +20,8 @@ public enum DeliveryStatus {
             }
     ),
     NOT_DELIVERED(
-            orderDelivery -> orderDelivery.setStatus(DELIVERED),
-            orderDelivery -> orderDelivery.setStatus(CANCELLED)
+            orderDelivery -> orderDelivery.changeDeliveryStatus(DELIVERED),
+            orderDelivery -> orderDelivery.changeDeliveryStatus(CANCELLED)
     );
 
     // like strategy pattern?

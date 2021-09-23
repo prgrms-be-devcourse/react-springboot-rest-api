@@ -15,6 +15,7 @@ import org.springframework.context.annotation.PropertySource;
 public class CoffeeDeliveryQuery {
     private String create;
     private Select select;
+    private String update;
 
     @Getter
     @Setter

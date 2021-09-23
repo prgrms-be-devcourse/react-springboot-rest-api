@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Coffee Order Manager</title>
+</head>
+<body>
+<div>
+    <h1>Coffee Order Manager - Update Delivery</h1>
+</div>
+
+<div>
+    <ul>
+        <li th:each="url: ${urls}">
+            <a th:text="${url[0]}" th:href="${url[1]}">LINKS</a>
+        </li>
+    </ul>
+</div>
+
+<div>
+    <form method="get" th:action="@{/delivery/update}">
+        <label for="id">FROM: </label>
+        <input id="id" name="id" th:value="${id}" type="number" min="1" required>
+        <input type="submit" value="SEARCH">
+    </form>
+</div>
+
+<div>
+    <p th:text="${error}">ERROR MESSAGE HERE</p>
+</div>
+
+<div th:unless="${delivery == null}" th:object="${delivery}"
+     style="border: 1px solid black; margin: 10px; padding: 10px;">
+    <form th:action="@{/delivery/update}" method="post">
+        <input type="hidden" name="id" th:value="*{id}">
+        <h3 th:text="|DELIVERY #*{id}|">DELIVERY #0</h3>
+        <table>
+            <tr>
+                <td><label for="sender-form">Sender: </label></td>
+                <td><input id="sender-form" type="text" name="sender" th:value="*{sender}" th:placeholder="*{sender}"></td>
+            </tr>
+            <tr>
+                <td><label for="receiver-form">Receiver: </label></td>
+                <td><input id="receiver-form" type="text" name="receiver" th:value="*{receiver}"
+                           th:placeholder="*{receiver}" required></td>
+            </tr>
+            <tr>
+                <td><label for="destination-form">Destination: </label></td>
+                <td><input id="destination-form" type="text" name="destination" th:value="*{destination}"
+                           th:placeholder="*{destination}"></td>
+            </tr>
+            <tr>
+                <td><label for="message-form">Message: </label></td>
+                <td><input id="message-form" type="text" name="message" th:value="*{message}"
+                           th:placeholder="*{message}"></td>
+            </tr>
+            <tr>
+                <td><label for="delivery-status-form">Status: </label></td>
+                <td>
+                    <select id="delivery-status-form" name="deliveryStatus">
+                        <option th:each="deliveryStatus: ${deliveryStatuses}" th:text="${deliveryStatus.toString()}"
+                                th:value="${deliveryStatus.toString()}"
+                                th:selected="${delivery.deliveryStatus eq deliveryStatus}">
+                            ORDER STATUS HERE
+                        </option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td><label for="order-id-form">ORDER: </label></td>
+                <td><input id="order-id-form" name="orderId" type="number" min="0" th:value="*{order.id}"></td>
+            </tr>
+        </table>
+        <div>
+            <input type="submit" value="UPDATE">
+            <a th:href="@{/delivery(id=*{id})}">
+                <input type="button" value="CANCEL">
+            </a>
+        </div>
+    </form>
+</div>
+</body>
+</html>

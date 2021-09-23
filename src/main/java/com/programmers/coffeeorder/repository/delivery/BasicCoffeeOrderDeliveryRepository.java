@@ -94,4 +94,17 @@ public class BasicCoffeeOrderDeliveryRepository implements CoffeeOrderDeliveryRe
         coffeeOrderDelivery.registerId(Objects.requireNonNull(keyHolder.getKey()).longValue());
         return coffeeOrderDelivery;
     }
+
+    @Override
+    public void updateCoffeeOrderDelivery(CoffeeOrderDelivery delivery) {
+        jdbcTemplate.update(coffeeDeliveryQuery.getUpdate(),
+                delivery.getDeliveryStatus().toString(),
+                delivery.getSender(),
+                delivery.getReceiver(),
+                delivery.getDestination(),
+                delivery.getMessage(),
+                LocalDateTime.now(),
+                delivery.getOrderId(),
+                delivery.getId());
+    }
 }

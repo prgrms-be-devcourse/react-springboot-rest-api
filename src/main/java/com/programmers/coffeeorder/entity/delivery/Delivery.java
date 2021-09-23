@@ -20,6 +20,26 @@ public abstract class Delivery {
     protected LocalDateTime updatedAt;
 
 
+    public void changeSender(String sender) {
+        this.sender = sender;
+    }
+
+    public void changeReceiver(String receiver) {
+        this.receiver = receiver;
+    }
+
+    public void changeDestination(String destination) {
+        this.destination = destination;
+    }
+
+    public void changeMessage(String message) {
+        this.message = message;
+    }
+
+    public void changeDeliveryStatus(DeliveryStatus status) {
+        this.deliveryStatus = status;
+    }
+
     public void registerId(long id) {
         this.id = id;
     }

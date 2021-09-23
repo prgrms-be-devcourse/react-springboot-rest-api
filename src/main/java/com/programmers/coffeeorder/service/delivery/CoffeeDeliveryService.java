@@ -17,6 +17,8 @@ public interface CoffeeDeliveryService {
 
     List<CoffeeOrderDelivery.DTO> listCoffeeOrderDeliveries(LocalDateTime from, LocalDateTime to);
 
+    void updateDelivery(CoffeeOrderDelivery coffeeOrderDelivery);
+
     CoffeeOrderDelivery.DTO createCoffeeOrderDelivery(long orderId, CoffeeOrderDelivery delivery);
 
 }

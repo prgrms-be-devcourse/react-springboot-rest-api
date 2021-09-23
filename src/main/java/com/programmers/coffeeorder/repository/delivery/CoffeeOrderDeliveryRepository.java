@@ -19,4 +19,6 @@ public interface CoffeeOrderDeliveryRepository {
 
     CoffeeOrderDelivery createCoffeeOrderDelivery(CoffeeOrderDelivery coffeeOrderDelivery);
 
+    void updateCoffeeOrderDelivery(CoffeeOrderDelivery coffeeOrderDelivery);
+
 }
