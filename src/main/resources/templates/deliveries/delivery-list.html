@@ -12,11 +12,8 @@
 
 <div>
     <ul>
-        <li>
-            <a th:href="@{/}">BACK TO MAIN MENU</a>
-        </li>
-        <li>
-            <a th:href="@{/delivery/appointed}">LIST OF RESERVED DELIVERIES</a>
+        <li th:each="url: ${urls}">
+            <a th:text="${url[0]}" th:href="${url[1]}">LINKS</a>
         </li>
     </ul>
 </div>

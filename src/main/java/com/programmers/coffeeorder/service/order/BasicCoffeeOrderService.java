@@ -50,8 +50,8 @@ public class BasicCoffeeOrderService implements CoffeeOrderService {
     }
 
     @Override
-    public void updateOrderInfo(long id, CoffeeOrder updatedCoffeeOrder) {
-        CoffeeOrder coffeeOrder = coffeeOrderRepository.readOrder(id).orElseThrow(() -> {
+    public void updateOrderInfo(CoffeeOrder updatedCoffeeOrder) {
+        CoffeeOrder coffeeOrder = coffeeOrderRepository.readOrder(updatedCoffeeOrder.getId()).orElseThrow(() -> {
             throw new IllegalArgumentException("Order with given id not found.");
         });
 

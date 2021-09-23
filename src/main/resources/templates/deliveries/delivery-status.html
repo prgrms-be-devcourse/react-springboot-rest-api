@@ -11,6 +11,14 @@
 </div>
 
 <div>
+    <ul>
+        <li th:each="url: ${urls}">
+            <a th:text="${url[0]}" th:href="${url[1]}">LINKS</a>
+        </li>
+    </ul>
+</div>
+
+<div>
     <form method="get" th:action="@{/delivery}">
         <label for="delivery-id-search">READ DELIVERY INFO OF: </label>
         <input id="delivery-id-search" name="id" type="number" min="0" th:value="${id}" th:placeholder="${id}" required>

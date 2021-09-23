@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -34,6 +36,13 @@ public class OrderManagerController {
     private static final String ORDER_UPDATE_TEMPLATE = "manage/update-order";
     private static final String ERROR_MESSAGE_COMPONENT = "error";
 
+    private static final List<String[]> urlMap = new LinkedList<>(Arrays.asList(
+            new String[]{"Main Page", "/"},
+            new String[]{"Order List", "/order/list"},
+            new String[]{"Inspect Order", "/order"},
+            new String[]{"Update Order", "/order/update"}
+    ));
+
 
     private static String redirectToOrderRead(Long id) {
         return "redirect:/order" + (id == null ? "" : String.format("?id=%d", id));
@@ -45,6 +54,7 @@ public class OrderManagerController {
     @GetMapping
     public String getCoffeeOrder(@RequestParam(name = "id", required = false) Long id,
                                  Model model) {
+        model.addAttribute("urls", urlMap);
         model.addAttribute("id", id);
         if(id != null) coffeeOrderService.readOrder(id).ifPresentOrElse(
                 order -> model.addAttribute("order", order),
@@ -59,6 +69,7 @@ public class OrderManagerController {
                                   @RequestParam(value = "to", required = false)
                                   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime to,
                                   Model model) {
+        model.addAttribute("urls", urlMap);
         if (from == null) from = LocalDateTime.of(1970, 1, 1, 0, 0);
         if (to == null) to = LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES);
         List<CoffeeOrder.DTO> orders = coffeeOrderService.listOrdersBetweenTime(from, to);
@@ -85,6 +96,7 @@ public class OrderManagerController {
     @GetMapping("/update")
     public String requestUpdateCoffeeOrder(@RequestParam(value = "id", required = false) Long id,
                                            Model model) {
+        model.addAttribute("urls", urlMap);
         model.addAttribute("id", id);
         if (id != null) {
             coffeeOrderService.readOrder(id).ifPresentOrElse(
@@ -106,7 +118,7 @@ public class OrderManagerController {
     @PostMapping("/update")
     public String submitUpdateCoffeeOrder(CoffeeOrderUpdate update) {
         CoffeeOrder updatedCoffeeOrder = new CoffeeOrder(update);
-        coffeeOrderService.updateOrderInfo(update.getId(), updatedCoffeeOrder);
+        coffeeOrderService.updateOrderInfo(updatedCoffeeOrder);
         coffeeOrderService.updateOrderItemsQuantity(update.getId(), update.getOrderItems());
         return redirectToOrderRead(update.getId());
     }

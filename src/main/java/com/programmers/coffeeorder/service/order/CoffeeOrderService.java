@@ -17,7 +17,7 @@ public interface CoffeeOrderService {
 
     void cancelOrder(long id);
 
-    void updateOrderInfo(long id, CoffeeOrder updatedCoffeeOrder);
+    void updateOrderInfo(CoffeeOrder updatedCoffeeOrder);
 
     void updateOrderItemsQuantity(long id, Map<Long, Integer> quantityMap);
 
