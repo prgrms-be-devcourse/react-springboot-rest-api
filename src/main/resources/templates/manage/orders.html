@@ -11,41 +11,53 @@
 </div>
 
 <div>
-    <form method="get" th:action="@{/order}">
-        <span>ORDERS</span>
+    <ul>
+        <li>
+            <a th:href="@{/}">BACK TO MAIN MENU</a>
+        </li>
+    </ul>
+</div>
+
+<div>
+    <form method="get" th:action="@{/order/list}">
+        <span>ORDERS </span>
         <label for="from">FROM: </label>
         <input id="from" name="from" th:value="${from}" type="datetime-local" pattern="[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}" placeholder="1970-01-01T00:00:00">
 
         <label for="to">TO: </label>
         <input id="to" name="to" th:value="${to}" type="datetime-local" pattern="[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}" placeholder="2199-12-31T23:59:59">
 
-        <input type="submit">
+        <input type="submit" value="SEARCH">
     </form>
 </div>
 
-<div th:each="order: ${orders}" th:object="${order}" style="border: 1px solid black; margin: 10px; padding: 10px;">
-    <a th:id="|order-*{id}|"><h3 th:text="|ORDER #*{id}|">ORDER #0</h3></a>
-    <a th:href="@{/order/update(id=*{id})}">[ UPDATE ]</a>
-    <p th:text="|Order requested by: *{email}|">Order requested by: email@domain.com</p>
-    <p th:text="|Delivery destination: *{address}(*{postcode})|">Delivery destination: south korea(12345)</p>
-    <p th:text="|Status: *{getOrderStatus}|">Status: NOT_DELIVERED</p>
-    <a th:href="@{/order/accept(id=*{id})}">[ ACCEPT ]</a>
-    <a th:href="@{/order/cancel(id=*{id})}">[ CANCEL ]</a>
-    <p th:text="|Created: *{createdAt} / Updated: *{updatedAt}|">Created: 2021-09-17T18:11:03 / Updated:
-        2021-09-017T18:11:03</p>
-
-    <table style="border: 1px solid black">
+<div>
+    <table style="border: 1px solid black;">
         <tr>
-            <th>COFFEE NAME</th>
-            <th>COFFEE TYPE</th>
-            <th>PRICE</th>
-            <th>QUANTITY</th>
+            <th>ID</th>
+            <th>REQUESTED BY</th>
+            <th>ADDRESS</th>
+            <th>POSTCODE</th>
+            <th>STATUS</th>
+            <th>CREATED AT</th>
+            <th>UPDATED AT</th>
+            <th>INFO</th>
+            <th>UPDATE</th>
+            <th>ACCEPT</th>
+            <th>CANCEL</th>
         </tr>
-        <tr th:each="coffee: ${order.orderItems}" th:object="${coffee}">
-            <td th:text="*{product.productName}">COFFEE NAME HERE</td>
-            <td th:text="*{product.category}">COFFEE TYPE HERE</td>
-            <td th:text="*{product.price}">COFFEE PRICE HERE</td>
-            <td th:text="*{quantity}">COFFEE QUANTITY HERE</td>
+        <tr th:each="order: ${orders}" th:object="${order}" >
+            <td th:text="*{id}">0</td>
+            <td th:text="*{email}">email@domain.com</td>
+            <td th:text="*{address}">DELIVERY DESTINATION ADDRESS HERE</td>
+            <td th:text="*{postcode}">DELIVERY DESTINATION POSTCODE HERE</td>
+            <td th:text="*{getOrderStatus()}">ORDER STATUS HERE</td>
+            <td th:text="*{createdAt}">CREATED TIMESTAMP HERE</td>
+            <td th:text="*{updatedAt}">UPDATED TIMESTAMP HERE</td>
+            <td><a th:href="@{/order(id=*{id})}">INFO</a></td>
+            <td><a th:href="@{/order/update(id=*{id})}">UPDATE</a></td>
+            <td><a th:href="@{/order/accept(id=*{id})}">ACCEPT</a></td>
+            <td><a th:href="@{/order/cancel(id=*{id})}">CANCEL</a></td>
         </tr>
     </table>
 </div>

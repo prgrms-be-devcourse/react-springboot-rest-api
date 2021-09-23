@@ -20,5 +20,6 @@ public class CoffeeDeliveryQuery {
     @Setter
     public static class Select {
         private String byId;
+        private String createdBetween;
     }
 }

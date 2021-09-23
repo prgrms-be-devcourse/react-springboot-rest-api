@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Coffee Order Service</title>
+</head>
+<body>
+
+<div>
+    <h1>
+        Coffee Order Service / Manager Console.
+    </h1>
+</div>
+
+<div>
+    <h2>
+        Coffee Orders
+    </h2>
+    <ul>
+        <li>
+            <a th:href="@{/order/list}" target="_blank">List Orders</a>
+        </li>
+        <li>
+            <a th:href="@{/order/update}" target="_blank">Update Order</a>
+        </li>
+
+    </ul>
+</div>
+
+<div>
+    <h2>
+        Coffee Deliveries
+    </h2>
+    <ul>
+        <li>
+            <a th:href="@{delivery/list}" target="_blank">List Deliveries</a>
+        </li>
+        <li>
+            <a th:href="@{delivery/create}" target="_blank">Create Delivery</a>
+        </li>
+        <li>
+            <a th:href="@{delivery/appointed}" target="_blank">List Reserved Deliveries of Date</a>
+        </li>
+    </ul>
+</div>
+
+</body>
+</html>

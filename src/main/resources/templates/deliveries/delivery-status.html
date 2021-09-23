@@ -60,7 +60,7 @@
     </div>
 
     <div th:object="${delivery.getCoffeeOrder()}">
-        <h3>ORDER INFO</h3>
+        <h3 th:text="|ORDER #*{id} INFO|">ORDER #0 INFO</h3>
         <p th:text="|Requested by: *{email}|">Order requested by: email@domain.com</p>
         <p th:text="|Status: *{orderStatus.toString()}|">Status: CREATED</p>
         <p th:text="|Created at: *{createdAt} / Updated at: *{updatedAt}|">

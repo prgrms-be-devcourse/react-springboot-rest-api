@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -36,6 +37,11 @@ public class BasicCoffeeDeliveryService implements CoffeeDeliveryService {
     @Override
     public Optional<CoffeeOrderDelivery.DTO> readCoffeeOrderDelivery(long deliveryId) {
         return coffeeOrderDeliveryRepository.readCoffeeOrderDelivery(deliveryId).map(CoffeeOrderDelivery::toDTO);
+    }
+
+    @Override
+    public List<CoffeeOrderDelivery.DTO> listCoffeeOrderDeliveries(LocalDateTime from, LocalDateTime to) {
+        return coffeeOrderDeliveryRepository.listDeliveriesBetween(from, to).stream().map(CoffeeOrderDelivery::toDTO).collect(Collectors.toList());
     }
 
     @Override

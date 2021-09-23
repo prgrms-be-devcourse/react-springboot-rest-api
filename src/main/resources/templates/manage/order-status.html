@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Coffee Order Manager</title>
+</head>
+<body>
+<div>
+    <h1>Coffee Order Manager - Order Status</h1>
+</div>
+
+<div>
+    <ul>
+        <li>
+            <a th:href="@{/order/list}">BACK TO LIST</a>
+        </li>
+    </ul>
+</div>
+
+<div>
+    <form method="get" th:action="@{/order}">
+        <label for="id">FROM: </label>
+        <input id="id" name="id" th:value="${id}" type="number" min="1" required>
+        <input type="submit" value="SEARCH">
+    </form>
+</div>
+
+<div>
+    <p th:text="${error}">ERROR MESSAGE HERE</p>
+</div>
+
+<div th:unless="${order == null}" th:object="${order}" style="border: 1px solid black; margin: 10px; padding: 10px;">
+    <a th:id="|order-*{id}|"><h3 th:text="|ORDER #*{id}|">ORDER #0</h3></a>
+    <a th:href="@{/order/update(id=*{id})}">[ UPDATE ]</a>
+    <p th:text="|Order requested by: *{email}|">Order requested by: email@domain.com</p>
+    <p th:text="|Delivery destination: *{address}(*{postcode})|">Delivery destination: south korea(12345)</p>
+    <p th:text="|Status: *{getOrderStatus}|">Status: NOT_DELIVERED</p>
+    <a th:href="@{/order/accept(id=*{id}, view='read')}">[ ACCEPT ]</a>
+    <a th:href="@{/order/cancel(id=*{id}, view='read')}">[ CANCEL ]</a>
+    <p th:text="|Created: *{createdAt} / Updated: *{updatedAt}|">Created: 2021-09-17T18:11:03 / Updated:
+        2021-09-017T18:11:03</p>
+
+    <table style="border: 1px solid black">
+        <tr>
+            <th>COFFEE NAME</th>
+            <th>COFFEE TYPE</th>
+            <th>PRICE</th>
+            <th>QUANTITY</th>
+        </tr>
+        <tr th:each="coffee: ${order.orderItems}" th:object="${coffee}">
+            <td th:text="*{product.productName}">COFFEE NAME HERE</td>
+            <td th:text="*{product.category}">COFFEE TYPE HERE</td>
+            <td th:text="*{product.price}">COFFEE PRICE HERE</td>
+            <td th:text="*{quantity}">COFFEE QUANTITY HERE</td>
+        </tr>
+    </table>
+</div>
+</body>
+</html>

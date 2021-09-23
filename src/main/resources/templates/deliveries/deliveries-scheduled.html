@@ -11,6 +11,17 @@
 </div>
 
 <div>
+    <ul>
+        <li>
+            <a th:href="@{/}">BACK TO MAIN MENU</a>
+        </li>
+        <li>
+            <a th:href="@{/delivery/list}">DELIVERY LIST</a>
+        </li>
+    </ul>
+</div>
+
+<div>
     <form method="get" th:action="@{/delivery/appointed}">
         <span>DELIVERIES </span>
         <label for="date">OF: </label>
@@ -21,10 +32,10 @@
 </div>
 
 <div th:each="email: ${deliveries.keySet()}" style="border: 1px solid black; margin: 10px; padding: 10px;">
-    <p th:text="|Customer: ${email}|">Customer: email@domain.com</p>
+    <h2 th:text="|Customer: ${email}|">Customer: email@domain.com</h2>
 
     <div th:each="order: ${deliveries.get(email)}" th:object="${order}">
-        <p th:text="|ORDER #*{id}|">ORDER #0</p>
+        <h3 th:text="|ORDER #*{id}|">ORDER #0</h3>
         <p th:text="|Destination: *{address}(*{postcode})|">Destination: cheongju(12345)</p>
         <p th:text="|Status: *{orderStatus}|">Status: NOT_DELIVERED</p>
 

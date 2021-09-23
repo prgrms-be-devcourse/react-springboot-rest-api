@@ -11,6 +11,14 @@
 </div>
 
 <div>
+    <ul>
+        <li>
+            <a th:href="@{/order/list}">BACK TO LIST</a>
+        </li>
+    </ul>
+</div>
+
+<div>
     <form method="get" th:action="@{/order/update}">
         <label for="id">FROM: </label>
         <input id="id" name="id" th:value="${id}" type="number" min="1" required>
@@ -75,7 +83,14 @@
                 </td>
             </tr>
         </table>
-        <input type="submit" value="UPDATE">
+
+        <div>
+            <input type="submit" value="UPDATE">
+
+            <a th:href="@{/order(id=*{id})}">
+                <input type="button" value="CANCEL">
+            </a>
+        </div>
     </form>
 </div>
 </body>

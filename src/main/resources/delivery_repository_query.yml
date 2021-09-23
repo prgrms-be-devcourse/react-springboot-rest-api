@@ -19,3 +19,13 @@ coffee-delivery:
         coffee_order_delivery
       WHERE
         id=?
+
+    createdBetween:
+      SELECT
+        *
+      FROM
+        coffee_order_delivery
+      WHERE
+        created_at
+      BETWEEN
+        ? AND ?

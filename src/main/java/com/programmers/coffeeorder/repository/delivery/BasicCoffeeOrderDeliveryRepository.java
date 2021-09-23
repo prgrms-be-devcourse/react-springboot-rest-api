@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static com.programmers.coffeeorder.repository.mapper.CoffeeOrderRowMappers.coffeeOrderDeliveryRowMapper;
 import static com.programmers.coffeeorder.repository.mapper.CoffeeOrderRowMappers.coffeeOrderRowMapper;
@@ -33,6 +34,17 @@ public class BasicCoffeeOrderDeliveryRepository implements CoffeeOrderDeliveryRe
     private final CoffeeQuery coffeeQuery;
     private final CoffeeDeliveryQuery coffeeDeliveryQuery;
     private final CoffeeOrderRepository coffeeOrderRepository;
+
+
+    @Override
+    public List<CoffeeOrderDelivery> listDeliveriesBetween(LocalDateTime from, LocalDateTime to) {
+        List<CoffeeOrderDelivery> deliveries = jdbcTemplate.query(coffeeDeliveryQuery.getSelect().getCreatedBetween(), coffeeOrderDeliveryRowMapper, from, to);
+        deliveries.forEach(delivery ->
+                delivery.setCoffeeOrder(coffeeOrderRepository.readOrder(delivery.getOrderId()).orElseThrow(() -> {
+                    throw new IllegalArgumentException("Delivery with not existing order found. Possible on-delete cascade failure.");
+                })));
+        return deliveries;
+    }
 
     @Override
     public Map<String, List<CoffeeOrder>> listReservedDeliveries(LocalDate date) {
