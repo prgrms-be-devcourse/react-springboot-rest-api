@@ -8,6 +8,7 @@ import com.programmers.coffeeorder.repository.order.CoffeeOrderRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -19,12 +20,14 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class BasicCoffeeDeliveryService implements CoffeeDeliveryService {
 
     private final CoffeeOrderRepository coffeeOrderRepository;
     private final CoffeeOrderDeliveryRepository coffeeOrderDeliveryRepository;
 
     @Override
+    @Transactional(readOnly = true)
     public Map<String, List<CoffeeOrder.DTO>> listAppointedDeliveries(LocalDate date) {
         Map<String, List<CoffeeOrder>> deliveries = coffeeOrderDeliveryRepository.listReservedDeliveries(date);
         Map<String, List<CoffeeOrder.DTO>> result = new HashMap<>();
@@ -36,11 +39,13 @@ public class BasicCoffeeDeliveryService implements CoffeeDeliveryService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Optional<CoffeeOrderDelivery.DTO> readCoffeeOrderDelivery(long deliveryId) {
         return coffeeOrderDeliveryRepository.readCoffeeOrderDelivery(deliveryId).map(CoffeeOrderDelivery::toDTO);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<CoffeeOrderDelivery.DTO> listCoffeeOrderDeliveries(LocalDateTime from, LocalDateTime to) {
         return coffeeOrderDeliveryRepository.listDeliveriesBetween(from, to).stream().map(CoffeeOrderDelivery::toDTO).collect(Collectors.toList());
     }

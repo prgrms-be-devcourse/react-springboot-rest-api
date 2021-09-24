@@ -1,5 +1,6 @@
 package com.programmers.coffeeorder.controller.api;
 
+import com.programmers.coffeeorder.controller.bind.ApiResponse;
 import com.programmers.coffeeorder.controller.bind.CoffeeOrderSubmit;
 import com.programmers.coffeeorder.entity.order.CoffeeOrder;
 import com.programmers.coffeeorder.entity.order.OrderStatus;
@@ -9,10 +10,7 @@ import com.programmers.coffeeorder.entity.order.item.CoffeeProductOrderItem;
 import com.programmers.coffeeorder.service.order.CoffeeOrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -44,7 +42,11 @@ public class OrderController {
                 .updatedAt(LocalDateTime.now())
                 .status(OrderStatus.CREATED)
                 .orderItems(products.stream().map(ProductOrderItem.class::cast).collect(Collectors.toList())).build());
-        if (dto.getId() < 1) return ResponseEntity.internalServerError().body(dto);
         return ResponseEntity.ok(dto);
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<ApiResponse<Object>> handleIllegalArgument(IllegalArgumentException exception) {
+        return ResponseEntity.badRequest().body(new ApiResponse<>(false, null, exception.getLocalizedMessage()));
     }
 }

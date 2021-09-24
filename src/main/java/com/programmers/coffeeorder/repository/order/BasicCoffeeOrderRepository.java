@@ -57,7 +57,9 @@ public class BasicCoffeeOrderRepository implements CoffeeOrderRepository {
                                 product.getId(),
                                 productOrderItem.getQuantity());
                     },
-                    () -> log.warn("Requested not existing coffee product from order {}", coffeeOrder.getId()));
+                    () -> {
+                        throw new IllegalArgumentException("Requested not existing coffee product from order " + coffeeOrder.getId());
+                    });
         });
 
         return coffeeOrder;
