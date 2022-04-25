@@ -6,7 +6,9 @@ import com.example.gccoffee.repository.ProductRepository;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
+import org.springframework.stereotype.Service;
 
+@Service
 public class DefaultProductService implements ProductService {
 
     private final ProductRepository productRepository;
