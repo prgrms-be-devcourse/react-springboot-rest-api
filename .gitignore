@@ -1,0 +1,58 @@
+
+# Created by https://www.toptal.com/developers/gitignore/api/macos,intellij,maven
+# Edit at https://www.toptal.com/developers/gitignore?templates=macos,intellij,maven
+
+### Intellij ###
+gc-coffee/.idea
+
+# Gradle and Maven with auto-import
+# When using Gradle or Maven with auto-import, you should exclude module files,
+# since they will be recreated, and may cause churn.  Uncomment if using
+# auto-import.
+*.iml
+
+# IntelliJ
+gc-coffee/out/
+
+gc-coffee/HELP.md
+
+### macOS ###
+# General
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Icon must end with two \r
+Icon
+
+
+# Thumbnails
+._*
+
+# Files that might appear in the root of a volume
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+
+# Directories potentially created on remote AFP share
+.AppleDB
+.AppleDesktop
+Network Trash Folder
+Temporary Items
+.apdisk
+
+### macOS Patch ###
+# iCloud generated files
+*.icloud
+
+### Maven ###
+gc-coffee/target/
+gc-coffee/.mvn/timing.properties
+# https://github.com/takari/maven-wrapper#usage-without-binary-jar
+gc-coffee/.mvn/wrapper/maven-wrapper.jar
+
+# End of https://www.toptal.com/developers/gitignore/api/macos,intellij,maven
