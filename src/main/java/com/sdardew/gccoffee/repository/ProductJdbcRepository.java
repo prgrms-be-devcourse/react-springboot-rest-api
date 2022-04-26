@@ -53,13 +53,13 @@ public class ProductJdbcRepository implements ProductRepository {
   }
 
   @Override
-  public Optional<Product> findByName(String productId) {
+  public Optional<Product> findByName(String productName) {
     try {
       return Optional.of(
         jdbcTemplate.queryForObject("SELECT * FROM products WHERE product_name = :productName",
-          Collections.singletonMap("productId", productId.toString().getBytes()), productRowMapper)
+          Collections.singletonMap("productName", productName), productRowMapper)
       );
-    } catch (EmptyResultDataAccessException e) {
+    } catch (EmptyResultDataAccessException e) {.
       return Optional.empty();
     }
   }

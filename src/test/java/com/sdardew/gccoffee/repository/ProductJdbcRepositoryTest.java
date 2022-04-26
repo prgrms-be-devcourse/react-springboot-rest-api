@@ -11,6 +11,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import static com.wix.mysql.distribution.Version.*;
@@ -57,5 +58,13 @@ class ProductJdbcRepositoryTest {
     repository.insert(newProduct);
     var all = repository.findAll();
     assertThat(all.isEmpty(), is(false));
+  }
+
+  @Test
+  @Order(2)
+  @DisplayName("상품을 이름으로 조회할 수 있다")
+  void testFindByName() {
+    var product = repository.findByName(newProduct.getProductName());
+    assertThat(product.isEmpty(), is(false));
   }
 }
