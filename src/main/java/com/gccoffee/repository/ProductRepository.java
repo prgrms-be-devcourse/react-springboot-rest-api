@@ -1,5 +1,6 @@
 package com.gccoffee.repository;
 
+import com.gccoffee.model.Category;
 import com.gccoffee.model.Product;
 
 import java.util.List;
@@ -17,7 +18,7 @@ public interface ProductRepository {
     
     Optional<Product> findByName(String productName);
     
-    List<Product> findByCategory(String productName);
+    List<Product> findByCategory(Category category);
     
     void deleteAll();
 }
