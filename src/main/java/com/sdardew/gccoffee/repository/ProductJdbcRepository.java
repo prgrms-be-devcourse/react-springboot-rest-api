@@ -59,7 +59,7 @@ public class ProductJdbcRepository implements ProductRepository {
         jdbcTemplate.queryForObject("SELECT * FROM products WHERE product_name = :productName",
           Collections.singletonMap("productName", productName), productRowMapper)
       );
-    } catch (EmptyResultDataAccessException e) {.
+    } catch (EmptyResultDataAccessException e) {
       return Optional.empty();
     }
   }
