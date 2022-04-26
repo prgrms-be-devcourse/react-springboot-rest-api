@@ -24,6 +24,7 @@ import static com.wix.mysql.config.MysqldConfig.*;
 @SpringBootTest
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @ActiveProfiles("test")
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class ProductJdbcRepositoryTest {
 
   static EmbeddedMysql embeddedMysql;
@@ -66,5 +67,41 @@ class ProductJdbcRepositoryTest {
   void testFindByName() {
     var product = repository.findByName(newProduct.getProductName());
     assertThat(product.isEmpty(), is(false));
+  }
+
+  @Test
+  @Order(2)
+  @DisplayName("상품을 아이디로 조회할 수 있다")
+  void testFindById() {
+    var product = repository.findById(newProduct.getProductId());
+    assertThat(product.isEmpty(), is(false));
+  }
+
+  @Test
+  @Order(2)
+  @DisplayName("상품들을 카테고리로 조회할 수 있다")
+  void testFindByCategory() {
+    var product = repository.findByCategory(newProduct.getCategory());
+    assertThat(product.isEmpty(), is(false));
+  }
+
+  @Test
+  @Order(3)
+  @DisplayName("상품을 수정할 수 있다")
+  void testUpdate() {
+    newProduct.setProductName("update-product");
+    repository.update(newProduct);
+    var product = repository.findById(newProduct.getProductId());
+    assertThat(product.isEmpty(), is(false));
+    assertThat(product.get(), samePropertyValuesAs(newProduct));
+  }
+
+  @Test
+  @Order(4)
+  @DisplayName("상품을 전체 삭제한다")
+  void testDeleteAll() {
+    repository.deleteAll();
+    var all = repository.findAll();
+    assertThat(all.isEmpty(), is(true));
   }
 }
