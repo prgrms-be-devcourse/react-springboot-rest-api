@@ -50,7 +50,6 @@ public class ProductJdbcRepository implements ProductRepository {
     }
 
 
-
     @Override
     public Optional<Product> findById(UUID productId) {
         try {
