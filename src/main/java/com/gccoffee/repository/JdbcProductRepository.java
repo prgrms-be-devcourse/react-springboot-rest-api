@@ -48,7 +48,7 @@ public class JdbcProductRepository implements ProductRepository {
             return Optional.ofNullable(
                 jdbcTemplate.queryForObject("SELECT * FROM products " +
                         "WHERE product_id = UNHEX(REPLACE(:productId, '-', ''))",
-                    Collections.singletonMap("product_id", productId.toString()), productRowMapper)
+                    Collections.singletonMap("productId", productId.toString()), productRowMapper)
             );
         } catch (Exception e) {
             return Optional.empty();
