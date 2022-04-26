@@ -1,9 +1,0 @@
-spring:
-  datasource:
-    url: jdbc:mysql://localhost:2215/demo
-    username: test
-    password: 1234
-server:
-  servlet:
-    encoding:
-      force-response: true
