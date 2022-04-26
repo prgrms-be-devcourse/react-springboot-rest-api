@@ -49,7 +49,7 @@ public class OrderJdbcRepository implements OrderRepository {
 
     private Map<String, Object> toOrderItemParamMap(UUID orderId, LocalDateTime createdAt, LocalDateTime updatedAt, OrderItem orderItem) {
         Map<String, Object> paramMap = new HashMap<>();
-        paramMap.put("orderId", orderId);
+        paramMap.put("orderId", orderId.toString().getBytes());
         paramMap.put("productId", orderItem.productId().toString().getBytes());
         paramMap.put("category", orderItem.category().toString());
         paramMap.put("price", orderItem.price());
