@@ -39,7 +39,16 @@ public class JdbcProductRepository implements ProductRepository {
 
     @Override
     public Product update(Product product) {
-        return null;
+        var update = jdbcTemplate.update(
+            "UPDATE products SET product_name = :productName, category = :category, price = :price, " +
+                "description = :description, created_at = :createdAt, updated_at = :updatedAt" +
+                " WHERE product_id = UNHEX(REPLACE(:productId, '-', ''))",
+            toParamMap(product)
+        );
+        if (update != 1) {
+            throw new RuntimeException("Nothing was updated");
+        }
+        return product;
     }
 
     @Override
@@ -76,7 +85,7 @@ public class JdbcProductRepository implements ProductRepository {
 
     @Override
     public void deleteAll() {
-
+        jdbcTemplate.update("DELETE FROM products", Collections.emptyMap());
     }
 
     private static final RowMapper<Product> productRowMapper = (rs, i) -> {
@@ -92,7 +101,7 @@ public class JdbcProductRepository implements ProductRepository {
 
     private static final Map<String, Object> toParamMap(Product product) {
         Map<String, Object> map = new HashMap<>();
-        map.put("productId", product.getProductId().toString().getBytes());
+        map.put("productId", product.getProductId().toString());
         map.put("productName", product.getProductName());
         map.put("category", product.getCategory().toString());
         map.put("price", product.getPrice());
