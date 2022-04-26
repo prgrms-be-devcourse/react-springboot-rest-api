@@ -10,7 +10,7 @@ public class Product {
     private final UUID productId;
     private String productName;
     private Category category;
-    private long price; // 원화만 지원하기때문에 소수점 신경 X
+    private long price;
     private String description;
     private final LocalDateTime createdAt;
     private LocalDateTime updatedAt;
