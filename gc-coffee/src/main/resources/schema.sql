@@ -31,8 +31,8 @@ CREATE TABLE order_items
     category        VARCHAR(50) NOT NULL,
     price           bigint      NOT NULL,
     quantity        int         NOT NULL,
-    create_at    DATETIME(6) NOT NULL,
-    update_at    DATETIME(6) DEFAULT NULL,
+    created_at    DATETIME(6) NOT NULL,
+    updated_at    DATETIME(6) DEFAULT NULL,
     INDEX (order_id),
     CONSTRAINT fk_order_items_to_order FOREIGN KEY (order_id) REFERENCES orders (order_id) ON DELETE CASCADE,
     CONSTRAINT fk_order_items_to_product FOREIGN KEY (product_id) REFERENCES products (product_id)
