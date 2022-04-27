@@ -29,7 +29,7 @@ public class JdbcOrderRepository implements OrderRepository {
         order.getOrderItems()
             .forEach(item ->
                 jdbcTemplate.update("INSERT INTO order_items(order_id, product_id, category, price, quantity, created_at, updated_at) " +
-                        "VALUES (UNHEX(REPLACE(:orderId, '-', '')), UUID_TO_BIN(:productId), :category, :price, :quantity, :createdAt, :updatedAt)",
+                        "VALUES (UNHEX(REPLACE(:orderId, '-', '')), UNHEX(REPLACE(:productId, '-', '')), :category, :price, :quantity, :createdAt, :updatedAt)",
                     toOrderItemParamMap(order.getOrderId(), order.getCreatedAt(), order.getUpdatedAt(), item)));
         return order;
     }
