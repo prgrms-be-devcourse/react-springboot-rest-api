@@ -1,38 +1,57 @@
-.App {
-  text-align: center;
+body {
+  background: #ddd;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.card {
+  margin: auto;
+  max-width: 950px;
+  width: 90%;
+  box-shadow: 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  border-radius: 1rem;
+  border: transparent
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
+.summary {
+  background-color: #ddd;
+  border-top-right-radius: 1rem;
+  border-bottom-right-radius: 1rem;
+  padding: 4vh;
+  color: rgb(65, 65, 65)
+}
+
+@media (max-width: 767px) {
+  .summary {
+    border-top-right-radius: unset;
+    border-bottom-left-radius: 1rem
   }
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+.row {
+  margin: 0
 }
 
-.App-link {
-  color: #61dafb;
+.title b {
+  font-size: 1.5rem
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.col-2,
+.col {
+  padding: 0 1vh
+}
+
+img {
+  width: 3.5rem
+}
+
+hr {
+  margin-top: 1.25rem
+}
+.products {
+  width: 100%;
+}
+.products .price, .products .action {
+  line-height: 38px;
+}
+.products .action {
+  line-height: 38px;
 }
