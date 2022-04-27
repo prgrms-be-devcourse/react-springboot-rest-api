@@ -1,7 +1,7 @@
 package com.devcourse.gccoffee.model;
 
 public enum OrderStatus {
-    ACCEPTED,
+    ACCEPT,
     PAYMENT_CONFIRMED,
     READY_FOR_DELIVERY,
     SHIPPED,
