@@ -2,7 +2,7 @@ import {SummaryItem} from "./SummaryItem";
 import React from "react";
 
 export function Summary({items = []}) {
-    const totalPrice = items.reduce((prev, curr) => prev + (curr.price * curr.count), 0);
+    const totalPrice = items.reduce((prev, curr) => prev + (curr.price * curr.count), 0)
 
     return (
         <>
@@ -10,8 +10,9 @@ export function Summary({items = []}) {
                 <h5 className="m-0 p-0"><b>Summary</b></h5>
             </div>
             <hr/>
-            {items.map(v => <SummaryItem key={v.id} count={v.count} productName={v.productName}/>)}
-
+            {items.map(v =>
+                <SummaryItem key={v.id} productName={v.productName} count={v.count}/>
+            )}
             <form>
                 <div className="mb-3">
                     <label htmlFor="email" className="form-label">이메일</label>
