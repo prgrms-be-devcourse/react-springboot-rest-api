@@ -7,9 +7,9 @@ import axios from "axios";
 
 function App() {
     const [products, setProducts] = useState([
-        {id: "uuid-1", productName: "콜롬비아 커피1", category: '커피빈', price: 3000},
-        {id: "uuid-2", productName: "콜롬비아 커피2", category: '커피빈', price: 4500},
-        {id: "uuid-3", productName: "콜롬비아 커피3", category: '커피빈', price: 5000},
+        {productId: "uuid-1", productName: "콜롬비아 커피1", category: '커피빈', price: 3000},
+        {productId: "uuid-2", productName: "콜롬비아 커피2", category: '커피빈', price: 4500},
+        {productId: "uuid-3", productName: "콜롬비아 커피3", category: '커피빈', price: 5000},
     ]);
     const [items, setItems] = useState([]);
 
@@ -20,12 +20,35 @@ function App() {
             })
     }, [])
 
-    const handleAddClick = (id) => {
-        const product = products.find(product => product.id === id)
-        const found = items.find(item => item.id === id)
-        const updatedItems = found ? items.map(item => (item.id === id) ? {...item, count: item.count + 1} : item) : [...items, {...product, count: 1}]
+    const handleAddClick = (productId) => {
+        const product = products.find(v => v.productId === productId)
+        const found = items.find(v => v.productId === productId)
+        const updatedItems =
+            found ? items.map(v => (v.productId === productId) ? {...v, count: v.count + 1} : v) : [...items, {...product, count: 1}]
         setItems(updatedItems);
         console.log(product);
+    }
+
+    const handleOrderSubmit = (order) => {
+        if(items.length === 0) {
+            alert("아이템을 추가해주세요!")
+        }else{
+            axios.post("http://localhost:8080/api/v1/orders", {
+                email: order.email,
+                address: order.address,
+                postcode: order.postcode,
+                orderItems: items.map(v => ({
+                    productId: v.productId,
+                    category: v.category,
+                    price: v.price,
+                    quantity: v.count
+                }))
+            }).then(v => alert("주문이 정상적으로 접수되었습니다."), e => {
+                alert("서버 장애")
+                console.error(e)
+            })
+        }
+        console.log(order, items)
     }
 
     return (
@@ -39,7 +62,7 @@ function App() {
                         <ProductList products={products} onAddClick={handleAddClick}/>
                     </div>
                     <div className="col-md-4 summary p-4">
-                        <Summary items={items}/>
+                        <Summary items={items} onOrderSubmit={handleOrderSubmit}/>
                     </div>
                 </div>
             </div>

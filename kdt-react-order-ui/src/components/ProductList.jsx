@@ -13,7 +13,7 @@ export const ProductList = (props) => {
             </h5>
             <ul className="list-group products">
                 {products.map((product) =>
-                    <li key={product.id} className="list-group-item d-flex mt-3">
+                    <li key={product.productId} className="list-group-item d-flex mt-3">
                         <Product {...product} onAddClick={onAddClick}/>
                     </li>
                 )}

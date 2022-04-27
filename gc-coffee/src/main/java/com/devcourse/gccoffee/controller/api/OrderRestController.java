@@ -18,7 +18,6 @@ public class OrderRestController {
 
     @PostMapping("/api/v1/orders")
     public Order createOrder(@RequestBody CreateOrderRequest orderRequest) {
-        System.out.println("이메일:"+orderRequest.email());
         return orderService.crateOrder(
                 new Email(orderRequest.email()),
                 orderRequest.email(),

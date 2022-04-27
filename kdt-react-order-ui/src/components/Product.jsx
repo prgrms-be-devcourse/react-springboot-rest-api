@@ -2,10 +2,10 @@ import '../App.css'
 import 'bootstrap/dist/css/bootstrap.css'
 
 export const Product = (props) => {
-    const {id, productName, category, price, onAddClick} = props
+    const {productId, productName, category, price, onAddClick} = props
 
     const handleAddBtnClick = e => {
-        onAddClick(id);
+        onAddClick(productId);
     }
 
     return (
