@@ -1,5 +1,5 @@
 // React는 props에 arguments를 객체로 전달해줌
-import React from "@types/react";
+import React from "react";
 
 export function Product(props) {
     const productName = props.productName;

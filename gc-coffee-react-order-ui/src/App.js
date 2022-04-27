@@ -1,14 +1,14 @@
 import './App.css';
-import 'bootstrap/dist/css/bootstrap.css'
+import 'bootstrap/dist/css/bootstrap.css';
 import React, {useState} from 'react';
 import {ProductList} from "./components/ProductList";
 import {Summary} from "./components/Summary";
 
 function App() {
     const [products, setProducts] = useState([
-        {id: 'uuid-1', productName: "콜롬비아 커비1", category: '커피빈', price: 5000 },
-        {id: 'uuid-2', productName: "콜롬비아 커비2", category: '커피빈', price: 5000 },
-        {id: 'uuid-3', productName: "콜롬비아 커비3", category: '커피빈', price: 5000 }
+        {productId: 'uuid-1', productName: '콜롬비아 커피 1', category: '커피빈', price: 5000 },
+        {productId: 'uuid-2', productName: '콜롬비아 커피 2', category: '커피빈', price: 5000 },
+        {productId: 'uuid-3', productName: '콜롬비아 커피 3', category: '커피빈', price: 5000 },
     ]);
 
     const [items, setItems] = useState([]);

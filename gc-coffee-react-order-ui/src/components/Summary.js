@@ -1,8 +1,8 @@
 import {SummaryItem} from "./SummaryItem";
-import React from "@types/react";
+import React from "react";
 
-export function Summary(items = []) {
-    const totalPrice = items.reduce((prev, curr) => prev + (curr.price * curr.count), 0)
+export function Summary({items = []}) {
+    const totalPrice = items.reduce((prev, curr) => prev + (curr.price * curr.count), 0);
 
     return (
         <>

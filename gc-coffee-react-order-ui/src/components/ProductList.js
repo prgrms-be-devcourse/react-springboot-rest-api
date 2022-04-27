@@ -1,6 +1,6 @@
 // props 안에 products라는게 존재한다
 // 이 products는 App()에서 전달해줌
-import React from "@types/react";
+import React from "react";
 import {Product} from "./Product";
 
 export function ProductList({products = []}) {
