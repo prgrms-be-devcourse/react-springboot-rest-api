@@ -15,10 +15,7 @@
 
 <h2>Production Management</h2>
 
-<div class="d-grid gap-2 d-md-flex justify-content-md-en">
-    <a th:href="@{/products}" class="btn btn-primary me-md-2" type="button">Add Product</a>
-</div>
-<form>
+<form th:href="@{/products}" method="post">
     <div class="mb-3">
         <label for="productName" class="form-label">Email address</label>
         <input type="text" class="form-control" id="productName" name="productName">
