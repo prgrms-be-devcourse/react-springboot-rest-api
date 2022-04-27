@@ -9,13 +9,6 @@ export function Summary({ items = [] }) {
             <hr/>
                 { items.map(v => <SummaryItem key={v.id} count={v.count} productName={v.productName} />) }
             <div className="row">
-                <div className="row">
-                    <h6 className="p-0">Brazil Serra Do Caparaó <span className="badge bg-dark">2개</span>
-                    </h6>
-                </div>
-                <div className="row">
-                    <h6 className="p-0">Columbia Nariñó <span className="badge bg-dark">2개</span></h6>
-                </div>
                 <form>
                     <div className="mb-3">
                         <label htmlFor="email" className="form-label">이메일</label>
