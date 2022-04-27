@@ -7,23 +7,63 @@ import axios from "axios";
 
 function App() {
   const [products, setProducts] = useState([
-    {id: 'uuid-1', productName: '콜롬비아 커피1', category: '커피빈', price: 5000},
-    {id: 'uuid-2', productName: '콜롬비아 커피2', category: '커피빈', price: 5000},
-    {id: 'uuid-3', productName: '콜롬비아 커피3', category: '커피빈', price: 5000},
+    {
+      productId: 'uuid-1',
+      productName: '콜롬비아 커피1',
+      category: '커피빈',
+      price: 5000
+    },
+    {
+      productId: 'uuid-2',
+      productName: '콜롬비아 커피2',
+      category: '커피빈',
+      price: 5000
+    },
+    {
+      productId: 'uuid-3',
+      productName: '콜롬비아 커피3',
+      category: '커피빈',
+      price: 5000
+    },
   ]);
   const [items, setItems] = useState([]);
-  const handleAddClicked = id => {
-    const product = products.find(v => v.id === id);
-    const found = items.find(v => v.id === id);
+  const handleAddClicked = productId => {
+    const product = products.find(v => v.productId === productId);
+    const found = items.find(v => v.productId === productId);
     const update =
-        found ? items.map(v => (v.id === id) ?  {...v, count: v.count + 1 } : v) : [...items, { ...product, count: 1}]
+        found ? items.map(
+                v => (v.productId === productId) ? {...v, count: v.count + 1} : v)
+            : [...items, {...product, count: 1}]
     setItems(update);
-    console.log(products.find(v => v.id === id), "added!");
+    console.log(products.find(v => v.productId === productId), "added!");
   }
-  useEffect(() =>{
+  useEffect(() => {
     axios.get('http://localhost:8080/api/v1/products')
-      .then(v => setProducts(v.data));
+    .then(v => setProducts(v.data));
   }, []);
+
+  const handleOrderSubmit = (order) => {
+    if (items.length === 0) {
+      alert("아이템을 추가해 주세요!");
+    } else {
+      axios.post('http://localhost:8080/api/v1/orders', {
+        email: order.email,
+        address: order.address,
+        postcode: order.postcode,
+        orderItems: items.map(v => ({
+          productId: v.productId,
+          category: v.category,
+          price: v.price,
+          quantity: v.count
+        }))
+      }).then(
+          v => alert("주문이 정상적으로 접수되었습니다."),
+          e => {
+            alert("서버 장애");
+            console.error(e);
+          })
+    }
+  }
   return (
       <div className="container-fluid">
         <div className="row justify-content-center m-4">
@@ -36,7 +76,7 @@ function App() {
               <ProductList products={products} onAddClick={handleAddClicked}/>
             </div>
             <div className="col-md-4 summary p-4">
-              <Summary items={items}/>
+              <Summary items={items} onOrderSubmit={handleOrderSubmit}/>
             </div>
           </div>
         </div>
