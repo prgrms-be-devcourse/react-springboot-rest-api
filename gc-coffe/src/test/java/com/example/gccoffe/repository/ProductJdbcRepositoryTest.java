@@ -88,4 +88,25 @@ class ProductJdbcRepositoryTest {
         List<Product> product = repository.findByCategory(Category.COFFEE_BEAN_PACKAGE);
         assertThat(product.isEmpty(), is(false));
     }
+
+    @Test
+    @Order(5)
+    @DisplayName("상품을 수정할 수 있다.")
+    void testUpdate() {
+        newProduct.setProductName("updated-product");
+        repository.update(newProduct);
+
+        Optional<Product> product = repository.findById(newProduct.getProductId());
+        assertThat(product.isEmpty(), is(false));
+        assertThat(product.get(), samePropertyValuesAs(newProduct));
+    }
+
+    @Test
+    @Order(6)
+    @DisplayName("상품들을 전체 삭제할 수 있다.")
+    void testDeleteAll() {
+        repository.deleteAll();
+        List<Product> all = repository.findAll();
+        assertThat(all.isEmpty(), is(true));
+    }
 }
