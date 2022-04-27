@@ -1,4 +1,6 @@
 package com.gccoffee.model;
 
-public class OrderItem {
+import java.util.UUID;
+
+public record OrderItem(UUID productId, Category category, long price, int quantity)  {
 }
