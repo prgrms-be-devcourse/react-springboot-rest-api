@@ -1,4 +1,4 @@
-package com.devcourse.gccoffee.controller;
+package com.devcourse.gccoffee.controller.api;
 
 import com.devcourse.gccoffee.model.Category;
 import com.devcourse.gccoffee.model.Product;
