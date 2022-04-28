@@ -1,3 +1,4 @@
+use product_mgmt;
 CREATE TABLE products
 (
     product_id   BINARY(16) PRIMARY KEY,
