@@ -1,14 +1,14 @@
 package org.programmers.gccoffee.model;
 
 import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Getter
+@EqualsAndHashCode
 @AllArgsConstructor
 public class Product {
     private final UUID productId;
