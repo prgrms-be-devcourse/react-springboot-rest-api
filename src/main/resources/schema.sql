@@ -34,3 +34,5 @@ CREATE TABLE order_items
     constraint fk_order_items_to_order foreign key (order_id) references orders (order_id) on delete cascade,
     constraint fk_order_items_to_product foreign key (product_id) references products (product_id)
 );
+
+ALTER TABLE orders convert to charset utf8;
