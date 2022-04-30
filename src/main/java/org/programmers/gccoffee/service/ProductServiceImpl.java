@@ -25,4 +25,9 @@ public class ProductServiceImpl implements ProductService {
     public Product createProduct(String productName, Category category, long price, String description) {
         return productRepository.insert(new Product(UUID.randomUUID(), productName, category, price, description, LocalDateTime.now(), LocalDateTime.now()));
     }
+
+    @Override
+    public List<Product> getProductsByCategory(Category category) {
+        return productRepository.findByCategory(category);
+    }
 }

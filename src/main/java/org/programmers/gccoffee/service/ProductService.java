@@ -9,4 +9,6 @@ public interface ProductService {
     List<Product> getAllProducts();
 
     Product createProduct(String productName, Category category, long price, String description);
+
+    List<Product> getProductsByCategory(Category category);
 }
