@@ -49,6 +49,7 @@ public class ProductRepositoryImpl implements ProductRepository {
 				"INSERT INTO products(product_id, product_name, category, price,created_at, updated_at)"
 						+ " values(UUID_TO_BIN(:productId),:productName,:category,:price,:createdAt,:updatedAt)",
 				toParameters(product));
+
 		if (update != 1) {
 			throw new RuntimeException("not exe query ...");
 		}
@@ -58,15 +59,24 @@ public class ProductRepositoryImpl implements ProductRepository {
 
 	@Override
 	public Product update(Product product) {
-		return null;
+		int update = jdbcTemplate.update(
+				"update products set product_name = :productName, category = :category, price =:price,description = :description,updated_at =:updatedAt"
+						+ " where product_id = (UUID_TO_BIN(:productId))",
+				toParameters(product));
+
+		if (update != 1) {
+			throw new RuntimeException("not exe query ...");
+		}
+
+		return product;
 	}
 
 	@Override
 	public Optional<Product> findById(UUID productId) {
 		try {
 			Product product = jdbcTemplate.queryForObject(
-					"select * from products where product_id=UUID_TO_BIN(:productId)",
-					Collections.singletonMap("productId", productId), ProductRowMapper);
+					"select * from products where product_id = UUID_TO_BIN(:productId)",
+					Collections.singletonMap("productId", productId.toString().getBytes()), ProductRowMapper);
 
 			return Optional.ofNullable(product);
 		} catch (EmptyResultDataAccessException e) {
@@ -85,7 +95,7 @@ public class ProductRepositoryImpl implements ProductRepository {
 	public List<Product> findByCategory(Category category) {
 		return jdbcTemplate.query(
 				"select * from products where category = :category",
-				Collections.singletonMap("category", category), ProductRowMapper);
+				Collections.singletonMap("category", category.toString()), ProductRowMapper);
 
 	}
 
