@@ -19,6 +19,10 @@ public class Email { // value object , email format으로 와야하기 때문에
         return Pattern.matches("\\b[\\w\\.-]+@[\\w\\.-]+\\.\\w{2,4}\\b", address); // 이 부분은 private static final로 빼는게 더 효율적이다. 자원 너무먹음
     }
 
+    public String getAddress( ) {
+        return address;
+    }
+
     @Override
     public int hashCode( ) {
         return Objects.hash(address);
