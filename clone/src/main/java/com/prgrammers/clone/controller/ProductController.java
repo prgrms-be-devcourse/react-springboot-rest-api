@@ -2,6 +2,8 @@ package com.prgrammers.clone.controller;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,7 +14,7 @@ import com.prgrammers.clone.service.ProductService;
 
 @Controller
 public class ProductController {
-
+	private static final Logger log = LoggerFactory.getLogger(ProductController.class);
 	private final ProductService productService;
 
 	public ProductController(ProductService productService) {
@@ -33,6 +35,7 @@ public class ProductController {
 
 	@PostMapping("/products")
 	public String createProduct(CreateProduct createProduct) {
+		log.info("createProduct -> {}",createProduct);
 		productService.create(
 				createProduct.productName(),
 				createProduct.category(),

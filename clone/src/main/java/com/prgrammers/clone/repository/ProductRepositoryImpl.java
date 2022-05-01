@@ -46,8 +46,8 @@ public class ProductRepositoryImpl implements ProductRepository {
 	@Override
 	public Product insert(Product product) {
 		int update = jdbcTemplate.update(
-				"INSERT INTO products(product_id, product_name, category, price,created_at, updated_at)"
-						+ " values(UUID_TO_BIN(:productId),:productName,:category,:price,:createdAt,:updatedAt)",
+				"INSERT INTO products(product_id, product_name, category, description, price,created_at, updated_at)"
+						+ " values(UUID_TO_BIN(:productId),:productName,:category,:description,:price,:createdAt,:updatedAt)",
 				toParameters(product));
 
 		if (update != 1) {
