@@ -1,17 +1,24 @@
 package com.prgrammers.clone.repository;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
+import org.springframework.dao.DataAccessException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.stereotype.Repository;
 
 import com.prgrammers.clone.model.Category;
 import com.prgrammers.clone.model.Product;
 import com.prgrammers.clone.utils.TranslatorUtils;
 
+@Repository
 public class ProductRepositoryImpl implements ProductRepository {
 
 	private final NamedParameterJdbcTemplate jdbcTemplate;
@@ -38,7 +45,15 @@ public class ProductRepositoryImpl implements ProductRepository {
 
 	@Override
 	public Product insert(Product product) {
-		return null;
+		int update = jdbcTemplate.update(
+				"INSERT INTO products(product_id, product_name, category, price,created_at, updated_at)"
+						+ " values(UUID_TO_BIN(:productId),:productName,:category,:price,:createdAt,:updatedAt)",
+				toParameters(product));
+		if (update != 1) {
+			throw new RuntimeException("not exe query ...");
+		}
+
+		return product;
 	}
 
 	@Override
@@ -48,22 +63,47 @@ public class ProductRepositoryImpl implements ProductRepository {
 
 	@Override
 	public Optional<Product> findById(UUID productId) {
-		return Optional.empty();
+		try {
+			Product product = jdbcTemplate.queryForObject(
+					"select * from products where product_id=UUID_TO_BIN(:productId)",
+					Collections.singletonMap("productId", productId), ProductRowMapper);
+
+			return Optional.ofNullable(product);
+		} catch (EmptyResultDataAccessException e) {
+			return Optional.empty();
+		}
 	}
 
 	@Override
-	public Optional<Product> findByName(String productName) {
-		return Optional.empty();
+	public List<Product> findByName(String productName) {
+		return jdbcTemplate.query(
+				"select * from products where product_name = :productName",
+				Collections.singletonMap("productName", productName), ProductRowMapper);
 	}
 
 	@Override
-	public Optional<Product> findByCategory(Category category) {
-		return Optional.empty();
+	public List<Product> findByCategory(Category category) {
+		return jdbcTemplate.query(
+				"select * from products where category = :category",
+				Collections.singletonMap("category", category), ProductRowMapper);
+
 	}
 
 	@Override
 	public void deleteAll() {
+		jdbcTemplate.update("DELETE FROM products", Collections.emptyMap());
+	}
 
+	private Map<String, Object> toParameters(Product product) {
+		return new HashMap<>() {{
+			put("productId", product.getProductId().toString().getBytes());
+			put("productName", product.getProductName());
+			put("category", product.getCategory().toString());
+			put("price", product.getPrice());
+			put("description", product.getDescription());
+			put("createdAt", product.getCreatedAt());
+			put("updatedAt", product.getUpdatedAt());
+		}};
 	}
 
 }

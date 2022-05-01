@@ -17,9 +17,9 @@ public interface ProductRepository {
 
 	Optional<Product> findById(UUID productId);
 
-	Optional<Product> findByName(String productName);
+	List<Product> findByName(String productName);
 
-	Optional<Product> findByCategory(Category category);
+	List<Product> findByCategory(Category category);
 
 	void deleteAll();
 

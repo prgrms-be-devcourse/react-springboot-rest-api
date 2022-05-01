@@ -6,5 +6,5 @@ create table products
     price         bigint      not null,
     description   varchar(500) default null,
     created_at    datetime(6) not null,
-    updated_at     datetime(6) not null,
-)
+    updated_at     datetime(6) not null
+);

@@ -26,13 +26,15 @@ dependencies {
 	// db
 	runtimeOnly 'mysql:mysql-connector-java'
 	implementation 'org.springframework.boot:spring-boot-starter-jdbc'
-	implementation 'com.h2database:h2'
 	// lombok
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
 	// ssr
-	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf:2.6.6'
+	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf:2.6.7'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+	//embed-mysql
+	//testImplementation 'com.wix:wix-embedded-mysql:4.6.2'
 }
 
 tasks.named('test') {
