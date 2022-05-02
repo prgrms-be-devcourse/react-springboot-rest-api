@@ -1,8 +1,22 @@
-import React from "react";
+import React, {useState} from "react";
 import {SummaryItem} from "./SummaryItem";
 
-export function Summary({items = []}) {
+export function Summary({items = [], onOrderSubmit}) {
     const totalPrice = items.reduce((prev, curr) => prev + (curr.price * curr.count), 0)
+    const [order, setOrder] = useState({
+        email: "", address: "", postcode: ""
+    });
+    const handleEmailInputChanged = (e) => {setOrder({...order, email: e.target.value})}
+    const handleAddressInputChanged = (e) => {setOrder({...order, address: e.target.value})}
+    const handlePostcodeInputChanged = (e) => {setOrder({...order, postcode: e.target.value})}
+    const handleSubmit = (e) => {
+        if (order.address === "" || order.email === "" || order.postcode === "") {
+            alert("입력 값이 비어 있어선 안 됩니다.")
+        } else {
+            onOrderSubmit(order);
+        }
+    }
+
     return (
         <React.Fragment>
             <div>
@@ -13,15 +27,15 @@ export function Summary({items = []}) {
             <form>
                 <div className="mb-3">
                     <label htmlFor="email" className="form-label">이메일</label>
-                    <input type="email" className="form-control mb-1" id="email"/>
+                    <input type="email" className="form-control mb-1" value={order.email} onChange={handleEmailInputChanged} id="email"/>
                 </div>
                 <div className="mb-3">
                     <label htmlFor="address" className="form-label">주소</label>
-                    <input type="text" className="form-control mb-1" id="address"/>
+                    <input type="text" className="form-control mb-1" value={order.address} onChange={handleAddressInputChanged} id="address"/>
                 </div>
                 <div className="mb-3">
                     <label htmlFor="postcode" className="form-label">우편번호</label>
-                    <input type="text" className="form-control" id="postcode"/>
+                    <input type="text" className="form-control" value={order.postcode} onChange={handlePostcodeInputChanged} id="postcode"/>
                 </div>
                 <div>당일 오후 2시 이후의 주문은 다음날 배송을 시작합니다.</div>
             </form>
@@ -29,7 +43,7 @@ export function Summary({items = []}) {
                 <h5 className="col">총금액</h5>
                 <h5 className="col text-end">{totalPrice}</h5>
             </div>
-            <button className="btn btn-dark col-12">결제하기</button>
+            <button className="btn btn-dark col-12" onClick={handleSubmit}>결제하기</button>
         </React.Fragment>
     )
 }

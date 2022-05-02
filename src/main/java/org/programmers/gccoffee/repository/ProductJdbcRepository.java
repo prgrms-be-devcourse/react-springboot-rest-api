@@ -19,6 +19,12 @@ import static org.programmers.gccoffee.ConvertingUtils.*;
 @Repository
 public class ProductJdbcRepository implements ProductRepository {
 
+    private final NamedParameterJdbcTemplate template;
+
+    public ProductJdbcRepository(DataSource dataSource) {
+        this.template = new NamedParameterJdbcTemplate(dataSource);
+    }
+
     private static final String FIND_ALL_SQL = "SELECT * FROM products";
     private static final String INSERT_SQL = "INSERT INTO products (product_id, product_name, category, price, description, created_at, updated_at)" +
             " values(:productId, :productName, :category, :price, :description, :createdAt, :updatedAt)";
@@ -28,12 +34,6 @@ public class ProductJdbcRepository implements ProductRepository {
     private static final String FIND_BY_NAME = "SELECT * FROM products WHERE product_name = :productName";
     private static final String FIND_BY_CATEGORY = "SELECT * FROM products WHERE category = :category";
     private static final String DELETE_ALL_SQL = "DELETE FROM products";
-
-    private final NamedParameterJdbcTemplate template;
-
-    public ProductJdbcRepository(DataSource dataSource) {
-        this.template = new NamedParameterJdbcTemplate(dataSource);
-    }
 
     @Override
     public List<Product> findAll() {
