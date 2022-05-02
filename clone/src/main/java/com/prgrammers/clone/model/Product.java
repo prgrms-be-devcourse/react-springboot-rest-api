@@ -3,8 +3,6 @@ package com.prgrammers.clone.model;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-import org.apache.tomcat.jni.Local;
-
 public class Product {
 	private final UUID productId;
 	private String productName;
