@@ -25,14 +25,14 @@ public class OrderReposiotryImpl implements OrderRepository {
 	public Order insert(Order order) {
 		int update = jdbcTemplate.update(
 				"INSERT INTO orders(order_id,email,address,postcode,order_status,created_at,updated_at)"
-						+ " VALUES (UUID_TO_BIN(:orderId), :email, :address, :postCode, :orderStatus, : createdAt, :updatedAt)"
+						+ " VALUES (UUID_TO_BIN(:orderId), :email, :address, :postcode, :orderStatus, :createdAt, :updatedAt)"
 				, toOrderParamMap(order)
 		);
 
 		order.getOrderItems()
 				.forEach(item -> {
 					int orderItemUpdate = jdbcTemplate.update(
-							"INSERT INTO order_items(order_id, product_id, category, price, quantity, createdAt, updatedAt)"
+							"INSERT INTO order_items(order_id, product_id, category, price, quantity, created_at, updated_at)"
 									+ " VALUES(UUID_TO_BIN(:orderId), UUID_TO_BIN(:productId), :category, :price, :quantity, :createdAt, :updatedAt)",
 							toOrderItemParamMap(order.getOrderId(), order.getCreatedAt(), order.getUpdatedAt(), item));
 
@@ -53,7 +53,7 @@ public class OrderReposiotryImpl implements OrderRepository {
 		orders.put("orderId", order.getOrderId().toString().getBytes());
 		orders.put("email", order.getEmail().getAddress());
 		orders.put("address", order.getAddress());
-		orders.put("postcode", order.getPostCOde());
+		orders.put("postcode", order.getPostcode());
 		orders.put("orderStatus", order.getOrderStatus().toString());
 		orders.put("createdAt", order.getCreatedAt());
 		orders.put("updatedAt", order.getUpdatedAt());
@@ -66,7 +66,7 @@ public class OrderReposiotryImpl implements OrderRepository {
 		HashMap<String, Object> orderItems = new HashMap<>();
 		orderItems.put("orderId", orderId.toString().getBytes());
 		orderItems.put("productId", item.productId().toString().getBytes());
-		orderItems.put("category", item.category());
+		orderItems.put("category", item.category().toString());
 		orderItems.put("price", item.price());
 		orderItems.put("quantity", item.quantity());
 		orderItems.put("createdAt", orderCreatedAt);

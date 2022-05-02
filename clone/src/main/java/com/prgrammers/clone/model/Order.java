@@ -8,18 +8,18 @@ public class Order {
 	private final UUID orderId;
 	private final Email email;
 	private final String address;
-	private final String postCOde;
+	private final String postcode;
 	private final List<OrderItem> orderItems;
 	private OrderStatus orderStatus;
 	private final LocalDateTime createdAt;
 	private LocalDateTime updatedAt;
 
-	public Order(UUID orderId, Email email, String address, String postCOde, List<OrderItem> orderItems,
+	public Order(UUID orderId, Email email, String address, String postcode, List<OrderItem> orderItems,
 			OrderStatus orderStatus, LocalDateTime createdAt, LocalDateTime updatedAt) {
 		this.orderId = orderId;
 		this.email = email;
 		this.address = address;
-		this.postCOde = postCOde;
+		this.postcode = postcode;
 		this.orderItems = orderItems;
 		this.orderStatus = orderStatus;
 		this.createdAt = createdAt;
@@ -38,8 +38,8 @@ public class Order {
 		return address;
 	}
 
-	public String getPostCOde() {
-		return postCOde;
+	public String getPostcode() {
+		return postcode;
 	}
 
 	public void setOrderStatus(OrderStatus orderStatus) {
