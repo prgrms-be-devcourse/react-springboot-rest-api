@@ -7,17 +7,17 @@ import org.springframework.context.annotation.PropertySource;
 
 @Configuration
 @PropertySource(value = "classpath:error.yaml", factory = YamlPropertiesFactory.class)
-@ConfigurationProperties("error")
+@ConfigurationProperties(prefix = "error")
 public class ErrorProperties {
+
     private static String priceNegativeValue;
+
     private static String notValidEmail;
+
+    private static String orderItemNegativeValue;
 
     public static String getNotValidEmail() {
         return notValidEmail;
-    }
-
-    public void setEmailNotValid(String notValidEmail) {
-        ErrorProperties.notValidEmail = notValidEmail;
     }
 
     public static String getPriceNegativeValue() {
@@ -25,7 +25,18 @@ public class ErrorProperties {
     }
 
     public void setPriceNegativeValue(String priceNegativeValue) {
-        ErrorProperties.priceNegativeValue = priceNegativeValue;
+        this.priceNegativeValue = priceNegativeValue;
     }
 
+    public void setNotValidEmail(String notValidEmail) {
+        this.notValidEmail = notValidEmail;
+    }
+
+    public static String getOrderItemNegativeValue() {
+        return orderItemNegativeValue;
+    }
+
+    public void setOrderItemNegativeValue(String orderItemNegativeValue) {
+        this.orderItemNegativeValue = orderItemNegativeValue;
+    }
 }
