@@ -3,7 +3,8 @@ package com.devcourse.drink.config.error;
 import java.util.function.Supplier;
 
 public enum ErrorType {
-    PRICE_NEGATIVE_VALUE(ErrorProperties::getPriceNegativeValue);
+    PRICE_NEGATIVE_VALUE(ErrorProperties::getPriceNegativeValue),
+    NOT_VALID_EMAIL(ErrorProperties::getNotValidEmail);
 
     private Supplier<String> error;
 

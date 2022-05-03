@@ -10,6 +10,15 @@ import org.springframework.context.annotation.PropertySource;
 @ConfigurationProperties("error")
 public class ErrorProperties {
     private static String priceNegativeValue;
+    private static String notValidEmail;
+
+    public static String getNotValidEmail() {
+        return notValidEmail;
+    }
+
+    public void setEmailNotValid(String notValidEmail) {
+        ErrorProperties.notValidEmail = notValidEmail;
+    }
 
     public static String getPriceNegativeValue() {
         return priceNegativeValue;
