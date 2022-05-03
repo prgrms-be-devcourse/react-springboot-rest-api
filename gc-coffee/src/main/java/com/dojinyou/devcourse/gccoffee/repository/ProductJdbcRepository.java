@@ -39,7 +39,7 @@ public class ProductJdbcRepository implements ProductRepository {
     @Override
     public Product insert(Product product) {
         int update = jdbcTemplate.update(
-                "INSERT INTO products(productId, productName, category, price, description, createdAt, updatedAt)"
+                "INSERT INTO products(product_id, product_name, category, price, description, created_at, updated_at)"
                         + "VALUES(UUID_TO_BIN(:productId), :productName, :category, :price, :description, :createdAt, :updatedAt)", toParamMap(product)
         );
         if (update != 1) {
