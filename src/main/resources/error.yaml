@@ -1,3 +1,4 @@
 error:
   priceNagativeValue: "가격이 음수입니다."
   notValidEmail: "잘못된 이메일 형식입니다."
+  orderItemNegativeValue: "주문한 상품의 개수가 잘못되었습니다."
