@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class CategoryTest {
 
     @Test
-    @DisplayName("카데고리에 상품 종류에 대한 값이 들어가는 있는지 확인하는 테스트")
+    @DisplayName("카테고리에 상품 종류에 대한 값이 들어가 있는지 확인하는 테스트")
     void categoryValueTest() {
         String[] kinds = {
                 "탄산음료",
