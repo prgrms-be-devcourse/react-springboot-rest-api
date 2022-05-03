@@ -15,3 +15,5 @@ out/
 !**/src/test/**/out/
 
 src/test/resources/application-test.yaml
+
+target
