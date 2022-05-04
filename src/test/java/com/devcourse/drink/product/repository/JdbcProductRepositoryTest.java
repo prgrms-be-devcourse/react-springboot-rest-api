@@ -57,6 +57,11 @@ class JdbcProductRepositoryTest {
         });
     }
 
+    @AfterAll
+    static void cleanup() {
+        embeddedMysql.stop();
+    }
+
     @Test
     @Order(1)
     @DisplayName("DB에 데이터를 넣고 정상적으로 들어가있는지 확인합니다.")
