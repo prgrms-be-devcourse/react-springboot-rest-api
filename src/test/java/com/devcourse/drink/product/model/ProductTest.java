@@ -33,7 +33,7 @@ class ProductTest {
     @Test
     @DisplayName("상품을 생성자로 생성하는 부분 테스트")
     void productConstructorTest() {
-        Product product = new Product(productId, name, category, price, description, now);
+        Product product = new Product(productId, name, category, price, description, now, now);
 
         assertThat(product.getProductId()).isEqualTo(productId);
         assertThat(product.getName()).isEqualTo(name);
@@ -48,7 +48,7 @@ class ProductTest {
     @DisplayName("상품을 생성자를 이용하여 생성할때 가격이 음수라면 에러가 발생하는지 확인")
     void constructorPriceInvalidTest() {
         assertThatExceptionOfType(IllegalArgumentException.class)
-                .isThrownBy(() -> new Product(productId, name, category, -1, description, now));
+                .isThrownBy(() -> new Product(productId, name, category, -1, description, now, now));
         /* 차후에 메시지까지 확인할 수 있도록 구현
         *  지금은 에러 타입 체크만            */
 //        assertThat(e.getMessage()).isEqualTo(PRICE_NEGATIVE_VALUE.message());
@@ -57,7 +57,7 @@ class ProductTest {
     @Test
     @DisplayName("price 값을 음수로 변경시도시 에러가 발생하는지 확인")
     void setPriceInvalidTest() {
-        Product product = new Product(productId, name, category, 1000, description, now);
+        Product product = new Product(productId, name, category, 1000, description, now, now);
 
         assertThatExceptionOfType(IllegalArgumentException.class)
                 .isThrownBy(() -> product.setPrice(-1));
@@ -66,7 +66,7 @@ class ProductTest {
     @Test
     @DisplayName("상품의 내용을 변경시 업데이트 시간이 수정되는지 확인")
     void setValueModifyUpdatedAtTest() {
-        Product product = new Product(productId, name, category, 1000, description, now);
+        Product product = new Product(productId, name, category, 1000, description, now, now);
         LocalDateTime updatedAt = product.getUpdatedAt();
 
         product.setName("modify");

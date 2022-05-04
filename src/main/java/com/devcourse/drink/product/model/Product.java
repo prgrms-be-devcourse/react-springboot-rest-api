@@ -1,6 +1,7 @@
 package com.devcourse.drink.product.model;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 import java.util.UUID;
 
 import static com.devcourse.drink.config.error.ErrorType.PRICE_NEGATIVE_VALUE;
@@ -15,7 +16,13 @@ public class Product {
     private final LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
-    public Product(UUID productId, String name, Category category, long price, String description, LocalDateTime createdAt) {
+    public Product(UUID productId,
+                   String name,
+                   Category category,
+                   long price,
+                   String description,
+                   LocalDateTime createdAt,
+                   LocalDateTime updatedAt) {
         productPriceCheck(price);
         this.productId = productId;
         this.name = name;
@@ -23,7 +30,7 @@ public class Product {
         this.price = price;
         this.description = description;
         this.createdAt = createdAt;
-        this.updatedAt = createdAt;
+        this.updatedAt = updatedAt;
     }
 
     private void productPriceCheck(long price) {
