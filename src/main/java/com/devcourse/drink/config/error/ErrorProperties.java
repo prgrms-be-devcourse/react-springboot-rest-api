@@ -16,12 +16,24 @@ public class ErrorProperties {
 
     private static String orderItemNegativeValue;
 
+    private static String productDBInsertFail;
+
+    private static String productNotMatched;
+
     public static String getNotValidEmail() {
         return notValidEmail;
     }
 
     public static String getPriceNegativeValue() {
         return priceNegativeValue;
+    }
+
+    public static String getOrderItemNegativeValue() {
+        return orderItemNegativeValue;
+    }
+
+    public static String getProductDBInsertFail() {
+        return productDBInsertFail;
     }
 
     public void setPriceNegativeValue(String priceNegativeValue) {
@@ -32,11 +44,19 @@ public class ErrorProperties {
         this.notValidEmail = notValidEmail;
     }
 
-    public static String getOrderItemNegativeValue() {
-        return orderItemNegativeValue;
+    public void setProductDBInsertFail(String productDBInsertFail) {
+        this.productDBInsertFail = productDBInsertFail;
     }
 
     public void setOrderItemNegativeValue(String orderItemNegativeValue) {
         this.orderItemNegativeValue = orderItemNegativeValue;
+    }
+
+    public static String getProductNotMatched() {
+        return productNotMatched;
+    }
+
+    public static void setProductNotMatched(String productNotMatched) {
+        ErrorProperties.productNotMatched = productNotMatched;
     }
 }

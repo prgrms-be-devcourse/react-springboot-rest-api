@@ -5,7 +5,9 @@ import java.util.function.Supplier;
 public enum ErrorType {
     PRICE_NEGATIVE_VALUE(ErrorProperties::getPriceNegativeValue),
     NOT_VALID_EMAIL(ErrorProperties::getNotValidEmail),
-    ORDER_ITEM_NEGATIVE_VALUE(ErrorProperties::getOrderItemNegativeValue);
+    ORDER_ITEM_NEGATIVE_VALUE(ErrorProperties::getOrderItemNegativeValue),
+    PRODUCT_DB_INSERT_FAIL(ErrorProperties::getProductDBInsertFail),
+    PRODUCT_NOT_MATCHED(ErrorProperties::getProductNotMatched);
 
     private final Supplier<String> error;
 
