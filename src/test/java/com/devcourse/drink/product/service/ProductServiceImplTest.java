@@ -42,4 +42,10 @@ class ProductServiceImplTest {
     void productFindByCategoryTest() {
 
     }
+
+    @Test
+    @DisplayName("상품 ID를 기준으로 상품내용을 업데이트합니다.")
+    void productUpdateByIdTest() {
+
+    }
 }
