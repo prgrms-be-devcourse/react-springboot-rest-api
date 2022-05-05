@@ -2,6 +2,7 @@ package com.devcourse.drink.product.service;
 
 import com.devcourse.drink.config.error.ErrorType;
 import com.devcourse.drink.config.exception.OrderNotMatchedException;
+import com.devcourse.drink.config.exception.ProductNotMatchedException;
 import com.devcourse.drink.product.model.Category;
 import com.devcourse.drink.product.model.Product;
 import com.devcourse.drink.product.repository.ProductRepository;
@@ -13,6 +14,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 import static com.devcourse.drink.config.error.ErrorType.ORDER_NOT_MATCHED;
+import static com.devcourse.drink.config.error.ErrorType.PRODUCT_NOT_MATCHED;
 
 @Service
 public class ProductServiceImpl implements ProductService {
@@ -53,7 +55,7 @@ public class ProductServiceImpl implements ProductService {
             modifyProduct.setDescription(description);
             return productRepository.update(modifyProduct);
         } else {
-            throw new OrderNotMatchedException(ORDER_NOT_MATCHED);
+            throw new ProductNotMatchedException(PRODUCT_NOT_MATCHED);
         }
     }
 
