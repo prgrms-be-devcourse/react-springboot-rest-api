@@ -23,7 +23,7 @@ public class Order {
     private LocalDateTime updatedAt;
 
     public Order(UUID orderId, Email email, String address, String postcode, List<OrderItem> orderItems,
-                 OrderStatus orderStatus, LocalDateTime createdAt) {
+                 OrderStatus orderStatus, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.orderId = orderId;
         this.email = email;
         this.address = address;
@@ -31,7 +31,7 @@ public class Order {
         this.orderItems = orderItems;
         this.orderStatus = orderStatus;
         this.createdAt = createdAt;
-        this.updatedAt = createdAt;
+        this.updatedAt = updatedAt;
     }
 
     public UUID getOrderId() {

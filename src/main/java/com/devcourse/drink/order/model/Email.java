@@ -8,7 +8,7 @@ import static com.devcourse.drink.config.error.ErrorType.NOT_VALID_EMAIL;
 public class Email {
     String address;
 
-    Email(String address) {
+    public Email(String address) {
         emailValidateCheck(address);
         this.address = address;
     }
