@@ -1,7 +1,7 @@
 plugins {
-	id 'org.springframework.boot' version '2.6.7'
-	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
-	id 'java'
+    id 'org.springframework.boot' version '2.6.7'
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+    id 'java'
 }
 
 group = 'com.prgrammers'
@@ -9,35 +9,41 @@ version = '0.0.1-SNAPSHOT'
 sourceCompatibility = "16"
 
 configurations {
-	compileOnly {
-		extendsFrom annotationProcessor
-	}
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
 }
 
 repositories {
-	mavenCentral()
+    mavenCentral()
 }
 
 dependencies {
-	// web
-	implementation 'org.springframework.boot:spring-boot-starter-web'
-	// dev-tool
-	developmentOnly 'org.springframework.boot:spring-boot-devtools'
-	// db
-	runtimeOnly 'mysql:mysql-connector-java'
-	implementation 'org.springframework.boot:spring-boot-starter-jdbc'
-	// lombok
-	compileOnly 'org.projectlombok:lombok'
-	annotationProcessor 'org.projectlombok:lombok'
-	// ssr
-	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf:2.6.7'
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    // web
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    //aop
+    implementation 'org.springframework.boot:spring-boot-starter-aop'
+    // dev-tool
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+    // db
+    runtimeOnly 'mysql:mysql-connector-java'
+    implementation 'org.springframework.boot:spring-boot-starter-jdbc'
+    //mapstruct
+    implementation 'org.mapstruct:mapstruct:1.4.2.Final'
+    annotationProcessor "org.mapstruct:mapstruct-processor:1.4.2.Final"
+    annotationProcessor 'org.projectlombok:lombok-mapstruct-binding:0.2.0'
+    // lombok
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+    // ssr
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf:2.6.7'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
-	//embed-mysql
-	//testImplementation 'com.wix:wix-embedded-mysql:4.6.2'
+    //embed-mysql
+    //testImplementation 'com.wix:wix-embedded-mysql:4.6.2'
 }
 
 tasks.named('test') {
-	useJUnitPlatform()
+    useJUnitPlatform()
 }
 targetCompatibility = JavaVersion.VERSION_16
