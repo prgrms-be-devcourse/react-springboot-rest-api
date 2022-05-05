@@ -8,7 +8,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
-import org.springframework.dao.DataAccessException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -37,17 +36,19 @@ public class ProductRepositoryImpl implements ProductRepository {
 		String productName = resultSet.getString("product_name");
 		Category category = Category.valueOf(resultSet.getString("category"));
 		long price = resultSet.getLong("price");
+		long quantity = resultSet.getLong("quantity");
 		String description = resultSet.getString("description");
 		LocalDateTime createdAt = TranslatorUtils.toLocalDateTIme(resultSet.getTimestamp("created_at"));
 		LocalDateTime updatedAt = TranslatorUtils.toLocalDateTIme(resultSet.getTimestamp("updated_at"));
-		return new Product(productId, productName, category, price, description, createdAt, updatedAt);
+
+		return new Product(productId, productName, category, price, quantity, description, createdAt, updatedAt);
 	};
 
 	@Override
 	public Product insert(Product product) {
 		int update = jdbcTemplate.update(
-				"INSERT INTO products(product_id, product_name, category, description, price,created_at, updated_at)"
-						+ " values(UUID_TO_BIN(:productId),:productName,:category,:description,:price,:createdAt,:updatedAt)",
+				"INSERT INTO products(product_id, product_name, category, description, price,quantity,created_at, updated_at)"
+						+ " values(UUID_TO_BIN(:productId),:productName,:category,:description,:price,:quantity,:createdAt,:updatedAt)",
 				toParameters(product));
 
 		if (update != 1) {
@@ -60,7 +61,7 @@ public class ProductRepositoryImpl implements ProductRepository {
 	@Override
 	public Product update(Product product) {
 		int update = jdbcTemplate.update(
-				"update products set product_name = :productName, category = :category, price =:price,description = :description,updated_at =:updatedAt"
+				"update products set product_name = :productName, category = :category, price =:price,quantity=:quantity,description = :description,updated_at =:updatedAt"
 						+ " where product_id = (UUID_TO_BIN(:productId))",
 				toParameters(product));
 
@@ -88,7 +89,7 @@ public class ProductRepositoryImpl implements ProductRepository {
 	public List<Product> findByName(String productName) {
 		return jdbcTemplate.query(
 				"select * from products where product_name = :productName",
-				Collections.singletonMap("productName", productName), ProductRowMapper);
+				Collections.singletonMap("name", productName), ProductRowMapper);
 	}
 
 	@Override
@@ -100,20 +101,40 @@ public class ProductRepositoryImpl implements ProductRepository {
 	}
 
 	@Override
+	public boolean isExists(UUID productId) {
+
+		Integer existence = jdbcTemplate.queryForObject(
+				"select count(*) from products where product_id = UUID_TO_BIN(:productId)",
+				Collections.singletonMap("productId", productId.toString().getBytes()),
+				Integer.class
+		);
+
+		return existence != 1;
+	}
+
+	@Override
 	public void deleteAll() {
 		jdbcTemplate.update("DELETE FROM products", Collections.emptyMap());
 	}
 
+	@Override
+	public void delete(UUID productId) {
+		jdbcTemplate.update("DELETE FROM products WHERE product_id= UUID_TO_BIN(:productId)",
+				Collections.singletonMap("productId", productId.toString().getBytes()));
+
+	}
+
 	private Map<String, Object> toParameters(Product product) {
-		return new HashMap<>() {{
-			put("productId", product.getProductId().toString().getBytes());
-			put("productName", product.getProductName());
-			put("category", product.getCategory().toString());
-			put("price", product.getPrice());
-			put("description", product.getDescription());
-			put("createdAt", product.getCreatedAt());
-			put("updatedAt", product.getUpdatedAt());
-		}};
+		HashMap<String, Object> parameters = new HashMap<>();
+		parameters.put("productId", product.getProductId().toString().getBytes());
+		parameters.put("productName", product.getProductName());
+		parameters.put("category", product.getCategory().toString());
+		parameters.put("price", product.getPrice());
+		parameters.put("quantity", product.getQuantity());
+		parameters.put("description", product.getDescription());
+		parameters.put("createdAt", product.getCreatedAt());
+		parameters.put("updatedAt", product.getUpdatedAt());
+		return parameters;
 	}
 
 }

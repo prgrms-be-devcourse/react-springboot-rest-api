@@ -15,6 +15,8 @@ public interface ProductRepository {
 
 	Product update(Product product);
 
+	boolean isExists(UUID productId);
+
 	Optional<Product> findById(UUID productId);
 
 	List<Product> findByName(String productName);
@@ -23,4 +25,5 @@ public interface ProductRepository {
 
 	void deleteAll();
 
+	void delete(UUID productId);
 }
