@@ -1,4 +1,4 @@
-CREATE TABLE products
+CREATE TABLE IF NOT EXISTS products
 (
     product_id  BINARY(16)   NOT NULL PRIMARY KEY,
     name        VARCHAR(20)  NOT NULL UNIQUE,
@@ -9,7 +9,7 @@ CREATE TABLE products
     updated_at  datetime(6)  NOT NULL
 );
 
-CREATE TABLE orders
+CREATE TABLE IF NOT EXISTS orders
 (
     order_id     binary(16)   NOT NULL PRIMARY KEY,
     email        varchar(50)  NOT NULL,
@@ -20,7 +20,7 @@ CREATE TABLE orders
     updated_at   datetime(6)  NOT NULL
 );
 
-CREATE TABLE order_items
+CREATE TABLE IF NOT EXISTS order_items
 (
     seq        bigint      NOT NULL PRIMARY KEY AUTO_INCREMENT,
     order_id   binary(16)  NOT NULL,
