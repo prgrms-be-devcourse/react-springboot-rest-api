@@ -4,3 +4,4 @@ error:
   orderItemNegativeValue: "주문한 상품의 개수가 잘못되었습니다."
   productDBInsertFail: "상품을 DB에 입력하는데 실패했습니다."
   productNotMatched: "일치하는 상품이 존재하지 않습니다."
+  orderNotMatched: "일치하는 주문이 존재하지 않습니다."

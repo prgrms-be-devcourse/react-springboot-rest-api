@@ -39,7 +39,7 @@ class OrderTest {
     @Test
     @DisplayName("주문을 생성자로 생성하는 부분 테스트")
     void productConstructorTest() {
-        Order order = new Order(orderId, email, address, postcode, orderItems, orderStatus, now);
+        Order order = new Order(orderId, email, address, postcode, orderItems, orderStatus, now, now);
 
         assertThat(order.getOrderId()).isEqualTo(orderId);
         assertThat(order.getEmail()).isEqualTo(email);
@@ -53,7 +53,7 @@ class OrderTest {
     @Test
     @DisplayName("주문의 내용을 변경시 업데이트 시간이 수정되는지 확인")
     void setValueModifyUpdatedAtTest() {
-        Order order = new Order(orderId, email, address, postcode, orderItems, orderStatus, now);
+        Order order = new Order(orderId, email, address, postcode, orderItems, orderStatus, now, now);
         LocalDateTime updatedAt = order.getUpdatedAt();
 
         order.setAddress("xx시 xx구 xxx로 xxx");

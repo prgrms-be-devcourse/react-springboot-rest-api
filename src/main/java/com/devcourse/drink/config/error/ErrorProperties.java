@@ -20,6 +20,16 @@ public class ErrorProperties {
 
     private static String productNotMatched;
 
+    private static String orderNotMatched;
+
+    public static String getOrderNotMatched() {
+        return orderNotMatched;
+    }
+
+    public void setOrderNotMatched(String orderNotMatched) {
+        this.orderNotMatched = orderNotMatched;
+    }
+
     public static String getNotValidEmail() {
         return notValidEmail;
     }
@@ -56,7 +66,7 @@ public class ErrorProperties {
         return productNotMatched;
     }
 
-    public static void setProductNotMatched(String productNotMatched) {
-        ErrorProperties.productNotMatched = productNotMatched;
+    public void setProductNotMatched(String productNotMatched) {
+        this.productNotMatched = productNotMatched;
     }
 }
