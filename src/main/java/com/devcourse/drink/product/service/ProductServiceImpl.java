@@ -46,7 +46,12 @@ public class ProductServiceImpl implements ProductService {
         Optional<Product> product = productRepository.findById(productId);
 
         if (product.isPresent()) {
-            return productRepository.update(product.get());
+            Product modifyProduct = product.get();
+            modifyProduct.setName(name);
+            modifyProduct.setCategory(category);
+            modifyProduct.setPrice(price);
+            modifyProduct.setDescription(description);
+            return productRepository.update(modifyProduct);
         } else {
             throw new OrderNotMatchedException(ORDER_NOT_MATCHED);
         }
