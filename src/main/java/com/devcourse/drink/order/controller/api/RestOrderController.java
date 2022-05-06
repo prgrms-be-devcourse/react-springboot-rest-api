@@ -19,6 +19,7 @@ public class RestOrderController {
 
     @PostMapping("/api/v1/orders")
     public Order createOrder(@RequestBody CreateOrderRequest createOrderRequest) {
+        createOrderRequest.orderItems().forEach(System.out::println);
         return orderService.createOrder(
                 new Email(createOrderRequest.email()),
                 createOrderRequest.address(),
