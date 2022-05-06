@@ -21,6 +21,11 @@ function App() {
         } : v) : [...items, {...product, count: 1}];
     setItems(updateItems);
   }
+
+  const onItemDelete = name => {
+      setItems(items.filter(products => products.name !== name))
+  }
+
   useEffect(() => {
     axios.get('http://localhost:8080/api/v1/products')
         .then(v => setProducts(v.data))
@@ -57,7 +62,7 @@ function App() {
             <div className="col-md-8 mt-4 d-flex flex-column align-items-start p-3 pt-0">
               <ProductList products={products} onAddClick={handleAddClicked}/>
             </div>
-            <Summary items={items} onOrderSubmit={handleOrderSubmit}/>
+            <Summary items={items} onOrderSubmit={handleOrderSubmit} onItemDelete={onItemDelete}/>
           </div>
         </div>
       </div>
