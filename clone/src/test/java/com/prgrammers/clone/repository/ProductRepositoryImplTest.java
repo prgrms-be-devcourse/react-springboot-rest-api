@@ -13,15 +13,18 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.annotation.Order;
+import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 import org.springframework.util.Assert;
 
+import com.prgrammers.clone.config.TestJdbcConfig;
+import com.prgrammers.clone.dto.ProductDto;
+import com.prgrammers.clone.mapper.ProductMapper;
 import com.prgrammers.clone.model.Category;
 import com.prgrammers.clone.model.Product;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-@SpringBootTest
+@SpringJUnitConfig(TestJdbcConfig.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class ProductRepositoryImplTest {
 
@@ -36,7 +39,7 @@ class ProductRepositoryImplTest {
 
 	@Order(0)
 	@Test
-	void testBeans() {
+	void testInjectionBeans() {
 		Assert.notNull(productRepository, "dependency check ...");
 	}
 
@@ -45,7 +48,13 @@ class ProductRepositoryImplTest {
 	@Test
 	void insert() {
 		// given
-		product = new Product(UUID.randomUUID(), "new-pack", Category.COFFEE_BEAN_PACKAGE, 1000L);
+		product = Product.builder()
+				.productId(UUID.randomUUID())
+				.productName("new-pack")
+				.category(Category.COFFEE_PACKAGE)
+				.price(3000)
+				.description("test description...")
+				.build();
 		// when
 		Product insert = productRepository.insert(product);
 		// then
@@ -99,9 +108,9 @@ class ProductRepositoryImplTest {
 
 		// given
 		// when
-		List<Product> products=productRepository.findByCategory(Category.COFFEE_BEAN_PACKAGE);
+		List<Product> products = productRepository.findByCategory(Category.COFFEE_PACKAGE);
 		// then
-		MatcherAssert.assertThat(products.size(),Matchers.is(1));
+		MatcherAssert.assertThat(products.size(), Matchers.is(1));
 		products.forEach(findingProduct -> {
 			MatcherAssert.assertThat(findingProduct, Matchers.samePropertyValuesAs(product));
 		});
@@ -113,12 +122,20 @@ class ProductRepositoryImplTest {
 	void update() {
 		//given
 		String updatedName = "update-test";
-		product.setProductName(updatedName);
+		Product updatingProduct = ProductMapper.INSTANCE.updateDtoToProduct(ProductDto.Update.builder()
+				.productId(product.getProductId())
+				.productName(updatedName)
+				.description(product.getDescription())
+				.price(product.getPrice())
+				.category(product.getCategory())
+				.build());
+
+		product.updateInformation(updatingProduct);
 		//when
 		Product update = productRepository.update(product);
 		//then
-		MatcherAssert.assertThat(product.getProductName(),Matchers.is(update.getProductName()));
-		MatcherAssert.assertThat(product.getProductId(),Matchers.is(update.getProductId()));
+		MatcherAssert.assertThat(product.getProductName(), Matchers.is(update.getProductName()));
+		MatcherAssert.assertThat(product.getProductId(), Matchers.is(update.getProductId()));
 
 	}
 
