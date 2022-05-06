@@ -1,29 +1,39 @@
 package com.prgrammers.clone.controller.api;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.prgrammers.clone.controller.CreateOrderRequest;
-import com.prgrammers.clone.model.Email;
+import com.prgrammers.clone.converter.OrderConverter;
+import com.prgrammers.clone.dto.OrderDto;
 import com.prgrammers.clone.model.Order;
 import com.prgrammers.clone.service.OrderService;
 
+@RequestMapping("/api/v1/orders")
 @RestController
 public class OrderRestController {
+
+	private static final Logger log = LoggerFactory.getLogger(OrderRestController.class);
 	private final OrderService orderService;
 
-	public OrderRestController(OrderService orderService) {
+	private final OrderConverter orderConverter;
+
+	public OrderRestController(OrderService orderService, OrderConverter orderConverter) {
 		this.orderService = orderService;
+		this.orderConverter = orderConverter;
 	}
 
-	@PostMapping("/api/v1/orders")
-	public Order createOrder(@RequestBody CreateOrderRequest orderRequest) {
-		return orderService.createOrder(
-				new Email(orderRequest.email()),
-				orderRequest.address(),
-				orderRequest.postcode(),
-				orderRequest.orderItems()
-		);
+	@PostMapping("")
+	public ResponseEntity<OrderDto.Response> createOrder(@RequestBody OrderDto.Create orderRequest) {
+		Order order = orderConverter.createDtoToDomain()
+				.convert(orderRequest);
+		Order createdOrder = orderService.createOrder(order);
+		OrderDto.Response response = orderConverter.domainToResponse().convert(createdOrder);
+		return ResponseEntity.ok(response);
 	}
+
 }
