@@ -1,6 +1,7 @@
 package com.prgrammers.clone.repository;
 
 import java.util.List;
+import java.util.stream.Stream;
 
 import org.assertj.core.api.Assertions;
 import org.hamcrest.MatcherAssert;
@@ -18,7 +19,6 @@ import com.prgrammers.clone.config.TestJdbcConfig;
 import com.prgrammers.clone.model.Email;
 import com.prgrammers.clone.model.Order;
 import com.prgrammers.clone.model.OrderItem;
-import com.prgrammers.clone.model.OrderStatus;
 import com.prgrammers.clone.model.Product;
 
 @SpringJUnitConfig(TestJdbcConfig.class)
@@ -53,12 +53,11 @@ class OrderRepositoryImplTest {
 		List<OrderItem> itemForBuy = List.of(orderItem);
 
 		// when
-		Order order = Order.createOrder(
+		Order order = Order.create(
 				new Email("dev@programmers.com.kr"),
 				"seoul",
 				"123-12",
-				itemForBuy,
-				OrderStatus.ACCEPT
+				itemForBuy
 		);
 
 		Order insertedOrder = orderRepository.insert(order);
@@ -78,6 +77,6 @@ class OrderRepositoryImplTest {
 		List<Order> histories = orderRepository.findByEmail(new Email("dev@programmers.com.kr"));
 
 		// when
-		Assertions.assertThat(histories.size()).isEqualTo(1);
+		Assertions.assertThat(histories.size()).isEqualTo(4);
 	}
 }
