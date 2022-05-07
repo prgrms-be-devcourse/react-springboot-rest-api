@@ -27,25 +27,6 @@ import lombok.RequiredArgsConstructor;
 public class OrderRepositoryImpl implements OrderRepository {
 	private final NamedParameterJdbcTemplate jdbcTemplate;
 
-	private static final RowMapper<Order> ORDER_ROW_MAPPER = (resultSet, rowNumber) -> {
-		UUID orderId = TranslatorUtils.toUUID(resultSet.getBytes("order_id"));
-		Email email = new Email(resultSet.getString("email"));
-		String address = resultSet.getString("address");
-		String postcode = resultSet.getString("postcode");
-		OrderStatus orderStatus = OrderStatus.valueOf(resultSet.getString("order_status"));
-		LocalDateTime createdAt = TranslatorUtils.toLocalDateTIme(resultSet.getTimestamp("created_at"));
-		LocalDateTime updatedAt = TranslatorUtils.toLocalDateTIme(resultSet.getTimestamp("updated_at"));
-		return Order.builder()
-				.orderId(orderId)
-				.email(email)
-				.address(address)
-				.postcode(postcode)
-				.orderStatus(orderStatus)
-				.createdAt(createdAt)
-				.updatedAt(updatedAt)
-				.build();
-	};
-
 	@Override
 	public Order insert(Order order) {
 		int update = jdbcTemplate.update(
@@ -81,6 +62,41 @@ public class OrderRepositoryImpl implements OrderRepository {
 				ORDER_ROW_MAPPER
 		);
 	}
+
+	@Override
+	public void deleteBy(UUID orderId) {
+		jdbcTemplate.update(
+				"delete from orders where order_id = :orderId"
+				, Collections.singletonMap("OrderId", orderId.toString().getBytes())
+		);
+	}
+
+	@Override
+	public void deleteAll() {
+		jdbcTemplate.update(
+				"delete from orders",
+				Collections.emptyMap()
+		);
+	}
+
+	private static final RowMapper<Order> ORDER_ROW_MAPPER = (resultSet, rowNumber) -> {
+		UUID orderId = TranslatorUtils.toUUID(resultSet.getBytes("order_id"));
+		Email email = new Email(resultSet.getString("email"));
+		String address = resultSet.getString("address");
+		String postcode = resultSet.getString("postcode");
+		OrderStatus orderStatus = OrderStatus.valueOf(resultSet.getString("order_status"));
+		LocalDateTime createdAt = TranslatorUtils.toLocalDateTIme(resultSet.getTimestamp("created_at"));
+		LocalDateTime updatedAt = TranslatorUtils.toLocalDateTIme(resultSet.getTimestamp("updated_at"));
+		return Order.builder()
+				.orderId(orderId)
+				.email(email)
+				.address(address)
+				.postcode(postcode)
+				.orderStatus(orderStatus)
+				.createdAt(createdAt)
+				.updatedAt(updatedAt)
+				.build();
+	};
 
 	private Map<String, Object> toOrderParamMap(Order order) {
 		HashMap<String, Object> orders = new HashMap<>();

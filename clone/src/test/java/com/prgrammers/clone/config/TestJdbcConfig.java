@@ -8,6 +8,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
+import com.prgrammers.clone.repository.OrderItemRepository;
+import com.prgrammers.clone.repository.OrderItemRepositoryImpl;
 import com.prgrammers.clone.repository.OrderRepository;
 import com.prgrammers.clone.repository.OrderRepositoryImpl;
 import com.prgrammers.clone.repository.ProductRepository;
@@ -46,5 +48,10 @@ public class TestJdbcConfig {
 	@Bean
 	public OrderRepository orderRepository(NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
 		return new OrderRepositoryImpl(namedParameterJdbcTemplate);
+	}
+
+	@Bean
+	public OrderItemRepository orderItemRepository(NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
+		return new OrderItemRepositoryImpl(namedParameterJdbcTemplate);
 	}
 }

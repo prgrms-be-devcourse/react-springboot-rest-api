@@ -1,5 +1,6 @@
 package com.prgrammers.clone.repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -9,11 +10,11 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.annotation.Order;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 import org.springframework.util.Assert;
 
@@ -37,23 +38,24 @@ class ProductRepositoryImplTest {
 		productRepository.deleteAll();
 	}
 
-	@Order(0)
 	@Test
 	void testInjectionBeans() {
 		Assert.notNull(productRepository, "dependency check ...");
 	}
 
-	@Order(1)
+	@Order(5)
 	@DisplayName("데이터 삽입")
 	@Test
-	void insert() {
+	void testInsert() {
 		// given
 		product = Product.builder()
 				.productId(UUID.randomUUID())
-				.productName("new-pack")
+				.productName("test-insert")
 				.category(Category.COFFEE_PACKAGE)
 				.price(3000)
 				.description("test description...")
+				.createdAt(LocalDateTime.now())
+				.updatedAt(LocalDateTime.now())
 				.build();
 		// when
 		Product insert = productRepository.insert(product);
@@ -61,7 +63,7 @@ class ProductRepositoryImplTest {
 		MatcherAssert.assertThat(insert, Matchers.samePropertyValuesAs(product));
 	}
 
-	@Order(2)
+	@Order(10)
 	@DisplayName("전체 데이터 조회")
 	@Test
 	void findAll() {
@@ -73,10 +75,10 @@ class ProductRepositoryImplTest {
 		Assertions.assertEquals(products.size(), 1);
 	}
 
-	@Order(3)
+	@Order(20)
 	@DisplayName("id 조회")
 	@Test
-	void findById() {
+	void testFindByUuid() {
 		// given
 		// when
 		Product findingProduct = productRepository.findById(product.getProductId())
@@ -86,12 +88,13 @@ class ProductRepositoryImplTest {
 		MatcherAssert.assertThat(findingProduct, Matchers.samePropertyValuesAs(product));
 	}
 
-	@Order(4)
+	@Order(30)
 	@DisplayName("이름 별 조회")
 	@Test
-	void findByName() {
+	void testFindByName() {
 		// given
 		// when
+
 		List<Product> products = productRepository.findByName(product.getProductName());
 
 		// then
@@ -101,10 +104,10 @@ class ProductRepositoryImplTest {
 		});
 	}
 
-	@Order(5)
+	@Order(40)
 	@DisplayName("category 조회")
 	@Test
-	void findByCategory() {
+	void testFindByCategory() {
 
 		// given
 		// when
@@ -116,14 +119,13 @@ class ProductRepositoryImplTest {
 		});
 	}
 
-	@Order(6)
+	@Order(50)
 	@DisplayName("상품 갱신")
 	@Test
-	void update() {
+	void testUpdate() {
 		//given
 		String updatedName = "update-test";
 		Product updatingProduct = ProductMapper.INSTANCE.updateDtoToProduct(ProductDto.Update.builder()
-				.productId(product.getProductId())
 				.productName(updatedName)
 				.description(product.getDescription())
 				.price(product.getPrice())
