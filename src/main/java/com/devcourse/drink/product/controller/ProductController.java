@@ -38,6 +38,6 @@ public class ProductController {
                 createProductRequest.price(),
                 createProductRequest.description()
         );
-        return "redirect:/products/index";
+        return "redirect:/products";
     }
 }
