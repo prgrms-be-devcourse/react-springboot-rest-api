@@ -13,19 +13,16 @@ import com.prgrammers.clone.dto.OrderDto;
 import com.prgrammers.clone.model.Order;
 import com.prgrammers.clone.service.OrderService;
 
+import lombok.RequiredArgsConstructor;
+
+@RequiredArgsConstructor
 @RequestMapping("/api/v1/orders")
 @RestController
 public class OrderRestController {
 
 	private static final Logger log = LoggerFactory.getLogger(OrderRestController.class);
 	private final OrderService orderService;
-
 	private final OrderConverter orderConverter;
-
-	public OrderRestController(OrderService orderService, OrderConverter orderConverter) {
-		this.orderService = orderService;
-		this.orderConverter = orderConverter;
-	}
 
 	@PostMapping("")
 	public ResponseEntity<OrderDto.Response> createOrder(@RequestBody OrderDto.Create orderRequest) {
