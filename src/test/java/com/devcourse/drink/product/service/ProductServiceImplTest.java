@@ -1,6 +1,7 @@
 package com.devcourse.drink.product.service;
 
 import com.devcourse.drink.product.repository.ProductRepository;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -9,6 +10,7 @@ import org.mockito.Mock;
 
 import org.mockito.junit.jupiter.MockitoExtension;
 
+@Disabled("미구현")
 @ExtendWith(MockitoExtension.class)
 class ProductServiceImplTest {
 

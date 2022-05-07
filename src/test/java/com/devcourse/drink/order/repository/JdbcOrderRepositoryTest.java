@@ -42,7 +42,7 @@ class JdbcOrderRepositoryTest {
                 .withTimeZone("Asia/Seoul")
                 .build();
         embeddedMysql = EmbeddedMysql.anEmbeddedMysql(config)
-                .addSchema("test-order_mgmt", ScriptResolver.classPathScript("schema.sql"),
+                .addSchema("test-drink", ScriptResolver.classPathScript("schema.sql"),
                         ScriptResolver.classPathScript("data.sql"))
                 .start();
     }
