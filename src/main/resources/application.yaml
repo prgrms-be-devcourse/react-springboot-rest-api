@@ -3,6 +3,6 @@ spring:
     url: jdbc:mysql://localhost/drink
     username: root
     password: root1234!
-#  sql:
-#    init:
-#      mode: always
+  sql:
+    init:
+      mode: always
