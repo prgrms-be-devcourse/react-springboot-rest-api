@@ -45,9 +45,7 @@ public class ProductRestController {
 
 	@GetMapping("/{product_id}")
 	public ResponseEntity<ProductDto.ResponseDto> getProduct(@PathVariable("product_id") UUID productId) {
-		log.info("product id : {}", productId);
 		Product product = productService.getProduct(productId);
-		log.info("get product : {}", product);
 		ProductDto.ResponseDto responseDto = mapper.productToResponseDto(product);
 
 		return ResponseEntity.ok(responseDto);

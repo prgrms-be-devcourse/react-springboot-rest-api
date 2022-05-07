@@ -89,7 +89,7 @@ public class ProductRepositoryImpl implements ProductRepository {
 	public List<Product> findByName(String productName) {
 		return jdbcTemplate.query(
 				"select * from products where product_name = :productName",
-				Collections.singletonMap("name", productName), ProductRowMapper);
+				Collections.singletonMap("productName", productName), ProductRowMapper);
 	}
 
 	@Override
@@ -134,6 +134,7 @@ public class ProductRepositoryImpl implements ProductRepository {
 		parameters.put("description", product.getDescription());
 		parameters.put("createdAt", product.getCreatedAt());
 		parameters.put("updatedAt", product.getUpdatedAt());
+
 		return parameters;
 	}
 

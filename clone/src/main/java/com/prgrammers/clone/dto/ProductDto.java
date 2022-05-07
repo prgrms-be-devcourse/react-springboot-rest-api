@@ -4,7 +4,6 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 import com.prgrammers.clone.model.Category;
-import com.prgrammers.clone.model.Product;
 
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -43,7 +42,7 @@ public class ProductDto {
 	}
 
 	@Builder
-	public record Update(UUID productId, String productName, String category, long price, long quantity,
+	public record Update(UUID productId, String productName, Category category, long price, long quantity,
 						 String description) {
 	}
 

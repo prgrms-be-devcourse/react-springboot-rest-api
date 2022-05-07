@@ -5,11 +5,9 @@ import java.util.UUID;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.prgrammers.clone.dto.ProductDto;
 import com.prgrammers.clone.exception.ServiceException;
 import com.prgrammers.clone.model.Category;
 import com.prgrammers.clone.model.Product;
@@ -51,16 +49,16 @@ public class ProductService {
 	@Transactional
 	public Product update(Product updateProduct) {
 		Product product = productRepository.findById(updateProduct.getProductId())
-				.orElseThrow(() -> new ServiceException.NotFoundResource("존재하지 않는 상품입니다."));
+				.orElseThrow(() -> new ServiceException.NotFoundResourceException("존재하지 않는 상품입니다."));
 
-		Product update = product.update(updateProduct);
+		Product update = product.updateInformation(updateProduct);
 		return productRepository.update(update);
 	}
 
 	@Transactional
 	public void delete(UUID productId) {
 		if (productRepository.isExists(productId)) {
-			throw new ServiceException.NotFoundResource("존재하지 않는 상품입니다.");
+			throw new ServiceException.NotFoundResourceException("존재하지 않는 상품입니다.");
 		}
 
 		productRepository.delete(productId);
@@ -68,6 +66,10 @@ public class ProductService {
 
 	public Product getProduct(UUID productId) {
 		return productRepository.findById(productId)
-				.orElseThrow(() -> new ServiceException.NotFoundResource("존재하지 않는 상품입니다."));
+				.orElseThrow(() -> new ServiceException.NotFoundResourceException("존재하지 않는 상품입니다."));
+	}
+
+	public void reduceQuantity(Product product) {
+		productRepository.update(product);
 	}
 }
