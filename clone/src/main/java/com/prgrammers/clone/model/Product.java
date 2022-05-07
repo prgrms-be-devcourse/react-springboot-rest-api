@@ -3,6 +3,8 @@ package com.prgrammers.clone.model;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+import org.apache.tomcat.jni.Local;
+
 import com.prgrammers.clone.exception.DomainException;
 
 import lombok.AccessLevel;
@@ -20,30 +22,15 @@ public class Product {
 	private final UUID productId;
 	private String productName;
 	private Category category;
-	private long price;
-	private long quantity;
+	private Long price;
+	private Long quantity;
 	private String description;
 	private final LocalDateTime createdAt;
 	private LocalDateTime updatedAt;
 
 	@Builder
 	public Product(UUID productId, String productName, Category category, long price, long quantity,
-			String description) {
-		this.productId = productId;
-		this.productName = productName;
-		this.category = category;
-		this.quantity = quantity;
-		this.price = price;
-		this.description = description;
-		this.createdAt = LocalDateTime.now();
-		this.updatedAt = LocalDateTime.now();
-	}
-
-	/**
-	 * todo : RowMappper 전용 생성자
-	 */
-	public Product(UUID productId, String productName, Category category, long price, long quantity, String description,
-			LocalDateTime createdAt, LocalDateTime updatedAt) {
+			String description, LocalDateTime createdAt, LocalDateTime updatedAt) {
 		this.productId = productId;
 		this.productName = productName;
 		this.category = category;
@@ -54,9 +41,18 @@ public class Product {
 		this.updatedAt = updatedAt;
 	}
 
-	private void setProductName(String productName) {
-		this.productName = productName;
-		this.updatedAt = LocalDateTime.now();
+	public static Product create(String productName, Category category, long price, long quantity, String description) {
+		return Product
+				.builder()
+				.productId(UUID.randomUUID())
+				.createdAt(LocalDateTime.now())
+				.updatedAt(LocalDateTime.now())
+				.category(category)
+				.price(price)
+				.quantity(quantity)
+				.productName(productName)
+				.description(description)
+				.build();
 	}
 
 	public Product updateInformation(Product todo) {

@@ -25,5 +25,5 @@ public interface ProductRepository {
 
 	void deleteAll();
 
-	void delete(UUID productId);
+	void deleteById(UUID productId);
 }

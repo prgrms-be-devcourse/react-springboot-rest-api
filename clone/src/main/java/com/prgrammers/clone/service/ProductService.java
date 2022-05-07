@@ -31,16 +31,6 @@ public class ProductService {
 		return productRepository.findAll();
 	}
 
-	public Product create(String productName, Category category, long price) {
-		return null;
-	}
-
-	@Transactional
-	public Product create(String productName, Category category, long price, String description) {
-
-		return null;
-	}
-
 	@Transactional
 	public Product create(Product createProduct) {
 		return productRepository.insert(createProduct);
@@ -61,11 +51,11 @@ public class ProductService {
 			throw new ServiceException.NotFoundResourceException("존재하지 않는 상품입니다.");
 		}
 
-		productRepository.delete(productId);
+		productRepository.deleteById(productId);
 	}
 
-	public Product getProduct(UUID productId) {
-		return productRepository.findById(productId)
+	public Product getProduct(UUID productUuid) {
+		return productRepository.findById(productUuid)
 				.orElseThrow(() -> new ServiceException.NotFoundResourceException("존재하지 않는 상품입니다."));
 	}
 

@@ -53,7 +53,6 @@ public class ProductRestController {
 
 	@PostMapping("")
 	public ResponseEntity<ProductDto.ResponseDto> create(@RequestBody ProductDto.Create createProduct) {
-		createProduct.createId();
 		Product creatingProduct = mapper.createDtoToProduct(createProduct);
 		Product product = productService.create(creatingProduct);
 		ProductDto.ResponseDto responseDto = mapper.productToResponseDto(product);

@@ -13,18 +13,18 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import com.prgrammers.clone.exception.JdbcException;
 import com.prgrammers.clone.model.Category;
 import com.prgrammers.clone.model.Product;
 import com.prgrammers.clone.utils.TranslatorUtils;
 
+import lombok.RequiredArgsConstructor;
+
+@RequiredArgsConstructor
 @Repository
 public class ProductRepositoryImpl implements ProductRepository {
 
 	private final NamedParameterJdbcTemplate jdbcTemplate;
-
-	public ProductRepositoryImpl(NamedParameterJdbcTemplate jdbcTemplate) {
-		this.jdbcTemplate = jdbcTemplate;
-	}
 
 	@Override
 	public List<Product> findAll() {
@@ -35,13 +35,23 @@ public class ProductRepositoryImpl implements ProductRepository {
 		UUID productId = TranslatorUtils.toUUID(resultSet.getBytes("product_id"));
 		String productName = resultSet.getString("product_name");
 		Category category = Category.valueOf(resultSet.getString("category"));
-		long price = resultSet.getLong("price");
-		long quantity = resultSet.getLong("quantity");
+		Long price = resultSet.getLong("price");
+		Long quantity = resultSet.getLong("quantity");
 		String description = resultSet.getString("description");
 		LocalDateTime createdAt = TranslatorUtils.toLocalDateTIme(resultSet.getTimestamp("created_at"));
 		LocalDateTime updatedAt = TranslatorUtils.toLocalDateTIme(resultSet.getTimestamp("updated_at"));
 
-		return new Product(productId, productName, category, price, quantity, description, createdAt, updatedAt);
+		return Product
+				.builder()
+				.productId(productId)
+				.productName(productName)
+				.category(category)
+				.price(price)
+				.quantity(quantity)
+				.description(description)
+				.createdAt(createdAt)
+				.updatedAt(updatedAt)
+				.build();
 	};
 
 	@Override
@@ -66,7 +76,7 @@ public class ProductRepositoryImpl implements ProductRepository {
 				toParameters(product));
 
 		if (update != 1) {
-			throw new RuntimeException("not exe query ...");
+			throw new JdbcException.NotExecuteQuery("not exe query ...");
 		}
 
 		return product;
@@ -118,7 +128,7 @@ public class ProductRepositoryImpl implements ProductRepository {
 	}
 
 	@Override
-	public void delete(UUID productId) {
+	public void deleteById(UUID productId) {
 		jdbcTemplate.update("DELETE FROM products WHERE product_id= UUID_TO_BIN(:productId)",
 				Collections.singletonMap("productId", productId.toString().getBytes()));
 

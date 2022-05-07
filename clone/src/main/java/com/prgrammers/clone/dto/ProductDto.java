@@ -14,12 +14,14 @@ public class ProductDto {
 	@Getter
 	@NoArgsConstructor(access = AccessLevel.PRIVATE)
 	public static class Create {
-		private UUID productId;
+		private UUID productId = UUID.randomUUID();
 		private String productName;
 		private Category category;
 		private long price;
 		private long quantity;
 		private String description;
+		private LocalDateTime createdAt = LocalDateTime.now();
+		private LocalDateTime updatedAt = LocalDateTime.now();
 
 		@Builder
 		public Create(String productName, Category category, long price, long quantity, String description) {
