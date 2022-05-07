@@ -1,6 +1,8 @@
 package com.prgrammers.clone.converter;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
@@ -16,40 +18,44 @@ public class OrderConverter {
 
 	public Converter<OrderDto.Create, Order> createDtoToDomain() {
 		return createDto -> {
-			List<OrderItem> orderItems = createDto.orderItems().stream()
+			List<OrderItem> orderItems = createDto.getOrderItems().stream()
 					.map(createOrderItem ->
 							OrderItem.builder()
-									.category(createOrderItem.category())
-									.price(createOrderItem.price())
-									.quantity(createOrderItem.quantity())
-									.productId(createOrderItem.productId())
+									.category(createOrderItem.getCategory())
+									.price(createOrderItem.getPrice())
+									.quantity(createOrderItem.getQuantity())
+									.productId(createOrderItem.getProductId())
 									.build())
 					.toList();
 
-			Email email = new Email(createDto.email());
+			Email email = new Email(createDto.getEmail());
 
-			return Order.createOrder(email,
-					createDto.address(),
-					createDto.postcode(),
-					orderItems,
-					OrderStatus.ACCEPT);
-
+			return Order.builder()
+					.orderId(UUID.randomUUID())
+					.email(email)
+					.address(createDto.getAddress())
+					.postcode(createDto.getPostcode())
+					.orderStatus(createDto.getOrderStatus())
+					.orderItems(orderItems)
+					.createdAt(createDto.getCreatedAt())
+					.updatedAt(createDto.getUpdatedAt())
+					.build();
 		};
 	}
 
 	public Converter<Order, OrderDto.Response> domainToResponse() {
 		return order -> {
 			List<OrderDto.ResponseOrderItem> responseOrderItems = order.getOrderItems().stream()
-					.map(orderItem -> {
-						return OrderDto.ResponseOrderItem
-								.builder()
-								.productId(orderItem.productId())
-								.category(orderItem.category())
-								.price(orderItem.price())
-								.quantity(orderItem.quantity())
-								.summary(orderItem.getTotalPrice())
-								.build();
-					}).toList();
+					.map(orderItem ->
+							OrderDto.ResponseOrderItem
+							.builder()
+							.productId(orderItem.productId())
+							.category(orderItem.category())
+							.price(orderItem.price())
+							.quantity(orderItem.quantity())
+							.summary(orderItem.getTotalPrice())
+							.build())
+					.toList();
 
 			return OrderDto.Response
 					.builder()

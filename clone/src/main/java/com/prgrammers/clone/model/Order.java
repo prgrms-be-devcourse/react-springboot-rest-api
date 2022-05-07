@@ -21,42 +21,29 @@ public class Order {
 	private LocalDateTime updatedAt;
 
 	@Builder
-	private Order(Email email, String address, String postcode, List<OrderItem> orderItems, OrderStatus orderStatus) {
-		this.orderId = UUID.randomUUID();
-		this.email = email;
-		this.address = address;
-		this.postcode = postcode;
-		this.orderItems = orderItems;
-		this.orderStatus = orderStatus;
-		this.createdAt = LocalDateTime.now();
-		this.updatedAt = LocalDateTime.now();
-	}
-
-	public static Order createOrder(Email email,String address,String postcode,List<OrderItem> orderItems,OrderStatus orderStatus) {
-		return Order.builder()
-				.email(email)
-				.address(address)
-				.postcode(postcode)
-				.orderItems(orderItems)
-				.orderStatus(orderStatus)
-				.build();
-	}
-
-	private Order(UUID orderId, Email email, String address, String postcode,
+	public Order(UUID orderId, Email email, String address, String postcode, List<OrderItem> orderItems,
 			OrderStatus orderStatus, LocalDateTime createdAt, LocalDateTime updatedAt) {
 		this.orderId = orderId;
 		this.email = email;
 		this.address = address;
 		this.postcode = postcode;
+		this.orderItems = orderItems;
 		this.orderStatus = orderStatus;
 		this.createdAt = createdAt;
 		this.updatedAt = updatedAt;
 	}
 
-	public static Order mapToDomain(UUID orderId, Email email, String address, String postcode,
-			OrderStatus orderStatus, LocalDateTime createdAt, LocalDateTime updatedAt) {
-
-		return new Order(orderId, email, address, postcode, orderStatus, createdAt, updatedAt);
+	public static Order create(Email email, String address, String postcode, List<OrderItem> orderItems) {
+		return Order.builder()
+				.orderId(UUID.randomUUID())
+				.email(email)
+				.address(address)
+				.postcode(postcode)
+				.orderItems(orderItems)
+				.orderStatus(OrderStatus.ACCEPT)
+				.createdAt(LocalDateTime.now())
+				.updatedAt(LocalDateTime.now())
+				.build();
 	}
 
 	public long calculateTotalPrice() {
