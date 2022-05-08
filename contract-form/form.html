@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="assets/css/style.css" />
+    <script src="assets/js/script.js" defer></script>
+    <title>계약서 폼</title>
+  </head>
+  <body>
+    <form class="form">
+      <h1 class="text-center">계약서</h1>
+      <!-- Progress bar -->
+      <div class="progressbar">
+        <div class="progress" id="progress"></div>
+        
+        <div class="progress-step progress-step-active" data-title="Intro"></div>
+        <div class="progress-step" data-title="Contact"></div>
+        <div class="progress-step" data-title="Message"></div>
+        <div class="progress-step" data-title="Password"></div>
+      </div>
+
+      <!-- Steps -->
+      <div class="form-step form-step-active">
+        <div class="input-group">
+          <p class="note">* 계약서 작성 시 유의사항 *</p>
+          <p class="note">입력 내용을 확인 후 기입 바랍니다.</p>
+        </div>
+        <div class="input-group">
+          <label for="cloud-id">클라우드 ID</label>
+          <input type="text" name="cloud-id" id="cloud-id" readonly />
+        </div>
+        <div class="">
+          <a href="#" class="btn btn-next width-50 ml-auto">Next</a>
+        </div>
+      </div>
+      <div class="form-step">
+        <div class="input-group">
+          <label for="name">이름</label>
+          <input type="text" name="name" id="name" />
+        </div>
+        <div class="input-group">
+          <label for="email">이메일</label>
+          <input type="email" name="email" id="email" />
+        </div>
+        <div class="btns-group">
+          <a href="#" class="btn btn-prev">Previous</a>
+          <a href="#" class="btn btn-next">Next</a>
+        </div>
+      </div>
+      <div class="form-step">
+        <div class="input-group">
+          <label for="evaluation">서비스 평가</label>
+          <textarea id="evaluation" name="evaluation" rows="6" cols="50"></textarea>
+        </div>
+        <div class="input-group">
+          <label for="evaluation">남기실 말</label>
+          <textarea id="feedback" name="feedback" rows="6" cols="50"></textarea>
+        </div>
+        <div class="btns-group">
+          <a href="#" class="btn btn-prev">Previous</a>
+          <a href="#" class="btn btn-next">Next</a>
+        </div>
+      </div>
+      <div class="form-step">
+        <div class="input-group">
+          <label for="password">비밀번호</label>
+          <input type="password" name="password" id="password" />
+        </div>
+        <div class="input-group">
+          <label for="confirmPassword">비밀번호 확인</label>
+          <input
+            type="password"
+            name="confirmPassword"
+            id="confirmPassword"
+          />
+        </div>
+        <div class="btns-group">
+          <a href="#" class="btn btn-prev">Previous</a>
+          <input type="button" value="Submit" class="to-spring" />
+        </div>
+      </div>
+    </form>
+
+    <script>
+      const cloudId = document.getElementById("cloud-id");
+      cloudId.value = localStorage.getItem("cloudId");
+  
+      const toSpring = document.querySelector(".to-spring");
+      
+      toSpring.addEventListener("click", () => {
+        let name = document.getElementById("name").value;
+        let email = document.getElementById("email").value;
+        let cloudId = document.getElementById("cloud-id").value;
+        
+        let evaluation = {
+          cloudId: cloudId,
+          title: "평가",
+          detail: document.getElementById("evaluation").value
+        };
+  
+        let feedback = {
+          cloudId: cloudId,
+          title: "의견",
+          detail: document.getElementById("feedback").value
+        };
+  
+        fetch("http://localhost:8080/api/v1/contracts", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            name: name,
+            email: email,
+            cloudId: cloudId,
+            optionList: [evaluation, feedback]
+          }),
+        })
+          .then((response) => response.json())
+          .then((message) => {
+            if (message.status == "CONTRACT_CREATED") {              
+              location.href= "/succeded.html";
+            }
+            else {
+              location.href= "/failed.html";
+            }
+
+        });
+      });
+    </script>
+  </body>
+</html>
