@@ -2,7 +2,6 @@ package com.prgrammers.clone.dto;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Objects;
 import java.util.UUID;
 
 import com.prgrammers.clone.model.Category;
@@ -19,7 +18,7 @@ public class OrderDto {
 	@NoArgsConstructor(access = AccessLevel.PRIVATE)
 	@ToString
 	@Getter
-	public static final class Create {
+	public static class Create {
 		private String email;
 		private String address;
 		private String postcode;
@@ -46,7 +45,7 @@ public class OrderDto {
 	@ToString
 	@NoArgsConstructor(access = AccessLevel.PRIVATE)
 	@Getter
-	public static final class CreateOrderItem {
+	public static class CreateOrderItem {
 		private UUID productId;
 		private Category category;
 		private long price;
