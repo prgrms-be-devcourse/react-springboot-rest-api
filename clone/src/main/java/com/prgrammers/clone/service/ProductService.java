@@ -3,8 +3,6 @@ package com.prgrammers.clone.service;
 import java.util.List;
 import java.util.UUID;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,7 +14,6 @@ import com.prgrammers.clone.repository.ProductRepository;
 @Transactional(readOnly = true)
 @Service
 public class ProductService {
-	private static final Logger log = LoggerFactory.getLogger(ProductService.class);
 	private final ProductRepository productRepository;
 
 	public ProductService(ProductRepository productRepository) {
@@ -59,7 +56,7 @@ public class ProductService {
 				.orElseThrow(() -> new ServiceException.NotFoundResourceException("존재하지 않는 상품입니다."));
 	}
 
-	public void reduceQuantity(Product product) {
+	public void reduceUpdate(Product product) {
 		productRepository.update(product);
 	}
 

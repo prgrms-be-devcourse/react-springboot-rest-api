@@ -34,7 +34,7 @@ public class OrderService {
 		orderItems.forEach(orderItem -> {
 			Product product = productService.getProduct(orderItem.productId());
 			product.reduce(orderItem.quantity());
-			productService.reduceQuantity(product);
+			productService.reduceUpdate(product);
 		});
 
 		return orderRepository.insert(order);
