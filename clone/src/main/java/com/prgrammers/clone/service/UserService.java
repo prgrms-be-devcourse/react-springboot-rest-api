@@ -22,6 +22,7 @@ public class UserService {
 		return orderService.getOrderHistories(new Email(email));
 	}
 
+	@Transactional
 	public void cancelOrder(UUID orderId) {
 		orderService.cancel(orderId);
 	}

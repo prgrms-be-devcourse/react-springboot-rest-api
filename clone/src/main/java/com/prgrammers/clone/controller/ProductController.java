@@ -1,6 +1,8 @@
 package com.prgrammers.clone.controller;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import com.prgrammers.clone.dto.ProductDto;
 import com.prgrammers.clone.model.Product;
 import com.prgrammers.clone.service.ProductService;
 
@@ -28,18 +31,25 @@ public class ProductController {
 		return "product-list";
 	}
 
-	@GetMapping("new-product")
+	@GetMapping("/new-product")
 	public String renderNewProduct() {
 		return "new-product";
 	}
 
 	@PostMapping("/products")
-	public String createProduct(CreateProduct createProduct) {
-		log.info("createProduct -> {}",createProduct);
+	public String createProduct(ProductDto.Create createProduct) {
+		log.info("createProduct -> {}", createProduct);
 		productService.create(
-				createProduct.productName(),
-				createProduct.category(),
-				createProduct.price(), createProduct.description());
+				Product.builder()
+						.productId(UUID.randomUUID())
+						.price(createProduct.getPrice())
+						.quantity(createProduct.getQuantity())
+						.category(createProduct.getCategory())
+						.productName(createProduct.getProductName())
+						.description(createProduct.getDescription())
+						.createdAt(LocalDateTime.now())
+						.updatedAt(LocalDateTime.now())
+						.build());
 
 		return "redirect:/products";
 	}

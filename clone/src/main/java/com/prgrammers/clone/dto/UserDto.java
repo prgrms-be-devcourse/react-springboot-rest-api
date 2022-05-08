@@ -30,14 +30,14 @@ public class UserDto {
 		public UserOrderResponse(
 				UUID orderId,
 				String address,
-				String postCode,
+				String postcode,
 				OrderStatus orderStatus,
 				List<UserDto.UserOrderItemResponse> userOrderItemResponse,
 				LocalDateTime createdAt
 		) {
 			this.orderId = orderId;
 			this.address = address;
-			this.postcode = postCode;
+			this.postcode = postcode;
 			this.orderStatus = orderStatus;
 			this.userOrderItemResponse = userOrderItemResponse;
 			this.createdAt = createdAt;
@@ -46,12 +46,13 @@ public class UserDto {
 		public void addUserOrderItemResponse(List<UserDto.UserOrderItemResponse> userOrderItemResponse) {
 			this.userOrderItemResponse = userOrderItemResponse;
 		}
+
 	}
 
 	@ToString
 	@Getter
 	@NoArgsConstructor(access = AccessLevel.PRIVATE)
-	public static class UserOrderItemResponse{
+	public static class UserOrderItemResponse {
 		private UUID productId;
 		private Category category;
 		private long price;

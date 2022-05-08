@@ -39,9 +39,8 @@ public class UserRestController {
 	public ResponseEntity<List<UserDto.UserOrderResponse>> getOrders(
 			@Validated
 			@Email(regexp = RegexUtils.EMAIL_REGEX, message = "4-50자 안의 이메일 형식이여야 합니다.")
-			@RequestParam("email") String email, PageRequest pageRequest) {
+			@RequestParam("email") String email) {
 		List<Order> orderHistories = userService.getOrderHistories(email);
-		PageRequest.of(0, 5, Sort.by(Sort.Direction.DESC, "created_at"));
 
 		if (orderHistories.isEmpty()) {
 			return ResponseEntity.ok(null);

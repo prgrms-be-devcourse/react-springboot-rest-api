@@ -34,8 +34,8 @@ CREATE TABLE IF NOT EXISTS `coffee_bean`.`orders`
 CREATE TABLE IF NOT EXISTS `coffee_bean`.`order_items`
 (
     `order_item_id` BIGINT auto_increment NOT NULL,
-    `order_id`      BINARY(16)                NOT NULL,
-    `product_id`    BINARY(16)                NOT NULL,
+    `order_id`      BINARY(16)            NOT NULL,
+    `product_id`    BINARY(16)            NOT NULL,
     `category`      VARCHAR(45)           NOT NULL,
     `quantity`      BIGINT                NOT NULL,
     `created_at`    DATETIME(6)           NOT NULL,
@@ -53,5 +53,19 @@ CREATE TABLE IF NOT EXISTS `coffee_bean`.`order_items`
             REFERENCES `coffee_bean`.`orders` (`order_id`)
             ON DELETE NO ACTION
             ON UPDATE NO ACTION
+)
+    ENGINE = InnoDB;
+
+
+CREATE TABLE IF NOT EXISTS `coffee_bean`.`vouchers`
+(
+    `voucher_id`    BINARY(16)  NOT NULL,
+    `discount`      BIGINT      NOT NULL,
+    `type`          VARCHAR(50) NOT NULL,
+    `quantity`      BIGINT      NOT NULL,
+    `created_at`    DATETIME(6) NOT NULL,
+    `updated_at`    DATETIME(6) NOT NULL,
+    `expiration_at` DATETIME(6) NOT NULL,
+    PRIMARY KEY (`voucher_id`)
 )
     ENGINE = InnoDB;
