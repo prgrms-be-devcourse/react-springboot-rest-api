@@ -23,6 +23,8 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     //aop
     implementation 'org.springframework.boot:spring-boot-starter-aop'
+    // spring Data
+    implementation 'org.springframework.data:spring-data-commons'
     // dev-tool
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
     // db
@@ -35,6 +37,12 @@ dependencies {
     // lombok
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
+    // un hex mysql
+    implementation 'javax.xml.bind:jaxb-api:2.3.1'
+    // java faker
+    implementation 'com.github.javafaker:javafaker:1.0.2'
+    // spring validation
+    implementation 'org.springframework.boot:spring-boot-starter-validation:2.6.3'
     // ssr
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf:2.6.7'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
