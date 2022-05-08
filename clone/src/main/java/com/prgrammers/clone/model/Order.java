@@ -52,4 +52,7 @@ public class Order {
 				.reduce(0L, Long::sum);
 	}
 
+	public void addItems(List<OrderItem> orderItems) {
+		this.orderItems = orderItems;
+	}
 }

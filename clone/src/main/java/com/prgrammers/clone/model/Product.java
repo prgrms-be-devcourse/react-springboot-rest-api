@@ -22,8 +22,8 @@ public class Product {
 	private final UUID productId;
 	private String productName;
 	private Category category;
-	private Long price;
-	private Long quantity;
+	private long price;
+	private long quantity;
 	private String description;
 	private final LocalDateTime createdAt;
 	private LocalDateTime updatedAt;

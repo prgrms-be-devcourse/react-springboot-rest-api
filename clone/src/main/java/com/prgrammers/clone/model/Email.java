@@ -5,6 +5,8 @@ import java.util.regex.Pattern;
 
 import org.springframework.util.Assert;
 
+import com.prgrammers.clone.utils.RegexUtils;
+
 public class Email {
 
 	private final String address;
@@ -35,7 +37,7 @@ public class Email {
 	}
 
 	private static boolean checkAddress(String address) {
-		return Pattern.matches("\\b[\\w\\.-]+@[\\w\\.-]+\\.\\w{2,4}\\b", address);
+		return Pattern.matches(RegexUtils.EMAIL_REGEX, address);
 	}
 
 	public String getAddress() {

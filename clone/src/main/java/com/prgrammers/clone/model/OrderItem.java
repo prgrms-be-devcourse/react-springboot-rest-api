@@ -6,7 +6,9 @@ import java.util.UUID;
 import lombok.Builder;
 
 @Builder
-public record OrderItem(UUID productId,
+public record OrderItem(Long orderItemId,
+						UUID orderId,
+						UUID productId,
 						Category category,
 						long price,
 						long quantity,
