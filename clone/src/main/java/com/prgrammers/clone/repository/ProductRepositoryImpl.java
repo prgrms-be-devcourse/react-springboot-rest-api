@@ -1,6 +1,7 @@
 package com.prgrammers.clone.repository;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Repository;
 import com.prgrammers.clone.exception.JdbcException;
 import com.prgrammers.clone.model.Category;
 import com.prgrammers.clone.model.Product;
+import com.prgrammers.clone.utils.JdbcUtils;
 import com.prgrammers.clone.utils.TranslatorUtils;
 
 import lombok.RequiredArgsConstructor;
@@ -132,6 +134,16 @@ public class ProductRepositoryImpl implements ProductRepository {
 		jdbcTemplate.update("DELETE FROM products WHERE product_id= UUID_TO_BIN(:productId)",
 				Collections.singletonMap("productId", productId.toString().getBytes()));
 
+	}
+
+	@Override
+	public List<Product> findById(List<UUID> productIds) {
+		String sql = String.format("select * from products where product_id in (%s)",
+				JdbcUtils.consistParameterWords(productIds.size()));
+
+		return jdbcTemplate.query(
+				sql, JdbcUtils.buildParameters(new ArrayList<>(productIds)), ProductRowMapper
+		);
 	}
 
 	private Map<String, Object> toParameters(Product product) {

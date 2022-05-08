@@ -1,6 +1,7 @@
 package com.prgrammers.clone.repository;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import com.prgrammers.clone.model.Email;
@@ -14,4 +15,8 @@ public interface OrderRepository {
 	void deleteBy(UUID orderId);
 
 	void deleteAll();
+
+	Optional<Order> findById(UUID orderId);
+
+	Order update(Order order);
 }

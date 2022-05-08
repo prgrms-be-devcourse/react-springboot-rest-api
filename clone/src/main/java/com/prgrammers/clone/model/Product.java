@@ -81,4 +81,9 @@ public class Product {
 		return this.quantity;
 	}
 
+	public long addQuantity(OrderItem orderItem) {
+		this.quantity += orderItem.quantity();
+
+		return this.quantity;
+	}
 }

@@ -7,4 +7,10 @@ public class JdbcException {
 			super(message);
 		}
 	}
+
+	public static class NotFoundDomain extends RuntimeException {
+		public NotFoundDomain(String message) {
+			super(message);
+		}
+	}
 }

@@ -1,13 +1,19 @@
 package com.prgrammers.clone.controller.api;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import javax.validation.constraints.Email;
 
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -28,13 +34,14 @@ public class UserRestController {
 	private final UserService userService;
 	private final UserMapper userMapper;
 
+	// todo paging
 	@GetMapping("/orders")
 	public ResponseEntity<List<UserDto.UserOrderResponse>> getOrders(
 			@Validated
 			@Email(regexp = RegexUtils.EMAIL_REGEX, message = "4-50자 안의 이메일 형식이여야 합니다.")
-			@RequestParam("email") String email) {
-
+			@RequestParam("email") String email, PageRequest pageRequest) {
 		List<Order> orderHistories = userService.getOrderHistories(email);
+		PageRequest.of(0, 5, Sort.by(Sort.Direction.DESC, "created_at"));
 
 		if (orderHistories.isEmpty()) {
 			return ResponseEntity.ok(null);
@@ -53,4 +60,12 @@ public class UserRestController {
 
 		return ResponseEntity.ok(userOrderResponses);
 	}
+
+	@DeleteMapping("/orders/{order_id}")
+	public ResponseEntity<String> cancel(@PathVariable("order_id") UUID orderId) {
+		userService.cancelOrder(orderId);
+
+		return ResponseEntity.ok("취소가 완료되었습니다.");
+	}
+
 }

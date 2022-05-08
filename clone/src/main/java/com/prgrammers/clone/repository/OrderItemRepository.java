@@ -11,4 +11,6 @@ public interface OrderItemRepository {
 	void deleteBy(Long orderItemId);
 
 	void deleteAll();
+
+	List<OrderItem> findByOrderId(UUID orderId);
 }

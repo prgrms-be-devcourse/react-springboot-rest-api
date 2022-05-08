@@ -1,6 +1,7 @@
 package com.prgrammers.clone.service;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,5 +20,9 @@ public class UserService {
 
 	public List<Order> getOrderHistories(String email) {
 		return orderService.getOrderHistories(new Email(email));
+	}
+
+	public void cancelOrder(UUID orderId) {
+		orderService.cancel(orderId);
 	}
 }

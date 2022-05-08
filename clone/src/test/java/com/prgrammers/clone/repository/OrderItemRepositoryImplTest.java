@@ -85,8 +85,8 @@ class OrderItemRepositoryImplTest {
 		productRepository.deleteAll();
 	}
 
-	@DisplayName("나의 주문목록에 대한 주문 상세 내역 조회하기")
 	@Test
+	@DisplayName("나의 주문목록에 대한 주문 상세 내역 조회하기")
 	void testFindByOrderId() {
 		// given
 		orderItems = products.stream()
@@ -119,9 +119,21 @@ class OrderItemRepositoryImplTest {
 		Assertions.assertThat(items.size()).isEqualTo(3);
 		AtomicInteger index = new AtomicInteger();
 		items.forEach(item -> {
-			MatcherAssert.assertThat(item.productId(), Matchers.is(orderItems.get(index.getAndIncrement()).productId()));
+			MatcherAssert.assertThat(item.productId(),
+					Matchers.is(orderItems.get(index.getAndIncrement()).productId()));
 		});
 
+	}
+
+	@Test
+	@DisplayName("주문한 목록이 아무것도 없을 때")
+	void testDoNotOrderInformation() {
+		//given
+		List<UUID> orderids = List.of();
+		List<OrderItem> byOrderId = orderItemRepository.findByOrderId(orderids);
+		//when
+
+		//then
 	}
 
 }

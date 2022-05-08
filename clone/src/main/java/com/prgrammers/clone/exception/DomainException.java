@@ -13,4 +13,10 @@ public class DomainException {
 		}
 	}
 
+	public static class NotProperCancelPolicy extends RuntimeException {
+		public NotProperCancelPolicy(String message) {
+			super(message);
+		}
+	}
+
 }

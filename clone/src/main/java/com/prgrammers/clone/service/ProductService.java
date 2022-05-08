@@ -62,4 +62,8 @@ public class ProductService {
 	public void reduceQuantity(Product product) {
 		productRepository.update(product);
 	}
+
+	public List<Product> getProductsByIds(List<UUID> productIds) {
+		return productRepository.findById(productIds);
+	}
 }

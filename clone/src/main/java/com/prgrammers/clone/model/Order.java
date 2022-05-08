@@ -4,6 +4,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
+import com.prgrammers.clone.exception.DomainException;
+
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
@@ -54,5 +56,15 @@ public class Order {
 
 	public void addItems(List<OrderItem> orderItems) {
 		this.orderItems = orderItems;
+	}
+
+	public OrderStatus updateOrderState() {
+		if (!this.orderStatus.isValidCancel()) {
+			throw new DomainException.NotProperCancelPolicy("배송전인 상태에서만 취소가 가능합니다.");
+		}
+
+		this.orderStatus = OrderStatus.CANCEL;
+
+		return this.orderStatus;
 	}
 }

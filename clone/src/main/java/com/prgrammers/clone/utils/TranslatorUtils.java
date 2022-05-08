@@ -5,6 +5,8 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+import javax.xml.bind.DatatypeConverter;
+
 public class TranslatorUtils {
 	private TranslatorUtils() {
 	}
@@ -16,6 +18,10 @@ public class TranslatorUtils {
 
 	public static LocalDateTime toLocalDateTIme(Timestamp timestamp) {
 		return timestamp != null ? timestamp.toLocalDateTime() : null;
+	}
+
+	public static String bytesToHex(byte[] bytes) {
+		return DatatypeConverter.printHexBinary(bytes);
 	}
 
 }

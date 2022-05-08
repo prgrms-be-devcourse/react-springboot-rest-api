@@ -5,15 +5,15 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 
-import org.springframework.jdbc.core.ResultSetExtractor;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import com.prgrammers.clone.exception.JdbcException;
-import com.prgrammers.clone.model.Category;
 import com.prgrammers.clone.model.Email;
 import com.prgrammers.clone.model.Order;
 import com.prgrammers.clone.model.OrderItem;
@@ -49,6 +49,33 @@ public class OrderRepositoryImpl implements OrderRepository {
 
 		if (update != 1) {
 			throw new JdbcException.NotExecuteQuery("Order not exe query....");
+		}
+
+		return order;
+	}
+
+	@Override
+	public Optional<Order> findById(UUID orderId) {
+		try {
+			return Optional.ofNullable(jdbcTemplate.queryForObject(
+					"select * from orders where order_id = UUID_TO_BIN(:orderId)"
+					, Collections.singletonMap("orderId", orderId.toString().getBytes())
+					, ORDER_ROW_MAPPER
+			));
+		} catch (EmptyResultDataAccessException e) {
+			throw new JdbcException.NotFoundDomain(e.getMessage());
+		}
+	}
+
+	@Override
+	public Order update(Order order) {
+		int update = jdbcTemplate.update(
+				"UPDATE orders SET order_status =:orderStatus where order_id = UUID_TO_BIN(:orderId)"
+				, toOrderParamMap(order)
+		);
+
+		if (update != 1) {
+			throw new JdbcException.NotExecuteQuery("order 의 update 실행문이 정상적으로 처리되지 못했습니다 .. ");
 		}
 
 		return order;

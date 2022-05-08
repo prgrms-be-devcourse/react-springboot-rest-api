@@ -2,14 +2,9 @@ package com.prgrammers.clone.repository;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.stream.Collectors;
 
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -17,6 +12,7 @@ import org.springframework.stereotype.Repository;
 
 import com.prgrammers.clone.model.Category;
 import com.prgrammers.clone.model.OrderItem;
+import com.prgrammers.clone.utils.JdbcUtils;
 import com.prgrammers.clone.utils.TranslatorUtils;
 
 import lombok.RequiredArgsConstructor;
@@ -30,11 +26,20 @@ public class OrderItemRepositoryImpl implements OrderItemRepository {
 	public List<OrderItem> findByOrderId(List<UUID> orderIds) {
 
 		String sql = String.format("select * from order_items where order_id in (%s) order by created_at desc",
-				consistParameterWords(orderIds.size()));
-		return jdbcTemplate.query(
-				sql, buildParameters(new ArrayList<>(orderIds)), ORDER_ITEM_ROW_MAPPER
-		);
+				JdbcUtils.consistParameterWords(orderIds.size()));
 
+		return jdbcTemplate.query(
+				sql, JdbcUtils.buildParameters(new ArrayList<>(orderIds)), ORDER_ITEM_ROW_MAPPER
+		);
+	}
+
+	@Override
+	public List<OrderItem> findByOrderId(UUID orderId) {
+		return jdbcTemplate.query(
+				"select * from order_items where order_id = UUID_TO_BIN(:orderId)"
+				, Collections.singletonMap("orderId", orderId.toString().getBytes())
+				, ORDER_ITEM_ROW_MAPPER
+		);
 	}
 
 	@Override
@@ -74,23 +79,4 @@ public class OrderItemRepositoryImpl implements OrderItemRepository {
 				.updatedAt(updatedAt)
 				.build();
 	};
-
-	private Map<String, Object> buildParameters(List<UUID> orderIdsCopy) {
-		HashMap<String, Object> orderIds = new HashMap<>();
-		AtomicInteger number = new AtomicInteger();
-		orderIdsCopy.forEach(orderId -> {
-			orderIds.put("orderId" + number.getAndIncrement(), orderId.toString().getBytes());
-		});
-
-		return orderIds;
-	}
-
-	private String consistParameterWords(int size) {
-		String inQueryWords = String.join(",", Collections.nCopies(size, "UUID_TO_BIN(?)"));
-		String[] inQueryParams = inQueryWords.split(",");
-		AtomicInteger index = new AtomicInteger();
-		return Arrays.stream(inQueryParams)
-				.map(s -> s.replace("?", ":orderId" + index.getAndIncrement()))
-				.collect(Collectors.joining(","));
-	}
 }

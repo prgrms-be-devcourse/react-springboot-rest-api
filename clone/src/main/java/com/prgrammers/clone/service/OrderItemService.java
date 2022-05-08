@@ -20,4 +20,8 @@ public class OrderItemService {
 	public List<OrderItem> getOrderItems(List<UUID> orderIds) {
 		return orderItemRepository.findByOrderId(orderIds);
 	}
+
+	public List<OrderItem> getOrderItems(UUID orderId) {
+		return orderItemRepository.findByOrderId(orderId);
+	}
 }

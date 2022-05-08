@@ -38,6 +38,22 @@ public class RestControllerExceptionHandler {
 				.body("잘못된 값을 입력하였습니다.");
 	}
 
+	@ResponseStatus(code = HttpStatus.BAD_REQUEST)
+	@ExceptionHandler(value = JdbcException.NotFoundDomain.class)
+	public ResponseEntity<String> handleJdbcExceptionNotFoundDomainException(JdbcException.NotFoundDomain e) {
+		log.warn(LOG_PREFIX, e.getMessage());
+		return ResponseEntity.badRequest()
+				.body("잘못된 값을 입력했습니다..");
+	}
+
+	@ResponseStatus(code = HttpStatus.BAD_REQUEST)
+	@ExceptionHandler(value = DomainException.NotProperCancelPolicy.class)
+	public ResponseEntity<String> handleDomainExceptionNotProperCancelPolicy(DomainException.NotProperCancelPolicy e){
+		log.warn(LOG_PREFIX, e.getMessage());
+		return ResponseEntity.badRequest()
+				.body("배송 전인 상태에서만 주문 취소가 가능합니다.");
+	}
+
 	@ResponseStatus(code = HttpStatus.INTERNAL_SERVER_ERROR)
 	@ExceptionHandler(value = JdbcException.NotExecuteQuery.class)
 	public ResponseEntity<String> handleJdbcNotExecuteQueryException(JdbcException.NotExecuteQuery e) {
